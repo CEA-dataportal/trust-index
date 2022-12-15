@@ -1,9 +1,100 @@
+/* Color map */
+.primary {color: #FF0000;}
+
+/* Elements */
+
+hr.divider {
+    height: 0.2rem;
+    max-width: 3.25rem;
+    margin: 1.5rem auto;
+    background-color: #FF0000;
+    opacity: 1;
+  }
+
+  hr.divider-light {
+    background-color: #fff;
+    margin: 1.5rem auto;
+  }
+ .spacer {
+    min-height: 1vh;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+
+/* Text */
+.subtitle {
+    font-weight: 200!important;
+    text-transform: uppercase;
+}
+
+
+/* HOME PAGE */
+
 header.masthead {
     padding-top: 10rem;
     padding-bottom: calc(10rem - 4.5rem);
-    background: linear-gradient(to bottom, rgba(18, 40, 78, 0.8) 0%, rgba(0, 81, 142, 0.8) 100%), url("../assets/img/bg-trustindex.jpg")!important;
+   background: linear-gradient(to bottom, rgba(18, 40, 78, 0.8) 0%, rgba(0, 81, 142, 0.8) 100%), url("../assets/img/bg-trustindex.jpg"); 
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-size: cover;
 }
+.page-section {
+    padding: 8rem 0 ;
+    min-height: 100vh;
+  }
+#portfolio {
+    padding: 2rem 5rem 2rem 5rem;
+    min-height: 90vh;
+    background-color: #fff;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 100%), url("../assets/img/bg-country_jpg.jpg");
+    color: black;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: cover;
+  }
+
+  #starter {
+    padding: 5rem 5rem 2rem 5rem;
+    min-height: 90vh;
+    background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 25%, rgba(0, 81, 142, 0.5) 100%);
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: cover;
+  }
+
+/* Buttons */
+
+
+  .btn-primary {
+    color: #fff;
+    background-color: #FF0000;
+    border-color: #FF0000;
+  }
+  .btn-primary:hover {
+    color: #fff;
+    background-color: #9A0000;
+    border-color: #9A0000;
+  }
+  .btn-check:focus + .btn-primary, .btn-primary:focus {
+    color: #fff;
+    background-color: #9A0000;
+    border-color: #9A0000;
+    box-shadow: 0 0 0 0.25rem rgba(246, 122, 88, 0.5);
+  }
+  .btn-check:checked + .btn-primary, .btn-check:active + .btn-primary, .btn-primary:active, .btn-primary.active, .show > .btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #9A0000;
+    border-color: #9A0000;
+  }
+  .btn-check:checked + .btn-primary:focus, .btn-check:active + .btn-primary:focus, .btn-primary:active:focus, .btn-primary.active:focus, .show > .btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.25rem rgba(246, 122, 88, 0.5);
+  }
+  .btn-primary:disabled, .btn-primary.disabled {
+    color: #fff;
+    background-color: #EF6C00;
+    border-color: #EF6C00;
+  }
