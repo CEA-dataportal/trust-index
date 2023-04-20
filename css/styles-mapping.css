@@ -140,9 +140,8 @@ padding: 25px 0;
 .container-keyfigures {
   position:absolute;
   right:0px;
-  top:-60px;
+  top:-50px;
   background: #0e1c31!important;
-  padding:10px;
   border: 1px solid #41526F;
 }
 #keyfigures{
