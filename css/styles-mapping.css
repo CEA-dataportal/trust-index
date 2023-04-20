@@ -22,9 +22,7 @@ h2 {
 }
 
 .wrapper-mapping {
-    min-height: 100%;
     height: auto!important;
-    height: 100%;
     margin: 0 auto auto;
 }
 /* Banner */
