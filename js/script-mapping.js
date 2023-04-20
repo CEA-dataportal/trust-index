@@ -192,7 +192,7 @@ let currentZoom = 1;
 
 const mapFillColor = '#596881', //00acee F9F871 294780 6077B5 001e3f A6B0C3
     mapInactive = '#596881', //1E3559
-    mapActive = '#12284c', //A6B0C3
+    mapActive = '#0e1c31', //A6B0C3
     hoverColor = '#546B89';
 
 let g, mapsvg, projection, width, height, zoom, path, maptip;
@@ -225,7 +225,7 @@ function initiateMap() {
         .attr("width", "100%")
         .attr("height", "100%")
         // .attr("fill", "#d9d9d9");
-        .attr("fill", "#12284c"); //#1b365e //294780 //1b365e //cdd4d9
+        .attr("fill", "#0e1c31"); //#1b365e //294780 //1b365e //cdd4d9
     // .attr("fill-opacity", "0.5");
 
     d3.select('#title').style('right', width / 2 + 'px');
@@ -259,7 +259,7 @@ function initiateMap() {
             return countriesISO3Arr.includes(d.properties.ISO_A3) ? mapFillColor : mapInactive;
         })
         .attr('stroke-width', 0.08)
-        .attr('stroke', '#12284c')
+        .attr('stroke', '#0e1c31')
         .on("mousemove", function(d) {
             countriesISO3Arr.includes(d.properties.ISO_A3) ? mousemove(d) : null;
         })
