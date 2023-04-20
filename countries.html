@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/jquery.dataTables.min.css">
+    <link href='styles.css' rel='stylesheet' />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/39e5643f1a.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+
+
+</head>
+
+<body>
+    <div class="loader">
+        <div class="sp sp-circle"></div>
+        Loading data...
+    </div>
+    <div class="wrapper">
+        <div class="banner__container">
+            <div class="banner__overlay">
+                <div class="container">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div id="heading">
+            <div class="heading-container">
+                <h2 class="banner_title block-title">Community Trust Index</h2>
+                <div class="line"></div>
+            </div>
+            <div class="container-keyfigures">
+              <div id="keyfigures">
+                <div class="desc">Engagement</div>
+                <div id="item-1"></div>
+              </div>
+              <div id="keyfigures">
+                <div class="desc">Ongoing</div>
+                <div id="item-2"></div>
+              </div>
+              <div id="keyfigures">
+                <div class="desc">Active</div>
+                <div id="item-3"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="page-content">
+            <div class="full-width">
+                <div id="mainOfIframe">
+                    <div id="map">
+                        <div class="zoom-controls">
+                            <button id="zoom_in">+</button>
+                            <button id="zoom_out">-</button>
+                        </div>
+                        <div id="legend"><small>Status</small></div>
+                    </div>
+                </div>
+            </div>
+            <div class="filters">
+                <span class="dtSearch">
+            <label id="searchBox"><input class="form-control" id="searchInput" type="text" placeholder="Search.."></label>
+        </span>
+            </div>
+
+            <div class="table">
+                <!-- Menu
+    <div class="tab-Active"><a href="index.html">Home</a></div><div class="tab-Active"><a href="index-2.html">Index</a></div><div class="tab-Inactive"><a href="country-1.html">Country</a></div>
+    -->
+                <table id="datatable" class="datatable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th width="20%">Country</th>
+                            <th width="10%">Status</th>
+                            <th width="30%">Progress</th>
+                            <th>Start Date</th>
+                            <th>Contact</th>
+                            <th>Report</th>
+                        </tr>
+                    </thead>
+                </table>
+                <small>Last update - 30/11/2022</small>
+            </div>
+        </div>
+    </div>
+
+    <script type='text/javascript' src='script.js'></script>
+</body>
+
+</html>
