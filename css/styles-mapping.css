@@ -121,6 +121,7 @@ padding: 25px 0;
   position:absolute;
   left:0px;
   top:-120px;
+
 }
 
 .block-title {
@@ -140,6 +141,9 @@ padding: 25px 0;
   position:absolute;
   right:0px;
   top:-70px;
+  background: #0e1c31!important;
+  padding:10px;
+  border: 1px solid #41526F;
 }
 #keyfigures{
   position:relative; z-index: 20;display:inline-block; margin: 20px; text-align: center; padding: 0; height: 80px; width: 80px;}
