@@ -2,7 +2,6 @@ body {
     background: #0e1c31!important;
     font-family:"Open Sans";
     color:#FFF;
-
 }
 
 h2 {
@@ -158,9 +157,10 @@ padding: 25px 0;
 
 /* Page Content */
 
-.page-content {
+.page-content-mapping {
     width: 100%;
     margin-top:-30px;
+    color:#FFF;
     }
 
 .full-width {
