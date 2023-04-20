@@ -1,5 +1,5 @@
 body {
-    background: #0e1c31;
+    background: #0e1c31!important;
     font-family:"Open Sans";
     color:#FFF;
 
@@ -21,7 +21,7 @@ h2 {
     transform: translate(-50%, -50%);
 }
 
-.wrapper {
+.wrapper-mapping {
     min-height: 100%;
     height: auto!important;
     height: 100%;
