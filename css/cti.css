@@ -31,6 +31,18 @@ hr.divider {
 
 /* HOME PAGE */
 
+.navbar-brand {
+  font-size: 2rem;
+  margin: 30 0 auto auto;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.83;
+  letter-spacing: normal;
+  color: #ffffff;
+}
+
+
 header.masthead {
     padding-top: 10rem;
     padding-bottom: calc(10rem - 4.5rem);
