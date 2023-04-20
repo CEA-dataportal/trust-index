@@ -133,7 +133,7 @@ header.masthead {
     transition: background-color 0.25s ease-in-out;
   }
 
-  #mainNav {
-    background: linear-gradient(rgba(18,40,76,1); rgba(18,40,76,0));
+  #mainNav.navbar-shrink {
+    background: linear-gradient(rgba(18,40,76,1); rgba(18,40,76,0))!important;
 
   }
