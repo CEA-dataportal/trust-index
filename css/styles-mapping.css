@@ -28,6 +28,7 @@ h2 {
 
 
 .banner__container {
+    background: linear-gradient(rgba(18,40,76,1); rgba(18,40,76,0));
     background-image: url("./assets/p-UGA0928_jpg.jpg");
     
 }
