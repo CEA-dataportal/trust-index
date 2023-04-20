@@ -139,7 +139,7 @@ padding: 25px 0;
 .container-keyfigures {
   position:absolute;
   right:0px;
-  top:20px;
+  top:-70px;
 }
 #keyfigures{
   position:relative; z-index: 20;display:inline-block; margin: 20px; text-align: center; padding: 0; height: 80px; width: 80px;}
@@ -299,19 +299,19 @@ border-bottom:  1px solid #293D5D!important;
     margin-right:10px;
   }
 
-  .tag-overall {
+.table .tag-overall {
     background: #CB4335;
     border: solid 1px #CB4335;
   }
-  .tag-competency {
+.table .tag-competency {
     background: #1A5276;
     border: solid 1px #1A5276;
   }
-  .tag-value {
+.table .tag-value {
     background: #2471A3;
     border: solid 1px #2471A3;
   }
-  .tag-other {
+.table .tag-other {
     background: #204669; /*#798ba5*/;
     border: solid 1px #204669; /*#798BA5*/;
   }
@@ -529,27 +529,27 @@ circle {
 }
 
 .tag-Test {
-    color:#FFF;
-    background:#FF7F7F;
+    color:#FFF!important;
+    background:#FF7F7F!important;
 }
 .tag-Engagement {
-    color:#FF7F7F;
-    background:#FFCCCC;
+    color:#FF7F7F!important;
+    background:#FFCCCC!important;
 }
 
 .tag-Ongoing {
-    color:#FFF;
-    background:#FF6666;
+    color:#FFF!important;
+    background:#FF6666!important;
 }
 
 .tag-Active {
-    color:#FFF;
-    background:#FF0000;
+    color:#FFF!important;
+    background:#FF0000!important;
 }
 
 .tag-Project {
-    font-size: .9em;
-    background:#798BA5;
+    font-size: .9em!important;
+    background:#798BA5!important;
 }
 .survole .tag-title {
     font-weight: bold;
