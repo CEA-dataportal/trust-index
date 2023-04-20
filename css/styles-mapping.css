@@ -140,13 +140,13 @@ padding: 25px 0;
 .container-keyfigures {
   position:absolute;
   right:0px;
-  top:-70px;
+  top:-60px;
   background: #0e1c31!important;
   padding:10px;
   border: 1px solid #41526F;
 }
 #keyfigures{
-  position:relative; z-index: 20;display:inline-block; margin: 20px; text-align: center; padding: 0; height: 80px; width: 80px;}
+  position:relative; z-index: 20;display:inline-block; margin: 20px; text-align: center; padding: 0; height: 60px; width: 80px;}
 #item-0{background-color:#FF6666;color:#FFF; text-align: center;  margin-left: auto;margin-right: auto;}
 #item-1{color:#FFCCCC; margin-left: auto;margin-right: auto; height: 45px; width: 60px;font-size: 2em; font-weight: bold; }
 #item-2{color:#FF6666; margin-left: auto;margin-right: auto; height: 45px; width: 60px;font-size: 2em; font-weight: bold; }
