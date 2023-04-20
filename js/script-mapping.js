@@ -49,18 +49,18 @@ $(document).ready(function() {
 
 function figures() {
 
-    const count = { 'Test': 0, 'Engagement': 0, 'Ongoing': 0, 'Active': 0 };
+    const count = { 'Test': 0, 'Engagement': 0, 'Ongoing': 0, 'Completed': 0 };
 
     for (element of prioritiesData) {
         element['Stage'] == "Test" ? count["Test"] += 1 :
             element['Stage'] == "Engagement" ? count["Engagement"] += 1 :
             element['Stage'] == "Ongoing" ? count["Ongoing"] += 1 :
-            element['Stage'] == "Active" ? count["Active"] += 1 : null;
+            element['Stage'] == "Completed" ? count["Completed"] += 1 : null;
     }
     var test = count['Test'];
     var engagement = count['Engagement'];
     var Ongoing = count['Ongoing'];
-    var active = count['Active'];
+    var active = count['Completed'];
 
     d3.select("#item-0").append("span")
         .text(test);
@@ -192,7 +192,7 @@ let currentZoom = 1;
 
 const mapFillColor = '#596881', //00acee F9F871 294780 6077B5 001e3f A6B0C3
     mapInactive = '#596881', //1E3559
-    mapActive = '#0e1c31', //A6B0C3
+    mapCompleted = '#0e1c31', //A6B0C3
     hoverColor = '#546B89';
 
 let g, mapsvg, projection, width, height, zoom, path, maptip;

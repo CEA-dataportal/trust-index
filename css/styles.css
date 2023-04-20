@@ -238,11 +238,11 @@ sup {
 }
 
 a {
-  color: #f4623a;
+  color: #FF0000;
   text-decoration: underline;
 }
 a:hover {
-  color: #c34e2e;
+  color: #FF0000;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {

@@ -187,7 +187,7 @@ text-align: center;
 }
 
 /* Table */
-.tab-Inactive, .tab-Active {
+.tab-Inactive, .tab-Completed {
     color: #ffffff;
     width: -webkit-fit-content;
     width: -moz-fit-content;
@@ -202,10 +202,10 @@ text-align: center;
 
 .tab-Inactive {
     background-color: #798BA5;}
-.tab-Active {
+.tab-Completed {
     background-color: #12284c;
 }
-.tab-Active a, .tab-Inactive a {
+.tab-Completed a, .tab-Inactive a {
     color: #ffffff;
 }
 
@@ -546,7 +546,7 @@ circle {
     background:#FF6666!important;
 }
 
-.tag-Active {
+.tag-Completed {
     color:#FFF!important;
     background:#FF0000!important;
 }
