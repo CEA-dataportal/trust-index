@@ -135,12 +135,7 @@ padding: 25px 0;
     padding-top: 10px;
     line-height: 3rem;
 }
-.line {
-    width:50px;
-    height: 5px;
-    margin-top: 10px;
-    background-color: #FF0000;
-}
+
 .container-keyfigures {
   position:absolute;
   right:0px;
@@ -235,10 +230,10 @@ top:-500px;
 }
   
 
-.table {
+table.datatable {
 width: 100%;
 max-width: 1280px;
-color:#91a0ac;
+color:#91a0ac!important;
 padding:10px;
 margin-right: auto;
 margin-left: auto;
