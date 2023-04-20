@@ -139,7 +139,7 @@ padding: 25px 0;
 .container-keyfigures {
   position:absolute;
   right:0px;
-  top:-110px;
+  top:20px;
 }
 #keyfigures{
   position:relative; z-index: 20;display:inline-block; margin: 20px; text-align: center; padding: 0; height: 80px; width: 80px;}
@@ -216,7 +216,7 @@ margin-right: auto;
 margin-left: auto;
 position:relative;
 z-index: 24;
-top:-500px;
+top:-20px;
 }
 
 #searchBox {
