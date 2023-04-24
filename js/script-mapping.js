@@ -199,10 +199,10 @@ let g, mapsvg, projection, width, height, zoom, path, maptip;
 let countriesISO3Arr = [];
 
 function initiateMap() {
-    width = document.getElementById("mainOfIframe").offsetWidth; //viewportWidth;
-    height = (isMobile) ? 350 : 550;
-    var mapScale = (isMobile) ? width / 5.5 : width / 7;
-    var mapCenter = (isMobile) ? [12, 25] : [12, 25];
+    width = document.getElementById("mainOfIframe").offsetWidth; //viewportWidth; 1400
+    height = (isMobile) ? 350 : 600;
+    var mapScale = (isMobile) ? width / 5.5 : width / 6.8;
+    var mapCenter = (isMobile) ? [0, 0] : [0, 20];
     projection = d3.geoMercator()
         .center(mapCenter)
         .scale(mapScale)
@@ -225,7 +225,7 @@ function initiateMap() {
         .attr("width", "100%")
         .attr("height", "100%")
         // .attr("fill", "#d9d9d9");
-        .attr("fill", "#0e1c31"); //#1b365e //294780 //1b365e //cdd4d9
+        .attr("fill", "#12284c"); //#1b365e //294780 //1b365e //cdd4d9
     // .attr("fill-opacity", "0.5");
 
     d3.select('#title').style('right', width / 2 + 'px');
@@ -333,12 +333,12 @@ function initiateMap() {
         .attr("widht", "100%")
         .attr("height", "100%");
 
-    const xcoord = 10;
+    const xcoord = 20;
     legendSVG.append("g")
         .selectAll("legend-item")
         .data(legendEntries)
         .enter()
-        .append("circle").attr("r", 6)
+        .append("circle").attr("r", 7)
         .attr("cx", xcoord)
         .attr("cy", function(d, i) {
             if (i == 0) {
