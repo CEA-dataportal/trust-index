@@ -109,6 +109,26 @@ header.masthead {
   background-blend-mode: normal,luminosity; 
 }
 
+#case_stories {
+  padding-top: 10rem;
+  padding-bottom: calc(10rem - 4.5rem);
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 15%, rgba(18, 40, 78, 0.7) 30%), url("../assets/img/bg-country_jpg.jpg"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #0A182D;
+  background-blend-mode: normal,luminosity;
+}
+#about {
+  padding-top: 10rem;
+  padding-bottom: calc(10rem - 4.5rem);
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 15%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/bg-trustindex3.jpg"); 
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #0A182D;
+  background-blend-mode: normal,luminosity;
+}
 .page-section {
     padding: 8rem 0 ;
     min-height: 100vh;
@@ -117,16 +137,7 @@ header.masthead {
 .block-header {
     display: flex;
   }
-#case_stories {
-    padding-top: 10rem;
-    padding-bottom: calc(10rem - 4.5rem);
-    background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 15%, rgba(18, 40, 78, 0.7) 30%), url("../assets/img/bg-country_jpg.jpg"); 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: #0A182D;
-    background-blend-mode: normal,luminosity;
-  }
+
 
 
   #case_stories .container .portfolio-box, #portfolio .container-sm .portfolio-box, #portfolio .container-md .portfolio-box, #portfolio .container-lg .portfolio-box, #portfolio .container-xl .portfolio-box, #portfolio .container-xxl .portfolio-box {
