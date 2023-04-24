@@ -50,6 +50,7 @@ hr.divider {
   font-weight: 700!important;
 }
 
+.ifrc {height: 45px; float: left; margin: 5px;}
 
 .square {
   width:10px;
@@ -95,6 +96,17 @@ header.masthead {
     background-blend-mode: normal,luminosity;
     
   
+}
+#toolkit {
+  padding-top: 10rem;
+  padding-bottom: calc(10rem - 4.5rem);
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 15%, rgba(18, 40, 78, 0.7) 30%), url("../assets/img/bg-trustindex2.jpg"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  background-color: #0A182D;
+  background-blend-mode: normal,luminosity; 
 }
 
 .page-section {
