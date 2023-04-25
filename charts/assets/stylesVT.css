@@ -1,0 +1,10 @@
+
+
+body {
+    height: 100vh;
+    background: #41526F;
+}
+
+#chart, .chart-box {
+    background:none!important;
+}
