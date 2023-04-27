@@ -15,7 +15,8 @@
 .bg-dark-journey2 {
   background-color:  rgba(0, 81, 142, 0.8)!important;
 }
-.icon_numeric {background:#0A182D ; padding:10px;width: 70px; border: 10px #0A182D solid;  border-radius: 35px; text-align: center; vertical-align: middle;margin:auto;} 
+.icon_numeric {
+ position:relative; z-index: 10; background:#0A182D ; padding:10px;width: 70px; border: 10px #0A182D solid;  border-radius: 35px; text-align: center; vertical-align: middle;margin:auto;} 
 .icon_numeric:hover {background:#FF0000 ; border: 10px #FF0000 solid;} 
 /* Elements */
 
@@ -78,11 +79,10 @@ hr.divider {
   background-color: #FF0000;
 }
 .line-0 {
-  width:100%;
+  width:200%;
   height: 5px;
   position: relative;
-  top: -200px;
-  left: -2%;
+  top: -220px;
   z-index: 0;
   background-color: #0A182D;
 }
