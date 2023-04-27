@@ -391,7 +391,7 @@ border-bottom:  1px solid #293D5D!important;
     top: 389px;
     width: 105px;
     text-align: left;
-    height:300px; */
+    height:300px;
 }
 
 #legend svg g text,
@@ -462,11 +462,6 @@ circle {
     display: none;
 }
 
-.cercle {
-    /* fill-opacity: 0.5; */
-    /* fill: #D90368; */
-    /* stroke: #D90368; */
-}
 
 
 

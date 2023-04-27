@@ -1,7 +1,21 @@
 /* Color map */
 .primary {color: #FF0000;}
 .secondary {color: #0A182D;}
-
+.bg-dark-journey1 {
+  width: 100%;
+  max-height: 200px;
+  padding:5px;
+  background-color:  rgba(18, 40, 78, 0.7)!important;
+  border: 5px rgba(255, 255, 255, 0.3) solid;
+}
+.bg-dark-journey1:hover {
+  background-color:  rgba(255, 255, 255, 0.7)!important;
+  color:#FF0000;
+}
+.bg-dark-journey2 {
+  background-color:  rgba(0, 81, 142, 0.8)!important;
+}
+.icon_numeric {background:#0A182D ; width: 55px; border: 10px #0A182D solid;  border-radius: 32px; text-align: center; vertical-align: middle;} 
 /* Elements */
 
 hr.divider {
@@ -102,7 +116,7 @@ header.masthead {
   height: auto!important;
   padding-top: 10rem;
   padding-bottom: 1rem!important;
-  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 15%, rgba(18, 40, 78, 0.7) 30%), url("../assets/img/bg-trustindex2.jpg"); 
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/country/ZMB1.jpg"); 
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -111,7 +125,43 @@ header.masthead {
   background-blend-mode: normal,luminosity; 
 }
 
+#journey {
+  height: auto!important;
+  padding-top: 10rem;
+  padding-bottom: 1rem!important;
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/bg_journey.png"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: contain;
+  background-color: #0A182D;
+  background-blend-mode: normal,luminosity; 
+}
 
+#country_zmb{
+  height: auto!important;
+  padding-top: 10rem;
+  padding-bottom: 1rem!important;
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/country/ZMB1.jpg"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  background-color: #0A182D;
+  background-blend-mode: normal,luminosity; 
+}
+#country_arg{
+  height: auto!important;
+  padding-top: 10rem;
+  padding-bottom: 1rem!important;
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/country/ARG1.jpg"); 
+  background-position: middle;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  background-color: #0A182D;
+  background-blend-mode: normal,luminosity; 
+}
 
 #toolkit {
   padding-top: 10rem;

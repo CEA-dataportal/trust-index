@@ -1,5 +1,4 @@
 const geodataUrl = 'https://community-trust-index.github.io/microsite/data/world.json';
-
 const dataURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=0&single=true&output=csv&force=on";
 const settingsURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=1974885344&single=true&output=csv&force=on";
 
@@ -114,7 +113,7 @@ function getDataTableData(data = prioritiesData) {
     data.forEach(element => {
         if (element['Link'] != '') {
             dt.push(
-                [element['ID'], 
+                ['<a href="country/'+ element['ISO3'] +'.html"><i class="fa-solid fa-square-plus"></i></a>',
                 element['Country'], 
                 stageClassName(element['Stage']), 
                 element['Progress'], 
@@ -126,7 +125,7 @@ function getDataTableData(data = prioritiesData) {
         }
         else {
             dt.push(
-                [element['ID'], 
+                ['<a href="country/'+ element['ISO3'] +'.html"><i class="fa-solid fa-square-plus"></i></a>',
                 element['Country'], 
                 stageClassName(element['Stage']), 
                 element['Progress'], 
@@ -148,8 +147,6 @@ function generateDataTable() {
         "columns": [{
                 "className": 'details-control',
                 "orderable": false,
-                "data": null,
-                "defaultContent": '<i class="fa-solid fa-square-plus"></i>',
                 "width": "1%"
             },
             { "width": "20%" },

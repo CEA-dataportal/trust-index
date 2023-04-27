@@ -1,9 +1,4 @@
 
-body {
-  background: #343E59;
-  color: #777;
-  font-family: Montserrat, Arial, sans-serif;
-}
 
 .body-bg {
   background: #F3F4FA !important;
@@ -68,3 +63,8 @@ body {
 .sparkboxes .box4 {
   background-image: linear-gradient( 135deg, #EE9AE5 10%, #5961F9 100%);
 }
+
+#keyfigures{
+  position:relative; display:inline-block; margin: 10px; text-align: center;  height: 65px; width: 80px;}
+#item-1{color:#FF0000; margin-left: auto;margin-right: auto; height: 40px; width: 60px;font-size: 2em; font-weight: bold; }
+.desc{color:#FFF;font-size: 0.75em; font-weight: 500;text-align: center; text-transform: uppercase ; padding:5px;}

@@ -1,9 +1,9 @@
-
+/* 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 console.log(urlParams);
 const country = urlParams.get('iso');
-console.log(country);
+console.log(country); */
 
  // settings
 const dataURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=1401474139&single=true&output=csv&force=on";
@@ -11,7 +11,7 @@ const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLr
 
 let CTI=[];
 let sampling=[];
-const countryISO = country;
+const countryISO = "ARG";
 var CTIdata = [];
 var SamplingData = [];
 
