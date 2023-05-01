@@ -57,3 +57,7 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
+
+    // Journey item animation
+
+   

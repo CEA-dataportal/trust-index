@@ -280,6 +280,40 @@ var optionsBar2 = {
   
   chartBar2.render();
 
+// Pie charts
+  var finding1 = {
+    series: [0.275862069, 0.186206897, 0.231034483, 0.303448276, 0.00344827680],
+    labels: ["Not all", "Not so much", "Mostly yes", "Yes completely","Don't know"],
+    colors:['#bf0000', '#ff0000','#6B66B7','#090088','#d6d6d6'],
+
+    chart: {
+        type: 'donut',
+    
+        },
+    dataLabels: {
+        enabled: true
+          },
+    tooltip: {
+        enabled: true,
+        formatter: "%"
+            },
+    responsive: [{
+        breakpoint: 480,
+        options: {
+            chart: {
+                width: 100
+            },
+        legend: {
+            position: 'bottom'
+        } 
+        }
+    }],
+  
+  };
+
+  var chart_finding1 = new ApexCharts(document.querySelector("#chartf1"), finding1);
+  chart_finding1.render();
+
 
  // Sampling charts
  // Age group

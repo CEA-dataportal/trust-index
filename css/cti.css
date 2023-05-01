@@ -2,6 +2,9 @@
 .primary {color: #FF0000;}
 .secondary {color: #0A182D;}
 .fourth {color: #5383cc;}
+
+
+/* Journey elements */
 .bg-dark-journey1 {
   width: 100%;
   max-height: 200px;
@@ -17,9 +20,52 @@
   background-color:  rgba(0, 81, 142, 0.8)!important;
 }
 .icon_numeric {
- position:relative; z-index: 10; background:#5383cc ; padding:10px;width: 70px; border: 10px #5383cc solid;  border-radius: 35px; text-align: center; vertical-align: middle;margin:auto;} 
+ position:relative; z-index: 10; background:#5383cc ; padding:10px;width: 70px; border: 10px #5383cc solid;  border-radius: 50%; text-align: center; vertical-align: middle;margin:auto;} 
 .icon_numeric:hover {background:#FF0000 ; border: 10px #FF0000 solid;} 
-/* Elements */
+
+
+#myProgress {
+  position: relative;
+  top: 90px;
+  z-index: 0;
+  width: 100%;
+}
+
+#progressbar {
+  opacity: 0; 
+  width: 0%;
+  height: 14px;
+  border-radius:28px;
+  background-color: #5383cc;
+  -webkit-animation: fadein 500ms linear forwards;  
+  animation: fadein 500ms linear forwards;
+  animation-delay: 100ms!important;
+}
+
+#journey-1 {
+  opacity: 0;  height: auto!important;  padding-top: 10rem;  padding-bottom: 1rem!important;  -webkit-animation: fadein 500ms linear forwards;  animation: fadein 500ms linear forwards;
+  animation-delay: 500ms;
+}
+#journey-2 {
+  opacity: 0;  height: auto!important;  padding-top: 10rem;  padding-bottom: 1rem!important;  -webkit-animation: fadein 500ms linear forwards;  animation: fadein 500ms linear forwards;
+  animation-delay: 1500ms;
+}
+#journey-3 {
+  opacity: 0;  height: auto!important;  padding-top: 10rem;  padding-bottom: 1rem!important;  -webkit-animation: fadein 500ms linear forwards;  animation: fadein 500ms linear forwards;
+  animation-delay: 2500ms;
+}
+#journey-4 {
+  opacity: 0;  height: auto!important;  padding-top: 10rem;  padding-bottom: 1rem!important;  -webkit-animation: fadein 500ms linear forwards;  animation: fadein 500ms linear forwards;
+  animation-delay: 3500ms;
+}
+#journey-5 {
+  opacity: 0;  height: auto!important;  padding-top: 10rem;  padding-bottom: 1rem!important;  -webkit-animation: fadein 500ms linear forwards;  animation: fadein 500ms linear forwards;
+  animation-delay: 4500ms;
+}
+#journey-6 {
+  opacity: 0;  height: auto!important;  padding-top: 10rem;  padding-bottom: 1rem!important;  -webkit-animation: fadein 500ms linear forwards;  animation: fadein 500ms linear forwards;
+  animation-delay: 5500ms;
+}
 
 
 /* Elements */
@@ -70,6 +116,15 @@ hr.divider {
   font-weight: 700!important;
 }
 
+.page-section {
+  padding: 8rem 0 ;
+  min-height: 100vh;
+}
+
+.block-header {
+  display: flex;
+}
+
 .ifrc {height: 45px; float: left; margin: 5px;}
 
 .square {
@@ -79,14 +134,9 @@ hr.divider {
   margin-right: 10px;
   background-color: #FF0000;
 }
-.line-0 {
-  width:100%;
-  height: 5px;
-  position: relative;
-  top: 90px;
-  z-index: 0;
-  background-color: #5383cc;
-}
+
+
+
 .line-1 {
   width:30%;
   height: 1px;
@@ -139,18 +189,7 @@ header.masthead {
   background-blend-mode: normal,luminosity; 
 }
 
-#journey {
-  height: auto!important;
-  padding-top: 10rem;
-  padding-bottom: 1rem!important;
-  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/bg_journey.png"); 
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: scroll;
-  background-size: contain;
-  background-color: #0A182D;
-  background-blend-mode: normal,luminosity; 
-}
+
 
 #country_zmb{
   height: auto!important;
@@ -209,15 +248,6 @@ header.masthead {
   background-color: #0A182D;
   background-blend-mode: normal,luminosity;
 }
-.page-section {
-    padding: 8rem 0 ;
-    min-height: 100vh;
-  }
-
-.block-header {
-    display: flex;
-  }
-
 
 
   #case_stories .container .portfolio-box, #portfolio .container-sm .portfolio-box, #portfolio .container-md .portfolio-box, #portfolio .container-lg .portfolio-box, #portfolio .container-xl .portfolio-box, #portfolio .container-xxl .portfolio-box {
@@ -317,3 +347,48 @@ header.masthead {
     transition: background-color 0.25s ease-in-out;
     cursor: pointer;
   }
+
+/* Effect */
+
+@-webkit-keyframes fadeout {
+    90% {
+        opacity: 1;
+    }
+    99% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    90% {
+        opacity: 1;
+    }
+    99% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        height: 0
+    }
+}
+
+@-webkit-keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

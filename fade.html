@@ -1,0 +1,42 @@
+<html>
+<head>
+<style>
+        #myProgress {
+  width: 100%;
+}
+
+#myBar {
+  width: 0%;
+  height: 30px;
+  background-color: green;
+}
+    </style>
+   
+</head>
+<body onload="loadFunction()">
+    <div id="myProgress">
+        <div id="myBar"></div>
+      </div>
+
+      <script>
+        var i = 0;
+        function loadFunction() {
+          if (i == 0) {
+            i = 1;
+            var elem = document.getElementById("myBar");
+            var width = 0;
+            var id = setInterval(frame, 25);
+            function frame() {
+              if (width >= 100) {
+                clearInterval(id);
+                i = 0;
+              } else {
+                width++;
+                elem.style.width = width + "%";
+              }
+            }
+          }
+        }
+             </script>
+</body>
+</html>

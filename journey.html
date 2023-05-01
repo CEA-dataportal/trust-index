@@ -23,16 +23,16 @@
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         
     </head>
-    <body id="page-top">
+    <body id="page-top" onload="loadBar()">
         <!-- Navigation-->
         <div id="includedNav"></div>
         
         <!-- Masthead-->
         <header class="masthead">
            
-            <div class="container px-4 px-lg-5 ">
+            <div class="container px-4 px-lg-5">
                  
-                <div class="row text-left px-lg-0 h-70 mb-5">
+                <div class="row text-left px-lg-0mb-5">
                     <div class="col-lg-12 px-lg-0 mt-5">
                         <h1 class="text-white font-weight-bold">Our Journey</h1>
                         <h2 class="text-white fw-light">Get Started</h2>
@@ -40,11 +40,17 @@
                     </div>
                     
                 </div>
-                <div class="line-0"></div>
+                <div class="row text-left px-lg-0 mt-5">
+                    <div id="myProgress">
+                        <div id="progressbar"></div>
+                      </div>
+
+                </div>
+                
                 <div class="row gx-4 gx-lg-5">
                     <div class="col-lg-2 col-md-6 text-center">
-                         <div class="mb-5 pt-5 pb-5">
-                            <div class="icon_numeric mb-2"><img src="https://img.icons8.com/wired/32/FFFFFF/idea.png"/></div>
+                         <div class="mb-5 pt-5 pb-5 " id="journey-1">
+                            <div class="icon_numeric mb-2"><a href="#step1"><img src="https://img.icons8.com/wired/32/FFFFFF/idea.png"/></a></div>
                             <h5 class="h5 mb-2">Planning</h5>
                             <!-- description
                             <p class="text-muted mb-0">To evaluate the perceived ability that the organisation provides support in a timely manner.</p>
@@ -53,8 +59,8 @@
                     </div>
                     
                     <div class="col-lg-2 col-md-6 text-center">
-                          <div class="mb-5 pt-5 pb-5">
-                            <div class="icon_numeric mb-2"><img src="https://img.icons8.com/wired/32/FFFFFF/survey.png"/></div>
+                          <div class="mb-5 pt-5 pb-5" id="journey-2">
+                            <div class="icon_numeric mb-2"><a href="#step2"><img src="https://img.icons8.com/wired/32/FFFFFF/survey.png"/></a></div>
                             <h5 class="h5 mb-2">Data Collection</h5>
                             <!-- description
                             <p class="text-muted mb-0">To evaluate how well the organisation is perceived as being knowledgeable of the community needs.</p>
@@ -63,8 +69,8 @@
                     </div>
                     <div class="col-lg-2 col-md-6 text-center">
                         
-                        <div class="mb-5 pt-5 pb-5 justify-content-center">
-                            <div class="icon_numeric mb-2"><img src="https://img.icons8.com/wired/32/FFFFFF/rebalance-portfolio.png"/></div>
+                        <div class="mb-5 pt-5 pb-5" id="journey-3">
+                            <div class="icon_numeric mb-2"><a href="#step3"><img src="https://img.icons8.com/wired/32/FFFFFF/rebalance-portfolio.png"/></a></div>
                             <h5 class="h5 mb-2">Data analysis</h5>
                             <!-- description
                             <p class="text-muted mb-0">To evaluate the perception of the organisation's proximity specially when it comes to making a complaint.</p>
@@ -72,8 +78,8 @@
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-6 text-center">
-                        <div class="mb-5 pt-5 pb-5">
-                            <div class="icon_numeric mb-2"><img src="https://img.icons8.com/wired/32/FFFFFF/report-card.png"/></div>
+                        <div class="mb-5 pt-5 pb-5" id="journey-4">
+                            <div class="icon_numeric mb-2"><a href="#step4"><img src="https://img.icons8.com/wired/32/FFFFFF/report-card.png"/></a></div>
                             <h5 class="h5 mb-2">Findings & recommendations</h5>
                             <!-- description
                             <p class="text-muted mb-0"> To evaluate the perception of the organisation's ability to provide quality information to the community.</p>
@@ -81,8 +87,8 @@
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-6 text-center">
-                        <div class="mb-5 pt-5 pb-5">
-                            <div class="icon_numeric mb-2"><img src="https://img.icons8.com/wired/32/FFFFFF/circled-play.png"/></div>
+                        <div class="mb-5 pt-5 pb-5" id="journey-5">
+                            <div class="icon_numeric mb-2"><a href="#step5"><img src="https://img.icons8.com/wired/32/FFFFFF/circled-play.png"/></a></div>
                             <h5 class="h5 mb-2">Action plans</h5>
                             <!-- description
                             <p class="text-muted mb-0">To evaluate the perception of the organisation's effectiveness in providing the right kinds of aid and assistance to the target communities it supports.</p>
@@ -90,8 +96,8 @@
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-6 text-center">
-                        <div class="mb-5 pt-5 pb-5">
-                            <div class="icon_numeric mb-2"><img src="https://img.icons8.com/wired/32/FFFFFF/trophy.png"/></div>
+                        <div class="mb-5 pt-5 pb-5" id="journey-6">
+                            <div class="icon_numeric mb-2"><a href="#step6"><img src="https://img.icons8.com/wired/32/FFFFFF/trophy.png"/></a></div>
                             <h5 class="h5 mb-2">Monitoring, Evaluation, and Learning</h5>
                             <!-- description
                             <p class="text-muted mb-0">To evaluate the perception of the organisation intention to do good to the people it supports.</p>
@@ -114,14 +120,19 @@
 
 
                 <!-- WHAT-->
-                <section class="page-section" id="what">
+                <section class="page-section bg-white" id="step1">
                     <div class="container px-4 px-lg-5">
                         <div class="row gx-4 gx-lg-5 justify-content-center">
-                            <div class="col-lg-8 text-center">
-                                <h2 class="text-white mt-0">Planning</h2>
-                                <hr class="divider divider" />
-                                <p class="text-white-75 mb-4"></p>
+                            <div class="col-lg-6 text-justify">
+                                <h4 class="text-muted mb-3 subtitle">#Step 1</h4>
+                                <div class="square "></div>
+                                <h2 class="text-secondary mt-0">Planning</h2>
+                                <p class="text-secondary mb-4">Planning is the first phase of the Community Trust Index Journey. It entails building consensus, engaging National Societies’ leadership for buy-in, secure a team, preparing information, trainings, developing research protocols, obtain ethical approvals, and ensuring technical and financial support is available for to collect, analyse and act on data. The Community Trust index can be integrated within existing research activities, such as perception surveys and other assessments, or implemented as standalone provided technical and financial support from a research partner.  </p>
+                                <h4 class="text-secondary mt-0">Tools</h4>
                                 
+                            </div>
+                            <div class="col-lg-6 text-justify">
+                                <img src="./assets/img/cea-trust.png" width="100%" style="border:5px #FFF solid" >                
                             </div>
                             
                         </div>
@@ -146,7 +157,26 @@
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
         <script src="js/nav.js"></script>
-        
+        <script>
+        var i = 0;
+        function loadBar() {
+          if (i == 0) {
+            i = 1;
+            var elem = document.getElementById("progressbar");
+            var width = 0;
+            var id = setInterval(frame, 50);
+            function frame() {
+              if (width >= 100) {
+                clearInterval(id);
+                i = 0;
+              } else {
+                width++;
+                elem.style.width = width + "%";
+              }
+            }
+          }
+        }
+    </script>
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <!-- * *                               SB Forms JS                               * *-->
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
