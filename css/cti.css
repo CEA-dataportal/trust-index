@@ -4,6 +4,8 @@
 .fourth {color: #5383cc;}
 
 
+
+.bg-secondary { background-color: #6c757d ;}
 /* Journey elements */
 .bg-dark-journey1 {
   width: 100%;
@@ -391,4 +393,19 @@ header.masthead {
     100% {
         opacity: 1;
     }
+}
+
+
+.tooltip > .tooltip-inner {
+  margin-top:10px;
+  width: 350px!important;
+  background-color: #190425; 
+  color: #FFFFFF; 
+  border: 1px solid #190425; 
+  padding: 15px;
+  font-size: 18px;
+}
+/* Tooltip on top */
+.tooltip.bottom > .tooltip-arrow {
+  top: 10px;
 }

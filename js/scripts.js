@@ -60,4 +60,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
     // Journey item animation
 
-   
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();  
+});

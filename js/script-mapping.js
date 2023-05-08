@@ -111,15 +111,15 @@ function stageClassName(stage) {
 function getDataTableData(data = prioritiesData) {
     var dt = [];
     data.forEach(element => {
-        if (element['Link'] != '') {
+        if (element['Page'] != '') {
             dt.push(
-                ['<a href="country/'+ element['ISO3'] +'.html"><i class="fa-solid fa-square-plus"></i></a>',
+                ['<a href="#"><i class="fa-solid fa-square-plus"></i></a>',
                 element['Country'], 
                 stageClassName(element['Stage']), 
                 element['Progress'], 
-                element['Start Date'], 
+                element['Date'], 
                 element['Contact'],
-                '<a href="' + element['Link'] + '" target="blank">Download</a>'
+                '<a href="/country/' + element['ISO3'] + '.html" ><label class="btn secondary">Link</label></a>'
                 ]
             )
         }
@@ -129,7 +129,7 @@ function getDataTableData(data = prioritiesData) {
                 element['Country'], 
                 stageClassName(element['Stage']), 
                 element['Progress'], 
-                element['Start Date'], 
+                element['Date'], 
                 element['Contact'],
                 ''
                 ]
@@ -145,16 +145,19 @@ function generateDataTable() {
     dataTable = $('#datatable').DataTable({
         data: dtData,
         "columns": [{
-                "className": 'details-control',
-                "orderable": false,
-                "width": "1%"
-            },
-            { "width": "20%" },
-            { "width": "15%" },
-            { "width": "15%" },
+            "className": 'details-control',
+            "orderable": false,
+            "data": null,
+            
+            "width": "1%"
+        },
             { "width": "15%" },
             { "width": "10%" },
-            { "width": "10%" }
+            { "width": "15%" },
+            { "width": "10%" },
+            { "width": "20%" },
+            { "width": "8%",
+            "className": 'dt-body-center',}
         ],
         "columnDefs": [{
                 "className": "dt-head-left",
@@ -174,7 +177,36 @@ function generateDataTable() {
         ],
         "dom": "Blrtp"
     });
+
+    $('#datatable tbody').on('click', 'td.details-control', function() {
+        var tr = $(this).closest('tr');
+        var row = datatable.row(tr);
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+            tr.css('background-color', '#fff');
+            tr.find('td.details-control i').removeClass('fa fa-caret-right');
+            tr.find('td.details-control i').addClass('fa fa-caret-down');
+        } else {
+            row.child(format(row.data())).show();
+            tr.addClass('shown');
+            tr.css('background-color', '#f5f5f5');
+            $('#cfmDetails').parent('td').css('border-top', 0);
+            $('#cfmDetails').parent('td').css('padding', 0);
+            $('#cfmDetails').parent('td').css('background-color', '#f5f5f5');
+            tr.find('td.details-control i').removeClass('fa-solid fa-caret-down');
+            tr.find('td.details-control i').addClass('fa-solid fa-caret-right');
+
+        }
+    });
+
+    
 } //generateDataTable
+
+
+function format(arr) {
+    return '<table class="tabDetail" id="cfmDetails">test</table>'
+} //format
 
 // search button
 $('#searchInput').keyup(function() {

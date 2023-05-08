@@ -41,7 +41,7 @@
   --bs-danger: #dc3545;
   --bs-light: #f8f9fa;
   --bs-dark: #212529;
-  --bs-primary-rgb: 244, 98, 58;
+  --bs-primary-rgb: rgba(255, 0, 0, 1);
   --bs-primary-rgb-fade: rgba(18, 40, 76, 0.8);
   --bs-secondary-rgb: 108, 117, 125;
   --bs-success-rgb: 25, 135, 84;
@@ -3034,8 +3034,8 @@ textarea.form-control-lg {
 
 .btn-primary {
   color: #fff;
-  background-color: #f4623a;
-  border-color: #f4623a;
+  background-color: #FF0000;
+  border-color: #FF0000;
 }
 .btn-primary:hover {
   color: #fff;
@@ -4461,11 +4461,11 @@ textarea.form-control-lg {
   color: rgba(0, 0, 0, 0.9);
 }
 .navbar-light .navbar-toggler {
-  color: rgba(0, 0, 0, 0.55);
-  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 1);
+  border-color: rgba(255, 255, 255, 1);
 }
 .navbar-light .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 .navbar-light .navbar-text {
   color: rgba(0, 0, 0, 0.55);
@@ -11306,7 +11306,7 @@ body {
 }
 
 .page-section {
-  padding: 8rem 0;
+  padding: 0rem 0;
 }
 
 .text-white-75 {
@@ -11334,25 +11334,34 @@ hr.divider-light {
   background-color: #fff;
 }
 
+@media  (max-width: 992px) {
+  #mainNav {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    background-color:  rgba(18, 40, 78, 0.7)!important;
+    transition: background-color 0.2s ease;
+  }
+}
+
+
+
 #mainNav {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  background-color: #fff;
   transition: background-color 0.2s ease;
 }
 #mainNav .navbar-brand {
   font-family:"Open Sans";
   font-weight: 700;
-  color: #212529;
+  color: #FFF;
 }
 #mainNav .navbar-nav .nav-item .nav-link {
-  color: #6c757d;
+  color: #FFF;
   font-family:"Open Sans";
   font-weight: 700;
   font-size: 0.9rem;
   padding: 0.75rem 0;
 }
 #mainNav .navbar-nav .nav-item .nav-link:hover, #mainNav .navbar-nav .nav-item .nav-link:active {
-  color: #f4623a;
+  color: #FF0000;
 }
 #mainNav .navbar-nav .nav-item .nav-link.active {
   color: #f4623a !important;
@@ -11410,8 +11419,7 @@ header.masthead h1, header.masthead .h1 {
 }
 @media (min-width: 992px) {
   header.masthead {
-    height: 100vh;
-    min-height: 40rem;
+    min-height: 100vh;
     padding-top: 4.5rem;
     padding-bottom: 0;
   }

@@ -248,7 +248,7 @@ border-bottom:  1px solid #293D5D!important;
   color: #204669;
 }
 
-
+.table a{ text-decoration: none; }
 .table .btn {
     outline: none;
     display: inline;
@@ -258,6 +258,18 @@ border-bottom:  1px solid #293D5D!important;
     color: #fff;
     margin-right:10px;
   }
+
+.table .secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+  .table .secondary:hover {
+    color: #fff;
+    background-color: #5c636a;
+    border-color: #565e64;
+  }
+
 
 .table .tag-overall {
     background: #CB4335;
@@ -432,7 +444,7 @@ circle {
 
 .d3-tip {
     padding: 10px;
-    max-width: 250px;
+    width: 200px;
     background-color: #fff;
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
