@@ -120,7 +120,6 @@ hr.divider {
 
 .page-section {
   padding: 8rem 0 ;
-  min-height: 100vh;
 }
 
 .block-header {
@@ -157,6 +156,13 @@ hr.divider {
   z-index: 0;
   background-color: #ffffff31;
 }
+.separator {
+  color:#6c757d;
+  width:30%;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
 #underline {
   display:block;
   font-size: 0.73rem;
@@ -179,7 +185,7 @@ header.masthead {
 }
 
 #country_profile {
-  height: auto!important;
+  min-height: 400px!important;
   padding-top: 10rem;
   padding-bottom: 1rem!important;
   background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/country/ZMB1.jpg"); 
@@ -191,6 +197,25 @@ header.masthead {
   background-blend-mode: normal,luminosity; 
 }
 
+#faq {
+  min-height: 400px!important;
+  padding-top: 10rem;
+  padding-bottom: 1rem!important;
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/country/ZMB1.jpg"); 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  background-color: #0A182D;
+  background-blend-mode: normal,luminosity; 
+}
+
+.question {
+  color:#0A182D;
+  font-weight: bold;
+  padding-left: 20px;
+  border-left:#5383cc solid 5px;
+}
 
 
 #country_zmb{
@@ -206,7 +231,7 @@ header.masthead {
   background-blend-mode: normal,luminosity; 
 }
 #country_arg{
-  height: auto!important;
+  min-height: 400px!important;
   padding-top: 10rem;
   padding-bottom: 1rem!important;
   background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/country/ARG1.jpg"); 
@@ -303,6 +328,11 @@ header.masthead {
     background-color: #FF0000;
     border-color: #FF0000;
   }
+  .btn-secondary {
+    color: #fff;
+    background-color: #5383cc;
+    border-color: #5383cc;
+  }
   .btn-primary:hover {
     color: #fff;
     background-color: #9A0000;
@@ -335,6 +365,16 @@ header.masthead {
   .btn-icon:hover {
     color: #FF0000!important;
   }
+
+
+  #faq .btn {
+  line-height: 1.2;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+  border-radius: 1rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+}
 
   .ct-btn-scroll {
     width: 49px;

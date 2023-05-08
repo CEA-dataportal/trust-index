@@ -119,7 +119,7 @@ function getDataTableData(data = prioritiesData) {
                 element['Progress'], 
                 element['Date'], 
                 element['Contact'],
-                '<a href="country/' + element['ISO3'] + '.html" ><label class="btn secondary">Link</label></a>'
+                '<a href="country/' + element['Url'] + '.html" ><label class="btn secondary">Link</label></a>'
                 ]
             )
         }
