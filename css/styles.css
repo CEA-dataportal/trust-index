@@ -1,4 +1,6 @@
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 /*!
 * Start Bootstrap - Creative v7.0.6 (https://startbootstrap.com/theme/creative)
 * Copyright 2013-2022 Start Bootstrap
@@ -55,10 +57,10 @@
   --bs-black-rgb: 0, 0, 0;
   --bs-body-color-rgb: 255, 255, 255;/*33, 37, 41;*/
   --bs-body-bg-rgb: #12284C;
-  --bs-font-sans-serif: "Open Sans";
+  --bs-font-sans-serif: "Open Sans", sans-serif;
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-  --bs-body-font-family: "Open Sans";
+  --bs-body-font-family: "Open Sans", sans-serif;
   --bs-body-font-size: 1rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
