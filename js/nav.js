@@ -1,6 +1,6 @@
 
     $(function(){
-        $("#includedNav").load("/inc/nav.html");
+        $("#includedNav").load("inc/nav.html");
         
       });
       
