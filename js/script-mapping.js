@@ -119,13 +119,13 @@ function getDataTableData(data = prioritiesData) {
                 element['Progress'], 
                 element['Date'], 
                 element['Contact'],
-                '<a href="/country/' + element['ISO3'] + '.html" ><label class="btn secondary">Link</label></a>'
+                '<a href="country/' + element['ISO3'] + '.html" ><label class="btn secondary">Link</label></a>'
                 ]
             )
         }
         else {
             dt.push(
-                ['<a href="country/'+ element['ISO3'] +'.html"><i class="fa-solid fa-square-plus"></i></a>',
+                ['<a href="#"><i class="fa-solid fa-square-plus"></i></a>',
                 element['Country'], 
                 stageClassName(element['Stage']), 
                 element['Progress'], 
