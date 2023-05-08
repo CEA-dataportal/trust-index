@@ -180,15 +180,18 @@ header.masthead {
     background-size: cover;
     background-color: #0A182D;
     background-blend-mode: normal,luminosity;
-    
+    border-bottom: #5383cc solid 5px;
   
 }
+.v-align {
+  vertical-align: middle!important;
+}
 
-#country_profile {
-  min-height: 400px!important;
+
+#faq, #journey, #country_profile {
+  min-height: 450px!important;
   padding-top: 10rem;
-  padding-bottom: 1rem!important;
-  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/country/ZMB1.jpg"); 
+  padding-bottom: 2rem!important;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
@@ -198,10 +201,7 @@ header.masthead {
 }
 
 #faq {
-  min-height: 400px!important;
-  padding-top: 10rem;
-  padding-bottom: 1rem!important;
-  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/country/ZMB1.jpg"); 
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/p-MDG1813.jpg"); 
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
