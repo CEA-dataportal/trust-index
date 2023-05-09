@@ -64,3 +64,4 @@ window.addEventListener('DOMContentLoaded', event => {
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();  
 });
+

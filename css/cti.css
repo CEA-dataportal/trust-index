@@ -129,13 +129,67 @@ hr.divider {
 .ifrc {height: 45px; float: left; margin: 5px;}
 
 .square {
+  float: left;
   width:10px;
   height: 10px;
-  margin-top: 5px;
-  margin-right: 10px;
+  margin-top: 1rem;
+  margin-right: 1rem;
   background-color: #FF0000;
 }
 
+@media (min-width:1200px) and  (min-height: 800px) {
+  .Go2Top, .Go2Top a{
+    position:fixed;
+    bottom: 2rem;
+    right: 2rem;
+  }
+}
+@media (max-width:1200px) or  (max-height: 800px) {
+  .Go2Top, .Go2Top a{
+    display:none;
+  }
+}
+
+.Go2Top, .Go2Top a{
+  color: #a5aaae40;
+  font-size:3rem;
+}
+
+.Go2Top a:hover{
+  color: #a5aaae;
+  }
+
+
+
+.number {
+  float: left;
+  position: relative;
+  font-family:Impact, 'Arial Narrow Bold', sans-serif;
+  z-index: 0;
+  font-size: 7rem;
+  width:100px;
+  height: 100px;
+  top: -30px;
+  left:-1px;
+  margin-top: -0px;
+  margin-left: -100px;
+  color: #EEEEEE;
+}
+.number1 {
+  float: left;
+  position: relative;
+  font-family:Georgia, 'Times New Roman', Times, serif;
+  z-index: 0;
+  font-size: 1.5rem;
+  width:100px;
+  height: 50px;
+  top: -10px;
+  left:-10px;
+  margin-top: -0px;
+  margin-left: -100px;
+  color: #65656546;
+  text-transform: uppercase;
+}
 
 
 .line-1 {
@@ -158,6 +212,7 @@ hr.divider {
 }
 .separator {
   color:#6c757d;
+  
   width:30%;
   text-align: center;
   margin-left: auto;
@@ -208,6 +263,17 @@ header.masthead {
   background-size: cover;
   background-color: #0A182D;
   background-blend-mode: normal,luminosity; 
+  
+  border-bottom: #5383cc solid 5px;
+}
+#category1 {
+  padding-top: 8rem;
+  padding-bottom: 1rem!important;
+}
+
+#category2, #category3 {
+  padding-bottom: 1rem!important;
+  padding-top: 3rem!important;
 }
 
 .question {
