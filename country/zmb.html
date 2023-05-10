@@ -39,10 +39,10 @@
                         <div class="collapse navbar-collapse" id="navbarResponsive">
                             <ul class="navbar-nav ms-auto my-0 my-lg-0">
                                 <li class="nav-item"><a class="nav-link" href="../about.html">The Index</a></li>
-                                <li class="nav-item"><a class="nav-link" href="..//journey.html">Our Journey</a></li>
-                                <li class="nav-item"><a class="nav-link" href="..//countries.html">Countries</a></li>
-                                <li class="nav-item"><a class="nav-link" href="..//stories.html">Stories</a></li>
-                                <li class="nav-item"><a class="nav-link" href="..//faq.html">Questions?</a></li>
+                                <li class="nav-item"><a class="nav-link" href="../journey.html">Our Journey</a></li>
+                                <li class="nav-item"><a class="nav-link" href="../countries.html">Countries</a></li>
+                                <li class="nav-item"><a class="nav-link" href="../stories.html">Stories</a></li>
+                                <li class="nav-item"><a class="nav-link" href="../faq.html">Questions?</a></li>
                             </ul>
                         </div> 
                     </div>
@@ -69,10 +69,10 @@
                     <div class="row px-lg-5 h-5 py-5 justify-content-center">
                         <div id="radialBarBottom" class="text-center"></div>
                     </div>
-                    
-                    <div class="row px-lg-5 h-5 py-5 justify-content-center">
+                   
+                    <div class="row px-lg-5 justify-content-center">
                         <div class="text-center">
-                            <a class="btn btn-primary btn-xl mt-5" href="#">Download Report</a>
+                            <div id="report"></div>
                         </div>
                         
                     </div>
@@ -84,7 +84,7 @@
             
         </header>
 
-
+        
         <!-- Findings-->
         <section class="page-section bg-light" id="finding1">
             <div class="container px-4 text-secondary">
@@ -125,26 +125,46 @@
     
         <!-- Findings-->
         <section class="page-section" id="finding1">
-            <div class="container px-4 text-white">
+            <div class="container px-2 text-white">
                 <div class="row text-left px-lg-0 mb-5">
                     <div class="block-header">
                         <div class="square "></div>
-                        <h3 class="tex font-weight-normal ">Sampling</h3>
+                        <h3 class="text font-weight-normal ">Sampling</h3>
     
                     </div>    
 
                 </div>
                 <div class="row text-left px-lg-0 mb-5 ">
                   
-                    <div class="col-lg-6 px-lg-1">
-                    <div id="keyfigures">
-                    <div id="item-1"></div>
-                    <h6>Respondents</h6>
+                   <div class="col-lg-4 px-lg-2">
+                   <div class="row text-left px-lg-0 mb-5">
+                   <h6>Population</h6>
+                   </div>
+                   <div class="row text-left px-lg-0 mb-5">
+                        <div id="keyfigures">
+                            <h6>All Respondents</h6>
+                            <div id="item-1"></div>
+                        </div>                   
                     </div>
-                    <i class="fa-sharp fa-solid fa-person-dress"></i>
+                    <div class="row text-left px-lg-0 mb-5">
+                        <div id="keyfigures">
+                        <i class="bi bi-gender-female" style="font-size: 28px !important;" title="Females"></i>
+                        <div id="item-2" title="Females"></div>
+                        </div>
+                        <div id="keyfigures">
+                        <i class="bi bi-gender-male" style="font-size: 28px !important;" title="Males"></i>
+                        <div id="item-3"></div>
+                        </div>
                     </div>
-                    <div class="col-lg-6 px-lg-5 text-center">
+                    </div>
+                    <div class="col-lg-4 px-lg-2 text-left">
+                        <h6>Region</h6>
+                        <div id=""></div>
+                    </div>
+                    <div class="col-lg-4 px-lg-2 text-left">
+                        <h6>Age group</h6>
                         <div id="chartDist"></div>
+                        <div id="text-limitations"><b>Limitations</b>: </div>
                     </div>
                 </div>
             </div>

@@ -6,12 +6,16 @@ const country = urlParams.get('iso');
 console.log(country); */
 
  // settings
-const dataURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=1401474139&single=true&output=csv&force=on";
-const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=110833577&single=true&output=csv&force=on";
+// const dataURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=1401474139&single=true&output=csv&force=on";
+// const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=110833577&single=true&output=csv&force=on";
+// Overview
+const overviewURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=361636222&single=true&output=csv&force=on";
+const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=110833577&single=true&output=csv&force=on";
+
+const country = "Zambia";
 
 let CTI=[];
 let sampling=[];
-const countryISO = "ZMB";
 var CTIdata = [];
 var SamplingData = [];
 
@@ -19,21 +23,26 @@ var SamplingData = [];
 $(document).ready(function() {
     function getData() {
         Promise.all([
-            d3.csv(dataURL),
+            d3.csv(overviewURL),
             d3.csv(samplingURL),
         ]).then(function(data) {
-            CTI=data[0].filter(d => { return d.ISO == countryISO; });
-            sampling=data[1].filter(d => { return d.ISO == countryISO; });
+            CTI=data[0];
+            sampling=data[1];
             CTIdata = [parseInt(CTI[0]['Competency']), parseInt(CTI[0]['Value']), parseInt(CTI[0]['Overall'])];
-            SamplingData = [parseInt(sampling[0]['Total_respondent']), parseInt(sampling[0]['Female_respondent']), parseInt(sampling[0]['Male_respondent'])];
+            SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
+            
             console.log(SamplingData);
+            // Overview
             title(CTI);
-            background(CTI); 
-            generateRadialChart(CTIdata);
             background(CTI);
-
+            report(CTI); 
+            generateRadialChart(CTIdata);
+           
             // sampling
-            figures(CTI);
+            figures(sampling);
+            figFemales(sampling);
+            figMales(sampling);
+            limits(sampling)
         }); // then
        
     } // getData
@@ -286,22 +295,18 @@ var optionsBar2 = {
       
 var optionsDist = {
     series: [{
-    name: 'Males',
-    data: [14.69, 12.95, 16.96, 11.08
-    ]
+    data: [  11.08, 16.96, 12.95, 14.69], 
   },
-  {
-    name: 'Females',
-    data: [12.28, 9.35, 15.49, 7.21
-    ]
-  }
   ],
     chart: {
     type: 'bar',
     height: 300,
-    stacked: false
+    stacked: false,
+    toolbar: {
+      show: false
+    }
   },
-  colors: ['#008FFB', '#FF4560'],
+  colors: ['#FF0000'],
   plotOptions: {
     bar: {
       horizontal: false,
@@ -321,20 +326,20 @@ var optionsDist = {
       lines: {
         show: false
       }
+    },
+    yaxis: {
+      lines: {
+        show: false
+      }
     }
   },
   yaxis: {
-    min: 0,
-    max: 20,
-    title: {
-      // text: 'Age',
-    },
   },
   tooltip: {
     shared: false,
     x: {
       formatter: function (val) {
-        return val
+        return "Age group:" + val
       }
     },
     y: {
@@ -344,20 +349,18 @@ var optionsDist = {
     }
   },
   title: {
-    text: 'Respondents'
   },
   xaxis: {
-    categories: ['45+', '35-44', '25-34', '18-24'
-    ],
-    title: {
-      text: 'Percent'
-    },
-    labels: {
-      formatter: function (val) {
-        return Math.abs(Math.round(val)) + "%"
-      }
-    }
+    categories: ['18-24','25-34', '35-44','45+' ],
+    axisTicks: {
+      show: false
   },
+    
+  },
+  yaxis: {
+    show:false,
+  },
+  
   };
 
   var chartDist = new ApexCharts(document.querySelector("#chartDist"), optionsDist);
@@ -371,23 +374,55 @@ function background() {
         .text(desc); 
 
 
-}; 
+};
+
 
 function title() {
-
-    var title = CTI[0]['Country'];
+    var title = country;
           d3.select("#title_country").append("span")
         .text(title); 
+};
 
+function report() {
 
-};  
+  var rep = CTI[0]['Report'];
+  if (rep != '') {
+        d3.select("#report").append("span")
+      .html('<a href="' + rep + '" ><div class="btn btn-primary btn-xl">Download Report</div></a>');
+    }
+}; 
   
 function figures() {
 
-    var respondents = CTI[0]['Total_respondent'];
-    console.log(respondents);
+    var respondents = sampling[0]['Total_respondent'];
           d3.select("#item-1").append("span")
         .text(respondents); 
 
 
 };
+
+function figFemales() {
+
+  var females = sampling[0]['Female_respondent'];
+  console.log(females);
+        d3.select("#item-2").append("span")
+      .text(females); 
+
+
+};
+function figMales() {
+
+  var males = sampling[0]['Male_respondent'];
+  console.log(males);
+        d3.select("#item-3").append("span")
+      .text(males); 
+
+
+};
+
+function limits() {
+  var limitation = sampling[0]['Limitations'];
+        d3.select("#text-limitations").append("span")
+      .text(limitation); 
+};
+

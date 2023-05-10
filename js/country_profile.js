@@ -123,11 +123,6 @@ function title() {
     name: 'Males',
     data: [14.69, 12.95, 16.96, 11.08
     ]
-  },
-  {
-    name: 'Females',
-    data: [12.28, 9.35, 15.49, 7.21
-    ]
   }
   ],
     chart: {
