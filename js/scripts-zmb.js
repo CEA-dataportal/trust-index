@@ -18,20 +18,23 @@ let CTI=[];
 let sampling=[];
 var CTIdata = [];
 var SamplingData = [];
-
+var mapData ;
 
 $(document).ready(function() {
     function getData() {
         Promise.all([
             d3.csv(overviewURL),
             d3.csv(samplingURL),
+            d3.json("../data/ZMB.geojson"),
         ]).then(function(data) {
             CTI=data[0];
             sampling=data[1];
             CTIdata = [parseInt(CTI[0]['Competency']), parseInt(CTI[0]['Value']), parseInt(CTI[0]['Overall'])];
             SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
             
-            console.log(SamplingData);
+          
+            mapData = data[2];
+            console.log(mapData);
             // Overview
             title(CTI);
             background(CTI);
@@ -43,6 +46,7 @@ $(document).ready(function() {
             figFemales(sampling);
             figMales(sampling);
             limits(sampling)
+            map(mapData);
         }); // then
        
     } // getData
@@ -81,7 +85,6 @@ window.Apex = {
  // Overview Radial Chart 
 
 function generateRadialChart(data){
-    console.log(data);
     var optionsCircle4 = {
         chart: {
           type: 'radialBar',
@@ -369,7 +372,6 @@ var optionsDist = {
 function background() {
 
     var desc = CTI[0]['Background'];
-    console.log(desc);
           d3.select("#background").append("span")
         .text(desc); 
 
@@ -404,7 +406,6 @@ function figures() {
 function figFemales() {
 
   var females = sampling[0]['Female_respondent'];
-  console.log(females);
         d3.select("#item-2").append("span")
       .text(females); 
 
@@ -413,7 +414,6 @@ function figFemales() {
 function figMales() {
 
   var males = sampling[0]['Male_respondent'];
-  console.log(males);
         d3.select("#item-3").append("span")
       .text(males); 
 
@@ -425,4 +425,60 @@ function limits() {
         d3.select("#text-limitations").append("span")
       .text(limitation); 
 };
+
+
+// SAMPLING MAP
+
+// Define the div for the tooltip
+var div = d3.select("#map_sampling").select("#tooltip")
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+
+// The svg
+var svg = d3.select("#map_sampling").select("svg").attr("width", 350).attr("height",350),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+// Map and projection
+var projection = d3.geoAitoff()
+    .scale(1250)
+    .translate([-455,-125])
+
+    
+svg.style("border","10px");
+
+// Load external data and boot
+function map(data){
+
+    console.log("carte")
+        // Draw the map
+        svg.append("g")
+            .selectAll("path")
+            .data(data.features)
+            .enter().append("path")
+                .attr("fill", "#737CA1")
+                .attr("stroke", "#FFF")
+                .attr("stroke-width", "1.5px")
+                .attr("d", d3.geoPath()
+                    .projection(projection)
+                )
+            .on("mouseover", function(d) {      
+                div.transition()        
+                    .duration(200)      
+                    .style("opacity", .9);      
+                div.html(d.properties.name)
+                    .style("left", (d3.event.pageX) + "px")  
+                    .style("font-size", "1rem")
+                    .style("padding", "5px")   
+                    .style("top", (d3.event.pageY - 28) + "px");    
+                    })                  
+                .on("mouseout", function(d) {       
+                    div.transition()        
+                        .duration(500)  
+                    .style("stroke", "#fff")
+                })
+
+}
+
+
 

@@ -27,6 +27,7 @@
 
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     </head>
     <body id="page-top">
 
@@ -159,7 +160,11 @@
                     </div>
                     <div class="col-lg-4 px-lg-2 text-left">
                         <h6>Region</h6>
-                        <div id=""></div>
+                        
+                        <div id="map_sampling">
+                            <div id="tooltip"></div>
+                            <svg></svg>
+                        </div>
                     </div>
                     <div class="col-lg-4 px-lg-2 text-left">
                         <h6>Age group</h6>
@@ -189,5 +194,8 @@
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
          <!-- Apex Charts-->
         <script src="../js/scripts-zmb.js"></script>
+
+
+        
     </body>
 </html>

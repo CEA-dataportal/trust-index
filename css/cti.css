@@ -515,3 +515,15 @@ header.masthead {
 .tooltip.bottom > .tooltip-arrow {
   top: 10px;
 }
+
+#map_sampling .tooltip {   
+  position: absolute;         
+  text-align: center;          
+  font: 0.73em sans-serif;      
+  background: #000000; 
+  border: 10px;
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+  border-radius: 4px;         
+  pointer-events: none;           
+}
