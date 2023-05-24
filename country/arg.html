@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -16,6 +15,7 @@
        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:bold, light, 300,300italic,400,400italic,600,600italic,700,700italic" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
         <!-- SimpleLightbox plugin CSS-->
@@ -27,30 +27,31 @@
 
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        </head>
-        
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    </head>
     <body id="page-top">
-        <!-- Navigation-->
-       
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4 t" id="mainNav">
-            <div class="container px-4 px-lg-4">
-                <div class="square"></div>
-                <a class="navbar-brand" href="/index.html"><h2 class="banner_title block-title">Community Trust Index</h2></a>
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto my-0 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="/about.html">The Index</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/journey.html">Our Journey</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/countries.html">Countries</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/stories.html">Stories</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/faq.html">Questions?</a></li>
-                    </ul>
-                </div> 
-            </div>
-        </nav>
 
+        <!-- Navigation-->
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4 t" id="mainNav">
+                    <div class="container px-4 px-lg-4">
+                        <div class="square"></div>
+                        <a class="navbar-brand" href="../index.html"><h2 class="banner_title block-title">Community Trust Index</h2></a>
+                        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                        <div class="collapse navbar-collapse" id="navbarResponsive">
+                            <ul class="navbar-nav ms-auto my-0 my-lg-0">
+                                <li class="nav-item"><a class="nav-link" href="../about.html">The Index</a></li>
+                                <li class="nav-item"><a class="nav-link" href="../journey.html">Our Journey</a></li>
+                                <li class="nav-item"><a class="nav-link" href="../countries.html">Countries</a></li>
+                                <li class="nav-item"><a class="nav-link" href="../stories.html">Stories</a></li>
+                                <li class="nav-item"><a class="nav-link" href="../faq.html">Questions?</a></li>
+                            </ul>
+                        </div> 
+                    </div>
+                </nav>
+        
         <!-- Masthead-->
-        <header class="masthead" id="country_arg">
+        <header class="masthead" id="country_profile">
            
             <div class="container px-4" >
                 <div class="row px-lg-0">
@@ -70,10 +71,10 @@
                     <div class="row px-lg-5 h-5 py-5 justify-content-center">
                         <div id="radialBarBottom" class="text-center"></div>
                     </div>
-                    
-                    <div class="row px-lg-5 h-5 py-5 justify-content-center">
+                   
+                    <div class="row px-lg-5 justify-content-center">
                         <div class="text-center">
-                            <a class="btn btn-primary btn-xl mt-5" href="#">Download Report</a>
+                            <div id="report"></div>
                         </div>
                         
                     </div>
@@ -85,7 +86,7 @@
             
         </header>
 
-
+        
         <!-- Findings-->
         <section class="page-section bg-light" id="finding1">
             <div class="container px-4 text-secondary">
@@ -124,28 +125,52 @@
             </div>
             </section>
     
-        <!-- Findings-->
-        <section class="page-section" id="sampling">
-            <div class="container px-4 text-white">
+        <!-- Sampling -->
+        <section class="page-section" id="finding1">
+            <div class="container px-2 text-white">
                 <div class="row text-left px-lg-0 mb-5">
                     <div class="block-header">
                         <div class="square "></div>
-                        <h3 class="tex font-weight-normal ">Sampling</h3>
+                        <h3 class="text font-weight-normal ">Sampling</h3>
     
                     </div>    
 
                 </div>
                 <div class="row text-left px-lg-0 mb-5 ">
                   
-                    <div class="col-lg-6 px-lg-1">
-                    <div id="keyfigures">
-                    <div id="item-1"></div>
-                    <h6>Respondents</h6>
+                   <div class="col-lg-4 px-lg-2">
+                   <div class="row text-left px-lg-0 mb-5">
+                   <h6>Population</h6>
+                   </div>
+                   <div class="row text-left px-lg-0 mb-5">
+                        <div id="keyfigures">
+                            <h6>All Respondents</h6>
+                            <div id="item-1"></div>
+                        </div>                   
                     </div>
-                    <i class="fa-sharp fa-solid fa-person-dress"></i>
+                    <div class="row text-left px-lg-0 mb-5">
+                        <div id="keyfigures">
+                        <i class="bi bi-gender-female" style="font-size: 28px !important;" title="Females"></i>
+                        <div id="item-2" title="Females"></div>
+                        </div>
+                        <div id="keyfigures">
+                        <i class="bi bi-gender-male" style="font-size: 28px !important;" title="Males"></i>
+                        <div id="item-3"></div>
+                        </div>
                     </div>
-                    <div class="col-lg-6 px-lg-5 text-center">
+                    </div>
+                    <div class="col-lg-4 px-lg-2 text-left">
+                        <h6>Region</h6>
+                        
+                        <div id="map_sampling">
+                            <div id="tooltip"></div>
+                            <svg></svg>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 px-lg-2 text-left">
+                        <h6>Age group</h6>
                         <div id="chartDist"></div>
+                        <div id="text-limitations"><b>Limitations</b>: </div>
                     </div>
                 </div>
             </div>
@@ -165,15 +190,16 @@
         <!-- SimpleLightbox plugin JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
         <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-        <script>
-        
-        </script>
-        
+        <script src="../js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
          <!-- Apex Charts-->
-         
-        <script src="/js/scripts-arg.js"></script>
+        <script src="../js/scripts-arg.js"></script>
+
+
+        
     </body>
 </html>
+
+
+

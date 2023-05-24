@@ -23,7 +23,8 @@
 
 <!-- Create an element where the map will take place -->
 <body>
-<svg id="my_dataviz" width="1000" height="500" padding = "0px"></svg>
+    <h2>Map</h2>
+<svg id="my_dataviz" width="250" height="500" padding = "0px"></svg>
 <div id="map"></div>
 </body>
 <script>
@@ -44,25 +45,25 @@ var svg = d3.select("svg"),
     overflow = "hidden";
 
 // Map and projection
-var projection = d3.geoAitoff()
-    .scale(2000)
-    .translate([-500, -250])
+var projection = d3.geoMercator()
+    .scale(500)
+    .translate([700, -150])
 
     
 
 //Zoom the map
-/*
+
 svg.call(d3.zoom().on("zoom", function () {
     svg.attr("transform", d3.event.transform)
 }))
-*/
+
 
 svg.style("border","10px");
 
 // Load external data and boot
 
-d3.json("/data/ZMB.geojson", function(data){
-
+d3.json("/data/ARG2.geojson", function(data){
+console.log(data)
 
     // Draw the map
     svg.append("g")
@@ -79,7 +80,7 @@ d3.json("/data/ZMB.geojson", function(data){
             div.transition()        
                 .duration(200)      
                 .style("opacity", .9);      
-            div.html(d.properties.name)
+            div.html(d.properties.nombre)
                 .style("left", (d3.event.pageX) + "px")  
                 .style("font-size", "1rem")
                 .style("padding", "5px")   
@@ -92,9 +93,6 @@ d3.json("/data/ZMB.geojson", function(data){
             })
             
 })
-
-
-
 
    
 </script>

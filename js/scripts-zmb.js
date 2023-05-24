@@ -6,11 +6,12 @@ const country = urlParams.get('iso');
 console.log(country); */
 
  // settings
-// const dataURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=1401474139&single=true&output=csv&force=on";
-// const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=110833577&single=true&output=csv&force=on";
-// Overview
+
 const overviewURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=361636222&single=true&output=csv&force=on";
 const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=110833577&single=true&output=csv&force=on";
+const geosamplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=1873376386&single=true&output=csv&force=on";
+
+
 
 const country = "Zambia";
 
@@ -18,7 +19,11 @@ let CTI=[];
 let sampling=[];
 var CTIdata = [];
 var SamplingData = [];
+var GeoSamplingData = [];
 var mapData ;
+var totSampling ;
+// for ColorScale
+var colorScale ;
 
 $(document).ready(function() {
     function getData() {
@@ -26,15 +31,26 @@ $(document).ready(function() {
             d3.csv(overviewURL),
             d3.csv(samplingURL),
             d3.json("../data/ZMB.geojson"),
+            d3.csv(geosamplingURL),
         ]).then(function(data) {
             CTI=data[0];
             sampling=data[1];
             CTIdata = [parseInt(CTI[0]['Competency']), parseInt(CTI[0]['Value']), parseInt(CTI[0]['Overall'])];
             SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
-            
-          
+            totSampling = sampling[0]['Total_respondent'];
+            GeoSamplingData = data[3];
+
+            // for ColorScale
+            GeoSamplingValue = [];
+            GeoSamplingData.forEach(element => {
+              GeoSamplingValue.push(parseInt(element.Value))
+              });
+            colorScale = d3.scaleLinear()
+            .domain([0, d3.max(GeoSamplingValue)])
+            .range(["#ffcccc", "#FF0000"]);
+
             mapData = data[2];
-            console.log(mapData);
+            console.log(data[3]);
             // Overview
             title(CTI);
             background(CTI);
@@ -456,26 +472,36 @@ function map(data){
             .selectAll("path")
             .data(data.features)
             .enter().append("path")
-                .attr("fill", "#737CA1")
+                .attr("fill", function(d) {
+
+                  ProvinceData = GeoSamplingData.filter(item => { return d.properties.name == item.Name; });
+                  var Val = ProvinceData.length != 0 ? parseInt(ProvinceData[0].Value) : 0;
+                  console.log(Val)
+                  return Val != 0 ? colorScale(Val) : "#CCC"; 
+              
+
+                }) //"#737CA1"
                 .attr("stroke", "#FFF")
-                .attr("stroke-width", "1.5px")
+                .attr("stroke-width", "1px")
                 .attr("d", d3.geoPath()
                     .projection(projection)
                 )
-            .on("mouseover", function(d) {      
+            .on("mouseover", function(d) { 
+                ProvinceData = GeoSamplingData.filter(item => { return d.properties.name == item.Name; });
+                var Val = ProvinceData.length != 0 ? parseInt(ProvinceData[0].Value) : 0;
+                Tooltip = "<h6>" + d.properties.name + "</h6>" + Val;
+              
                 div.transition()        
                     .duration(200)      
                     .style("opacity", .9);      
-                div.html(d.properties.name)
+                div.html(Tooltip)
                     .style("left", (d3.event.pageX) + "px")  
-                    .style("font-size", "1rem")
+                    .style("font-size", "0.8rem")
                     .style("padding", "5px")   
                     .style("top", (d3.event.pageY - 28) + "px");    
                     })                  
-                .on("mouseout", function(d) {       
-                    div.transition()        
-                        .duration(500)  
-                    .style("stroke", "#fff")
+                .on("mouseout", function(d) { 
+                    div.html(Tooltip).style("opacity", 0)
                 })
 
 }
