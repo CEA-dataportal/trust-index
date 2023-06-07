@@ -19,6 +19,76 @@ body {
     height: auto!important;
     margin: 0 auto auto;
 }
+
+
+
+.hidden {display: none;}
+.toggler {position: relative; text-align: right; right: 0px; top: 50px;}
+.title_toggle {font-size: 0.83rem; padding-left: 5px; padding-right: 5px; display: inline; line-height: 0.83rem; vertical-align: middle;}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 22px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #2471A3;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #204669;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #204669;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(28px);
+    -ms-transform: translateX(28px);
+    transform: translateX(28px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 28px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
 /* Banner */
 
 
@@ -78,28 +148,23 @@ body {
 /* Page Header */
 
 #heading {
-  position:relative;
-  max-width: 1280px;
+  position:absolute;
+  bottom:15vh;
   z-index:5;
   margin-left: auto;
   margin-right: auto;
 }
 
-.heading-container {
-  position:absolute;
-  left:0px;
-  top:-120px;
-
-}
 
 
 
 .container-keyfigures {
-  position:absolute;
+  position: relative;
   right:0px;
-  top:-45px;
-  background: #0e1c31!important;
-  border: 1px solid #41526F;
+  text-align: left;
+  width: 320px;
+  background: #0e1c31!important; 
+  /* border: 1px solid #41526F; */
 }
 #keyfigures{
   position:relative; z-index: 20;display:inline-block; margin: 10px; text-align: center;  height: 65px; width: 80px;}
@@ -114,7 +179,6 @@ body {
 
 .page-content-mapping {
     width: 100%;
-    margin-top:-30px;
     color:#FFF;
     }
 
@@ -122,17 +186,32 @@ body {
 position:relative;
 z-index: 0;
 width: 100%;
-min-height: 550px;
+margin-left: 20px;
+max-width: 1290px;
 text-align: center;
+padding-top: 30px;
 }
 
+#mapping {
+    
+    min-height: 80vh;
+}
+.map_title {
+text-align: left;
+color: #ffffff;
+font-size: 2rem;
+padding-bottom: 10px;
+margin-bottom: 20px;
+border-bottom: #204669 solid 1px;
+
+}
+
+
 #mainOfIframe {
-  width: 100%;
-  width: 1400px;
+  width: 1290px;
   opacity: 0;
   margin-left: auto;
   margin-right: auto;
-  background: #12284c;
 }
 
 .sp {
@@ -169,14 +248,14 @@ text-align: center;
 .filters {
 width: 100%;
 max-width: 1280px;
-text-align: left;
+text-align: right;
 color:#FFF;
-padding:10px;
+padding:5px;
 margin-right: auto;
 margin-left: auto;
 position:relative;
 z-index: 24;
-top:-20px;
+margin-top: -30px;
 }
 
 #searchBox {
@@ -188,7 +267,9 @@ top:-20px;
     color:#CFD4DB!important;
     border:1px solid rgba(12, 28, 53, 0.8)!important;
 }
-  
+.table > :not(:first-child) {
+    border-top:none!important;
+}
 
 table.datatable {
 width: 100%;
@@ -198,6 +279,7 @@ padding:10px;
 margin-right: auto;
 margin-left: auto;
 margin-bottom:25px;
+height: 55vh;
 }
 
 table.datatable th {
@@ -261,8 +343,8 @@ border-bottom:  1px solid #293D5D!important;
 
 .table .secondary {
     color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background-color: #2471A3;
+    border-color: #2471A3;
   }
   .table .secondary:hover {
     color: #fff;
@@ -369,7 +451,7 @@ border-bottom:  1px solid #293D5D!important;
 
 .zoom-controls {
     position: absolute;
-    left: 25px;
+    right: 25px;
     top: 40px;
     display: grid;
     grid-gap: 5px;
@@ -381,7 +463,7 @@ border-bottom:  1px solid #293D5D!important;
     font-size: 18px;
     display: grid;
     border-radius: 50% !important;
-    background: #12284c;
+    background: #2471A3!important;
     color: #fff;
     border: none;
     user-select: none;

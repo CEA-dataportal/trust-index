@@ -39,41 +39,63 @@
     </div>
         <!-- Navigation-->
 
-        <div id="includedNav"></div> <!-- see nav.html-->
-
-        <!-- Key figures block -->
-
-        <header class="wrapper-mapping sticky-top">
-            
-                    <div class="banner__container">
-                        <div class="banner__overlay">
-                            <div class="container">
-            
-                            </div>
-                        </div>
-                    </div>
-                    <div id="heading">
-                        <div class="container-keyfigures">
-                          <div id="keyfigures">
-                            <div id="item-1"></div>                            
-                            <div class="desc">Engagement</div>
-                          </div>
-                          <div id="keyfigures">
-                            <div id="item-2"></div>
-                            <div class="desc">Ongoing</div>
-                          </div>
-                          <div id="keyfigures">
-                            <div id="item-3"></div>
-                            <div class="desc">Completed</div>
-                          </div>
-                        </div>
-                    </div>
-        </header>
+        <div id="topbar"><div class="Tab">CEA Data Portal</div></div>
+        <nav class="navbar navbar-expand-lg navbar-light py-4" id="mainNav">
+          
+          <div class="container px-4 px-lg-4 mt-md-4">
+              <div class="navbar-brand"><a href="index.html">Community Trust</a> Index</div>
+              <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                  <ul class="navbar-nav ms-auto my-0 my-lg-0">
+                      <li class="nav-item"><a class="nav-link" href="about.html">The Index</a></li>
+                      <li class="nav-item"><a class="nav-link" href="journey.html">Our Journey</a></li>
+                      <li class="nav-item"><a class="nav-link" href="countries.html">Countries</a></li>
+                      <li class="nav-item"><a class="nav-link" href="stories.html">Stories</a></li>
+                      <li class="nav-item"><a class="nav-link" href="faq.html">Questions?</a></li>
+                  </ul>
+              </div> 
+          </div>
+      </nav>
+       
  
-        <!-- Data and Map -->
+        <!-- Data and Map -->            
+        
+        <!-- Rounded switch -->
+            
         <div class="container px-0 px-lg-0">
-            <div class="full-width">
+        
+        <div class="full-width">
+            
+            <div class="toggler">
+                <div class="title_toggle">Map</div>
+                <label class="switch">
+                        <input type="checkbox"  class="always">
+                        <span class="slider round"></span>
+                     </label><div class="title_toggle">List</div>
+                </div> 
+
+            <div class="map_title">Countries</div>
+            
+        
+        <div id="mapping" class="togglee">
+            <div id="heading">
+                <div class="container-keyfigures">
                 
+                  <div id="keyfigures">
+                    <div id="item-1"></div>                            
+                    <div class="desc">Engagement</div>
+                  </div>
+                  <div id="keyfigures">
+                    <div id="item-2"></div>
+                    <div class="desc">Ongoing</div>
+                  </div>
+                  <div id="keyfigures">
+                    <div id="item-3"></div>
+                    <div class="desc">Completed</div>
+                  </div>
+                </div>
+            </div>
+                        
                 <div id="mainOfIframe">
                     <div id="map">
                         <div class="zoom-controls">
@@ -84,14 +106,17 @@
                     </div>
                 </div>
             </div>
+            
+        </div>
+        
+             
+         <div class="table togglee hidden">
+            
             <div class="filters">
-            <span class="dtSearch">
-            <label id="searchBox"><input class="form-control" id="searchInput" type="text" placeholder="Search.."></label>
-            </span>
+                <span class="dtSearch">
+                <label id="searchBox"><input class="form-control" id="searchInput" type="text" placeholder="Search.."></label>
+                </span>
             </div>
-
-            <div class="table">
-
                 <table id="datatable" class="datatable" style="width:100%">
                     <thead>
                         <tr>

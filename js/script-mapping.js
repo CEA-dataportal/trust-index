@@ -465,3 +465,10 @@ function getColor(type) {
 $(document).ready(function() {
     // $('.js-example-basic-single').select2();
 });
+
+
+  $(function(){
+    $(".always").click(function() {
+        $(".togglee").slideToggle();
+    });
+});

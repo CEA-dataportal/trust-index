@@ -92,6 +92,8 @@ hr.divider {
 
 
 /* Text */
+
+
 .subtitle {
     font-weight: 200!important;
     text-transform: uppercase;
@@ -99,24 +101,66 @@ hr.divider {
 
 
 /* HOME PAGE */
-
+.navbar-shrink .navbar-brand,
 .navbar-brand {
-  font-size: 2rem;
-  margin: 30 0 auto auto;
-  font-weight: bold;
+  font-size: 28px!important;
+  font-weight: 300!important;
   font-stretch: normal;
-  font-style: normal;
   line-height: 0.83;
   letter-spacing: normal;
-  color: #ffffff;
+  color: #FFFFFF!important;
 }
-.block-title {
+.navbar-shrink .navbar-brand a,
+.navbar-brand a{
+  font-weight: 700;
+  text-decoration: none;
+  color: #FFFFFF!important;
+}
+.navbar-shrink .navbar-brand a:hover,
+.navbar-brand a:hover{
+  font-weight: 700;
+  text-decoration: none;
+  color: #FFFFFF!important;
+}
+.brand-title {
   line-height: 3rem;
 }
 
-.navbar-brand h2 {
-  font-weight: 700!important;
+#mainNav .navbar-nav .nav-item .nav-link {
+  margin-bottom: 5px;
+  padding:5px;
+  margin-left:20px;
 }
+#mainNav .navbar-shrink .navbar-nav .nav-item .nav-link:hover,
+#mainNav .navbar-nav .nav-item .nav-link:hover {
+  
+  color: #FFFFFF!important;
+  border-bottom: #FF0000 5px solid;
+  margin-bottom: 0px;
+}
+
+#topbar {
+  position: fixed;
+  z-index: 400;
+  max-width: 1280px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.Tab, .Tab a{
+  position:fixed;
+  top:0px;
+  right:0px;
+  font-size: 0.83rem!important;
+  width: 120px;
+  padding: 5px;
+  margin-bottom: 25px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  text-align: center;
+  background-color: #FF0000;
+}
+
 
 .page-section {
   padding: 8rem 0 ;
@@ -228,12 +272,13 @@ hr.divider {
 header.masthead {
     padding-top: 10rem;
     padding-bottom: calc(10rem - 4.5rem);
-    background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 15%, rgba(18, 40, 78, 0.7) 30%), url("../assets/img/bg-trustindex.jpg"); 
+    background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 15%, rgba(18, 40, 78, 0.7) 30%), url("../assets/img/bg-trustindex.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-size: cover;
-    background-color: #0A182D;
+    background-color: #FFFFFF;
+    /* background-color: #0A182D; */
     background-blend-mode: normal,luminosity;
     border-bottom: #5383cc solid 5px;
   
@@ -243,16 +288,19 @@ header.masthead {
 }
 
 
-#faq, #journey, #country_profile {
-  min-height: 450px!important;
+#faq, #about, #journey, #country_profile {
+  min-height: 400px!important;
   padding-top: 10rem;
   padding-bottom: 2rem!important;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-size: cover;
-  background-color: #0A182D;
+  background-color:*#0A182D;
   background-blend-mode: normal,luminosity; 
+
+
+  border-bottom: #5383cc solid 5px;
 }
 
 #faq {
@@ -263,8 +311,6 @@ header.masthead {
   background-size: cover;
   background-color: #0A182D;
   background-blend-mode: normal,luminosity; 
-  
-  border-bottom: #5383cc solid 5px;
 }
 #category1 {
   padding-top: 8rem;
@@ -433,11 +479,11 @@ header.masthead {
   }
 
 
-  #faq .btn {
+  #faq .btn, #about .btn{
   line-height: 1.2;
   padding: 0.5rem 0.8rem;
   font-size: 0.9rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
 }
