@@ -1,4 +1,8 @@
-const geodataUrl = '/data/world.json';
+
+var urlHost = window.location.host;
+
+const geodataUrl = window.location.protocol+'//' + urlHost + '/data/world.json';
+console.log(geodataUrl);
 const dataURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=0&single=true&output=csv&force=on";
 const settingsURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbooW7TmLrMZ8QNc4IlGq4mKaZQflviQ1WNPzeMHLemb8Nl5QdsDQnR5TnWHeNOzsFY479CV-tHbNY/pub?gid=1974885344&single=true&output=csv&force=on";
 
