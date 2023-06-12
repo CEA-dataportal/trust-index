@@ -9,6 +9,11 @@
         
       });
       
+      $(function(){
+        $("#inc-footer").load("inc/footer.html");
+        
+      });
+      
 
   
 

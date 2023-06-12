@@ -145,6 +145,30 @@ hr.divider {
   margin-top: -5px;
   margin-right: auto;
   margin-left: auto;
+  left:-55px;
+  top:20vh;
+}
+
+.rotate {
+
+
+  /* Legacy vendor prefixes that you probably don't need... */
+  /* Safari */
+  -webkit-transform: rotate(-90deg);
+  -webkit-transform-origin: 51%  55%;
+
+  /* Firefox */
+  -moz-transform: rotate(-90deg);
+
+  /* IE */
+  -ms-transform: rotate(-90deg);
+
+  /* Opera */
+  -o-transform: rotate(-90deg);
+
+  /* Internet Explorer */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
 }
 
 
