@@ -149,7 +149,7 @@ body {
 
 #heading {
   position:absolute;
-  bottom:15vh;
+  bottom:50px;
   z-index:5;
   margin-left: auto;
   margin-right: auto;
@@ -194,7 +194,8 @@ padding-top: 30px;
 
 #mapping {
     
-    min-height: 80vh;
+    height: 80vh;
+    min-height: 660px;
 }
 .map_title {
 text-align: left;

@@ -3,6 +3,11 @@
         $("#includedNav").load("inc/nav.html");
         
       });
+
+      $(function(){
+        $("#inc-offcanvas").load("inc/canvas.html");
+        
+      });
       
 
   
