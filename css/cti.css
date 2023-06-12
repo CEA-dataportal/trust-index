@@ -143,23 +143,8 @@ hr.divider {
   position: absolute;
   z-index: 1000;
   margin-top: -5px;
-  max-width: 1280px;
   margin-right: auto;
   margin-left: auto;
-}
-.Tab, .Tab a{
-  position:fixed;
-  top:0px;
-  right:0px;
-  font-size: 0.83rem!important;
-  width: 120px;
-  padding: 5px;
-  margin-bottom: 25px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  text-align: center;
-  background-color: #FF0000;
 }
 
 
@@ -576,64 +561,6 @@ header.masthead {
 }
 
 
-/* Popup box BEGIN */
-.hover_bkgr_fricc{
-  background:rgba(0,0,0,.4);
-  cursor:pointer;
-  display:none;
-  height:100%;
-  position:fixed;
-  text-align:center;
-  top:0;
-  width:100%;
-  z-index:10000;
-}
-.hover_bkgr_fricc .helper{
-  display:inline-block;
-  height:100%;
-  vertical-align:middle;
-}
-.hover_bkgr_fricc > div {
-  background-color: #fff;
-  box-shadow: 10px 10px 60px #555;
-  display: inline-block;
-  height: auto;
-  max-width: 551px;
-  min-height: 100px;
-  vertical-align: middle;
-  width: 60%;
-  position: relative;
-  border-radius: 8px;
-  padding: 15px 5%;
-}
-.popupCloseButton {
-  background-color: #fff;
-  border: 3px solid #999;
-  border-radius: 50px;
-  cursor: pointer;
-  display: inline-block;
-  font-family: arial;
-  font-weight: bold;
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  font-size: 25px;
-  line-height: 30px;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-}
-.popupCloseButton:hover {
-  background-color: #ccc;
-}
-.trigger_popup_fricc {
-  cursor: pointer;
-  font-size: 20px;
-  margin: 20px;
-  display: inline-block;
-  font-weight: bold;
-}
-/* Popup box BEGIN */
 
 /* Canvas */
 
@@ -670,3 +597,38 @@ border: #FFF solid 5px;
   border-width: 1px;
   border-style: solid;
   }
+
+
+  .offcanvas .dropdown-toggle {
+   padding-top:2px!important; 
+   padding-bottom:2px!important; 
+   font-size: 0.9rem;
+  }
+  .offcanvas .dropdown-toggle::before {
+    content: "Select";
+  }
+
+  .dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+  }
+
+.dropdown-menu {
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0;
+  font-size: 0.83rem!important;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
