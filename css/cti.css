@@ -151,8 +151,6 @@ hr.divider {
 
 .rotate {
 
-
-  /* Legacy vendor prefixes that you probably don't need... */
   /* Safari */
   -webkit-transform: rotate(-90deg);
   -webkit-transform-origin: 51%  55%;
@@ -655,4 +653,94 @@ border: #FFF solid 5px;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0.25rem;
+}
+
+/* Stories Popup */
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  position: absolute;
+  display: block;
+  top:-20vh;
+  left:20vw;
+  overflow:scroll;
+  overflow-x:hidden;
+  width: 60vw;
+  height: 80vh; /* Could be more or less, depending on screen size */
+  background-color: #fefefe;
+  color: #212529;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 10px;
+}
+.modal-content h3,.modal-content h5 {
+  color:rgba(18, 40, 78, 1);
+  font-weight: 700;
+  
+}
+.modal-content p {
+  font-size: 0.93rem!important;
+}
+.modal-content img { 
+  float: right;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  width: 400px;
+}
+
+
+blockquote {
+  width: 30%;;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  border-left:20px solid #aaa;
+  padding-left: 0px;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #EEE;
+}
+blockquote p{
+  margin-top: -3rem;
+  font-size: 2rem!important;
+  color: #555;
+  font-style: italic;
+}
+blockquote p::first-letter {
+  text-transform: uppercase
+}
+
+blockquote::before {
+  position:relative;
+  top:-5px;
+  left:-28px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color:#EEE;
+  content: "“";
+  font-size: 2.5rem;
+  padding-right: 10px;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
