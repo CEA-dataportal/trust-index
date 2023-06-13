@@ -1,5 +1,5 @@
 
-    $(function(){
+      $(function(){
         $("#includedNav").load("inc/nav.html");
         
       });
@@ -13,7 +13,7 @@
         $("#inc-footer").load("inc/footer.html");
         
       });
-      
+
 
   
 
