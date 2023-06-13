@@ -31,11 +31,17 @@
         <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     </head>
     <body id="page-top">
-        <div id="topbar"><div class="Tab">CEA Data Portal</div></div>
+        
         <!-- Navigation-->
       <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4" id="mainNav">
+    
+        <div id="topbar" class="fixed-top">
+            <button class="btn btn-primary rotate" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                CEA Data Portal
+            </button>
+        </div>
                     <div class="container px-4 px-lg-4 mt-md-4">
-                        <div class="navbar-brand"><a href="../index.htm">Community Trust</a> Index</div>
+                        <div class="navbar-brand"><a href="../index.html">Community Trust</a> Index</div>
                         <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                         <div class="collapse navbar-collapse" id="navbarResponsive">
                             <ul class="navbar-nav ms-auto my-0 my-lg-0">
@@ -51,8 +57,50 @@
         
         <!-- Masthead-->
         <header class="masthead" id="country_profile">
-           
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div class="offcanvas-header">
+                  
+                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <img src="../assets\img\cea-logo.JPG" width="60%"> | Data Portal
+                  <div>
+                    <p class="intro font-weight-normal p-lg-3">
+                    Explore the below pages to find out more data about community engagement and accountability (CEA) through following thematic pilars
+                    </p>
+                  </div>
+                  
+                  <h5 class="mt-4">CEA Data</h5>
+                  <ul><li class="">Latest news</li>
+                  <div class="dropdown mt-3">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                     Countries
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <li><a class="dropdown-item" href="#">Argentina</a></li>
+                      <li><a class="dropdown-item" href="#">Guatemala</a></li>
+                      <li><a class="dropdown-item" href="#">Malawi</a></li>
+                    </ul>
+                  </div>
+                </ul>
+                 
+                  <h5 class="mt-4">Projects</h5>
+                  <ul><li class="">Community Perception</li>
+                  <li class="">Impact Research</li>
+                  <li class=""><a href="https://cea-dataportal.github.io/trust-index/">Building Trust</a></li>
+                    </ul>
+            
+                  
+                  <div class="mt-5"></div>
+                  <a href="https://communityengagementhub.org/" target="_blank">Learn more about CEA</a>
+                 
+                  
+                </div>
+              </div>
+
             <div class="container px-4" >
+                
                 <div class="row px-lg-0">
                 <div class="col-lg-7 px-lg-0 mb-5">
                     <div class="row text-left px-lg-0">
@@ -194,8 +242,6 @@
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
          <!-- Apex Charts-->
         <script src="../js/scripts-arg.js"></script>
-
-
         
     </body>
 </html>

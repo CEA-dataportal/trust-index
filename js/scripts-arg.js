@@ -35,7 +35,8 @@ console.log(country); */
          ]).then(function(data) {
              CTI=data[0];
              sampling=data[1];
-             CTIdata = [parseInt(CTI[0]['Competency']), parseInt(CTI[0]['Value']), parseInt(CTI[0]['Overall'])];
+             CTIdata = [parseInt(CTI[0]['Non-beneficiaries']), parseInt(CTI[0]['Beneficiaries']), parseInt(CTI[0]['Volunteers'])];
+             console.log(CTIdata);
              SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
              totSampling = sampling[0]['Total_respondent'];
               // for ColorScale
@@ -128,9 +129,10 @@ console.log(country); */
            lineCap: 'round'
          },
          series: data,
-         labels: ['Competency', 'Value', 'Trust Index'],
-         colors: ['#0080ff', '#5F61B5', '#FF0000'],
+         labels: ['Others', 'Beneficiaries', 'Volunteers'],
+         colors: ['#EEEEEE', '#ff9999', '#FF0000'],
          legend: {
+           inverseOrder: true,
            show: true,
            floating: true,
            position: 'bottom',
@@ -507,6 +509,8 @@ console.log(country); */
  
  }
  
- 
+
+
+
  
  
