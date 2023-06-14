@@ -332,16 +332,32 @@ function initiateMap() {
     .attr("opacity", "0.9")
         .on("mousemove", function(d) {
             mousemove(d);
+            $(this)
+            .attr("stroke", "#D9FFFFFF")
+            .attr('stroke-width', 2);
         })
         .on("mouseout", function() {
             maptip.classed('hidden', true);
-        });
+            $(this)
+            .attr("stroke", "#D9FFFFFF")
+            .attr('stroke-width', 0);
+        })
 
-    // .on("click", function(d) {
+        .on("click", function(d) {
+            
+            if (d['Page'] != '') {
+                   url = 'country/'+ d['Url'] + '.html';
+                   window.open(url, '_self');
+            }
+            else {
+                   url = '#' ;
+                   window.open(url);
+            }
+
     //     generateEmergencyInfo(d);
     //     g.selectAll("circle").attr('r', circlesR);
     //     $(this).attr('r', circlesR * 2);
-    // });
+        });
 
     mapsvg.transition()
         .duration(750)
@@ -409,18 +425,25 @@ function mousemove(d) {
         countryName = arr[0]["Country"];
         stages = splitMultiValues(arr[0]["Stage"]);
         progresses = splitMultiValues(arr[0]["Progress"]);
-
+        
     } else {
         countryName = d["Country"];
         stages = splitMultiValues(d["Stage"]);
         progresses = splitMultiValues(d["Progress"]);
     }
     html += '<h6>' + countryName + '</h6>';
+
+    if (d['Page'] != '') {
+    html += '<p><small>Click to access Country Profile</small></p>';
+    }
+    
+
+    html += '<div class="subtitle">Status</div>';
     for (let index = 0; index < stages.length; index++) {
         const stage = stages[index];
         html += '<button type="button" class="btn tag-' + stage + '">' + stage + '</button>';
     }
-    html += '<div class="subtitle">Progress</div>';
+    html += '<div class="subtitle">Step</div>';
     for (let index = 0; index < progresses.length; index++) {
         const agency = progresses[index];
         html += '<button type="button" class="btn tag-Project">' + progresses + '</button>';

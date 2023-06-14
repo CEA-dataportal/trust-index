@@ -36,12 +36,11 @@ console.log(country); */
              CTI=data[0];
              sampling=data[1];
              CTIdata = [parseInt(CTI[0]['Non-beneficiaries']), parseInt(CTI[0]['Beneficiaries']), parseInt(CTI[0]['Volunteers'])];
-             console.log(CTIdata);
+             console.log(CTI);
              SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
              totSampling = sampling[0]['Total_respondent'];
               // for ColorScale
              GeoSamplingData = data[3];
-             console.log(GeoSamplingData);
              GeoSamplingValue = [];
              GeoSamplingData.forEach(element => {
               GeoSamplingValue.push(parseInt(element.Value))
@@ -54,7 +53,9 @@ console.log(country); */
              // Overview
              title(CTI);
              background(CTI);
-             report(CTI); 
+             report(CTI);
+             coverage(CTI);
+             lead(CTI);
              generateRadialChart(CTIdata);
             
              // sampling
@@ -394,11 +395,25 @@ console.log(country); */
  
  
  };
+ function lead() {
+ 
+  var lead = CTI[0]['Lead'];
+  var partners = CTI[0]['Partners'];
+        d3.select("#lead").append("span")
+        .html('<b>Lead</b>: '+ lead + '<br><b>Support</b>: ' + partners); 
+};
+
+ function coverage() {
+ 
+  var coverage = parseFloat(CTI[0]['Coverage']*100, 2).toFixed(0);
+        d3.select("#coverage").append("span")
+        .html(''+ coverage + '% of country'); 
+};
  
  
  function title() {
      var title = country;
-           d3.select("#title_country").append("span")
+         d3.select("#title_country").append("span")
          .text(title); 
  };
  
@@ -479,7 +494,6 @@ console.log(country); */
  
                   ProvinceData = GeoSamplingData.filter(item => { return d.properties.nombre == item.Name; });//mettre les PCODE
                   var Val = ProvinceData.length != 0 ? parseInt(ProvinceData[0].Value) : 0;
-                  console.log(Val)
                   return Val != 0 ? colorScale(Val) : "#CCC"; 
                   
                   //return colorScale(Val)
