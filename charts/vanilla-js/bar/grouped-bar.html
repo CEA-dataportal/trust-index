@@ -56,9 +56,11 @@
       
         var options = {
           series: [{
-          data: [44, 55, 41, 64, 22, 43, 21]
+          data: [44, 55, 41, 64, 22, 43, 21] /* beneficiaries data*/
         }, {
-          data: [53, 32, 33, 52, 13, 44, 32]
+          data: [53, 32, 33, 52, 13, 44, 32] /* volunteers data*/
+        }, {
+          data: [53, 32, 33, 52, 13, 44, 32] /* others data*/
         }],
           chart: {
           type: 'bar',
@@ -66,7 +68,7 @@
         },
         plotOptions: {
           bar: {
-            horizontal: true,
+            horizontal: false,
             dataLabels: {
               position: 'top',
             },
@@ -90,7 +92,7 @@
           intersect: false
         },
         xaxis: {
-          categories: [2001, 2002, 2003, 2004, 2005, 2006, 2007],
+          categories: [2001, 'Clown', 2003, 2004, 2005, 2006, 2007], /* dimensions*/
         },
         };
 

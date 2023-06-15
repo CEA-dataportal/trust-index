@@ -10,8 +10,7 @@ console.log(country); */
  const overviewURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvzBmXnsG40DyGmwKUEXvNRhdlNwWVCDTrbjpBoL1I6DTAbDZnN2Qu0p0OBE53KjpoyFkmYhrGdTW/pub?gid=361636222&single=true&output=csv&force=on";
  const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvzBmXnsG40DyGmwKUEXvNRhdlNwWVCDTrbjpBoL1I6DTAbDZnN2Qu0p0OBE53KjpoyFkmYhrGdTW/pub?gid=110833577&single=true&output=csv&force=on";
  const geosamplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvzBmXnsG40DyGmwKUEXvNRhdlNwWVCDTrbjpBoL1I6DTAbDZnN2Qu0p0OBE53KjpoyFkmYhrGdTW/pub?gid=1120370117&single=true&output=csv&force=on";
- 
- 
+ const chartCTI_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvzBmXnsG40DyGmwKUEXvNRhdlNwWVCDTrbjpBoL1I6DTAbDZnN2Qu0p0OBE53KjpoyFkmYhrGdTW/pub?gid=15486601&single=true&output=csv&force=on"
  
  const country = "Argentina";
  
@@ -20,6 +19,7 @@ console.log(country); */
  var CTIdata = [];
  var SamplingData = [];
  var GeoSamplingData = [];
+ var chartCTIData = [];
  var mapData ;
  var totSampling ;
  // for ColorScale
@@ -32,6 +32,7 @@ console.log(country); */
              d3.csv(samplingURL),
              d3.json("../data/ARG2.geojson"),
              d3.csv(geosamplingURL),
+             d3.csv(chartCTI_url),
          ]).then(function(data) {
              CTI=data[0];
              sampling=data[1];
@@ -39,6 +40,24 @@ console.log(country); */
              console.log(CTI);
              SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
              totSampling = sampling[0]['Total_respondent'];
+             chartCTIData = data[4];
+              var beneficiariesArr = [];
+              var volunteersArr = [];
+              var othersArr = [];
+              var driversArr= [];
+            
+             chartCTIData.forEach(element => {
+              if(element.Dimension == "Competency"){
+              beneficiariesArr.push(element.beneficiaries);
+              volunteersArr.push(element.volunteers);
+              othersArr.push(element.others);
+              driversArr.push(element.Drivers);
+              }
+             });
+
+              console.log(driversArr);
+              console.log(othersArr);
+             
               // for ColorScale
              GeoSamplingData = data[3];
              GeoSamplingValue = [];
@@ -57,7 +76,8 @@ console.log(country); */
              coverage(CTI);
              lead(CTI);
              generateRadialChart(CTIdata);
-            
+             generateChartCTI (beneficiariesArr, volunteersArr, othersArr, driversArr);
+             
              // sampling
              figures(sampling);
              figFemales(sampling);
@@ -285,7 +305,7 @@ console.log(country); */
      grid: {
        show: false,
        },
-      title: {
+     title: {
            text: 'Perception of Competencies',
            align: 'center',
            margin: 10,
@@ -309,7 +329,158 @@ console.log(country); */
    
    
    chartBar2.render();
- 
+
+   // chart1 - horizontal barchart
+   
+   function generateChartCTI (beneficiariesArr, volunteersArr, othersArr, driversArr){
+
+   var optionsChartCTI = {
+    
+    colors: ['#FF0000', '#ff9999', '#CCCCCC'],
+    series: [{
+    name: 'Beneficiaries' ,
+    data: beneficiariesArr /* beneficiaries data*/
+  }, {
+    name: 'Volunteers' ,
+    data: volunteersArr /* volunteers data*/
+  }, {
+    name: 'Other' ,
+    data: othersArr /* others data*/
+  }],
+    chart: {
+    type: 'bar',
+    height: 430
+  },
+  plotOptions: {
+    
+    
+    bar: {
+      horizontal: false,
+      dataLabels: {
+        position: 'top',
+      },
+    }
+  },
+  dataLabels: {
+    enabled: true,
+    align: 'center',
+    style: {
+      fontSize: '12px',
+      colors: ['#000']
+    },
+    formatter: (val) => { return parseFloat(val).toFixed(1) },
+  },
+  stroke: {
+    show: true,
+    width: 1,
+    colors: ['#fff']
+  },
+  tooltip: {
+    shared: true,
+    intersect: false
+  },
+  xaxis: {
+    categories: driversArr, /* dimensions*/
+  },
+  grid: {
+    show: false,
+    },
+  title: {
+      text: 'Trust Index for Competencies',
+      align: 'center',
+      margin: 10,
+      offsetX: 50,
+      style: {
+          fontSize:  '14px',
+          fontWeight:  'bold',
+          fontFamily:  "Open Sans",
+          color:  '#263238'
+        },
+  },
+  yaxis: {
+    show: false,
+  },
+  };
+
+  var ChartCTI = new ApexCharts(document.querySelector("#chartCTI"), optionsChartCTI);
+  ChartCTI.render();
+}
+
+// chart2 - horizontal barchart
+   
+function generateChartCTI2 (beneficiariesArr, volunteersArr, othersArr, driversArr){
+
+  var optionsChartCTI2 = {
+   
+   colors: ['#FF0000', '#ff9999', '#CCCCCC'],
+   series: [{
+   name: 'Beneficiaries' ,
+   data: beneficiariesArr /* beneficiaries data*/
+ }, {
+   name: 'Volunteers' ,
+   data: volunteersArr /* volunteers data*/
+ }, {
+   name: 'Other' ,
+   data: othersArr /* others data*/
+ }],
+   chart: {
+   type: 'bar',
+   height: 430
+ },
+ plotOptions: {
+   
+   
+   bar: {
+     horizontal: false,
+     dataLabels: {
+       position: 'top',
+     },
+   }
+ },
+ dataLabels: {
+   enabled: true,
+   align: 'center',
+   style: {
+     fontSize: '12px',
+     colors: ['#000']
+   },
+   formatter: (val) => { return parseFloat(val).toFixed(1) },
+ },
+ stroke: {
+   show: true,
+   width: 1,
+   colors: ['#fff']
+ },
+ tooltip: {
+   shared: true,
+   intersect: false
+ },
+ xaxis: {
+   categories: driversArr, /* dimensions*/
+ },
+ grid: {
+   show: false,
+   },
+ title: {
+     text: 'Trust Index for Competencies',
+     align: 'center',
+     margin: 10,
+     offsetX: 50,
+     style: {
+         fontSize:  '14px',
+         fontWeight:  'bold',
+         fontFamily:  "Open Sans",
+         color:  '#263238'
+       },
+ },
+ yaxis: {
+   show: false,
+ },
+ };
+
+ var ChartCTI2 = new ApexCharts(document.querySelector("#chartCTI2"), optionsChartCTI2);
+ ChartCTI2.render();
+}
  
   // Sampling charts
   // Age group
@@ -407,7 +578,7 @@ console.log(country); */
  
   var coverage = parseFloat(CTI[0]['Coverage']*100, 2).toFixed(0);
         d3.select("#coverage").append("span")
-        .html(''+ coverage + '% of country'); 
+        .html(''+ coverage + '% of provinces'); 
 };
  
  
@@ -422,7 +593,7 @@ console.log(country); */
    var rep = CTI[0]['Report'];
    if (rep != '') {
          d3.select("#report").append("span")
-       .html('<a href="' + rep + '" ><div class="btn btn-primary btn-xl">Download Report</div></a>');
+       .html('<a href="' + rep + '" ><div class="btn btn-primary btn-xl">See Analysis</div></a>');
      }
  }; 
    
@@ -461,17 +632,14 @@ console.log(country); */
  
  // SAMPLING MAP
  
- // Define the div for the tooltip
  var div = d3.select("#map_sampling").select("#tooltip")
      .attr("class", "tooltip")               
      .style("opacity", 0);
  
- // The svg
  var svg = d3.select("#map_sampling").select("svg").attr("width", 350).attr("height",400),
      width = +svg.attr("width"),
      height = +svg.attr("height");
  
- // Map and projection
  var projection = d3.geoMercator()
      .scale(500)
      .translate([700,-190])
@@ -479,13 +647,9 @@ console.log(country); */
      
  svg.style("border","10px");
  
- 
 
- 
- // Load external data and boot
  function map(data){
  
-         // Draw the map
          svg.append("g")
              .selectAll("path")
              .data(data.features)
