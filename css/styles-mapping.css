@@ -311,6 +311,11 @@ border:none!important;
 border-bottom:  1px solid #293D5D!important;
 }
 
+table.dataTable .details {
+    text-transform:none!important;
+    
+      }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
     background: #798BA5!important;
     border:none!important;

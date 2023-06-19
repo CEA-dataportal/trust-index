@@ -295,6 +295,9 @@ header.masthead {
   vertical-align: middle!important;
 }
 
+.page-section {
+  padding: 4rem 0!important;
+}
 
 #faq, #about, #journey, #country_profile {
   min-height: 400px!important;

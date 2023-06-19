@@ -131,6 +131,13 @@ console.log(country); */
          plotOptions: {
            radialBar: {
              size: undefined,
+             dataLabels: {
+              total: {
+                show: true,
+                label: 'SCORE',
+                
+              }
+            },
              inverseOrder: true,
              hollow: {
                margin: 10,
@@ -141,6 +148,7 @@ console.log(country); */
              track: {
                show: false,
              },
+             
              startAngle: -180,
              endAngle: 180
        

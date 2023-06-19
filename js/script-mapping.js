@@ -116,24 +116,26 @@ function getDataTableData(data = prioritiesData) {
     data.forEach(element => {
         if (element['Page'] != '') {
             dt.push(
-                ['<a href="#"><i class="fa-solid fa-square-plus"></i></a>',
-                element['Country'], 
+                ['<i class="icofont-dotted-right"></i>',
+                '<b>' + element['Country'] + '</b>', 
                 stageClassName(element['Stage']), 
-                element['Progress'], 
-                element['Date'], 
-                element['Contact'],
+                element['Progress'],
+                element['Respondents'], 
+                element['Coverage'], 
+                '<span class="details">' + element['Details'] + '</span>', 
                 '<a href="country/' + element['Url'] + '.html" ><label class="btn secondary">Link</label></a>'
                 ]
             )
         }
         else {
             dt.push(
-                ['<a href="#"><i class="fa-solid fa-square-plus"></i></a>',
-                element['Country'], 
+                ['<i class="icofont-dotted-right"></i>',
+                '<b>' + element['Country'] + '</b>', 
                 stageClassName(element['Stage']), 
-                element['Progress'], 
-                element['Date'], 
-                element['Contact'],
+                element['Progress'],
+                element['Respondents'],
+                element['Coverage'], 
+                '<span class="details">' + element['Details'] + '</span>', 
                 ''
                 ]
             )
@@ -148,18 +150,18 @@ function generateDataTable() {
     dataTable = $('#datatable').DataTable({
         data: dtData,
         "columns": [{
-            "className": 'details-control',
             "orderable": false,
-            "data": null,
-            
             "width": "1%"
         },
             { "width": "15%" },
-            { "width": "10%" },
-            { "width": "15%" },
-            { "width": "10%" },
-            { "width": "20%" },
-            { "width": "8%",
+            { "width": "12%" },
+            { "width": "12%" },
+            { "width": "12%",
+            "className": 'dt-body-center' },
+            { "width": "12%",
+            "className": 'dt-body-center' },
+            {  },
+            { "width": "5%",
             "className": 'dt-body-center',}
         ],
         "columnDefs": [{
@@ -181,7 +183,7 @@ function generateDataTable() {
         "dom": "Blrtp"
     });
 
-    $('#datatable tbody').on('click', 'td.details-control', function() {
+    /* $('#datatable tbody').on('click', 'td.details-control', function() {
         var tr = $(this).closest('tr');
         var row = datatable.row(tr);
         if (row.child.isShown()) {
@@ -202,7 +204,7 @@ function generateDataTable() {
 
         }
     });
-
+ */
     
 } //generateDataTable
 
