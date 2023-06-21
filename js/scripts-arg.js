@@ -701,7 +701,7 @@ chartRadar2.render();
 
  function coverage() {
  
-  var coverage = parseFloat(CTI[0]['Coverage']*100, 2).toFixed(0);
+  var coverage = parseInt(CTI[0]['Coverage']);
         d3.select("#coverage").append("span")
         .html(''+ coverage + ' provinces'); 
 };
