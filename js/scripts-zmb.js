@@ -145,6 +145,122 @@ function generateRadialChart(data){
         
 }
 
+// chart1 - horizontal barchart
+   
+function generateChartCTI (OverallArr, driversArr){
+
+  var optionsChartCTI = {
+   
+   colors: ['#FF0000', '#ff9999', '#CCCCCC'],
+   series: [{
+       name: 'Overall' ,
+       data: OverallArr, /* Overall data*/
+     }
+/*       , {
+   name: 'Beneficiaries' ,
+   data: beneficiariesArr 
+ }, {
+   name: 'Volunteers' ,
+   data: volunteersArr 
+ }, {
+   name: 'Other' ,
+   data: othersArr 
+ } */
+],
+   chart: {
+     height: 'auto',
+     width:'100%',
+     type: 'bar',
+     toolbar:false
+   },
+ plotOptions: {
+   bar: 
+   {
+     margin: 10,
+     horizontal: true,
+     barHeight:'50%',
+     colors: {
+       backgroundBarColors: ['#CCC'],
+       backgroundBarOpacity: 1,
+       backgroundBarRadius: 0,
+   },
+   dataLabels: {
+     position: 'top',
+   },
+   }
+ },
+ dataLabels: {
+   textAnchor: 'end',
+   formatter: function (val, opt) {
+     return opt.w.globals.labels[opt.dataPointIndex] + ":  " + parseFloat(val).toFixed(1) 
+   },
+ },
+ tooltip: {
+   theme: 'dark',
+   x: {
+     show: true
+   },
+   y: {
+     title: {
+       formatter: function () {
+         return ''
+       }
+     }
+   }
+ },
+ 
+ xaxis: {
+   
+   labels: {
+   show: false
+   },
+   axisBorder: {
+   show: false
+   },
+   axisTicks: {
+   show: false
+   },
+   categories: driversArr, /* dimensions*/
+ },
+ grid: {
+   show: false
+   },
+ stroke: {
+     width: 0,
+     colors: ["#12284C"]
+   },
+ title: {
+     text: 'Trust Index for Competencies',
+     align: 'center',
+     margin: 10,
+     offsetX: 50,
+     style: {
+         fontSize:  '14px',
+         fontWeight:  'bold',
+         fontFamily:  "Open Sans",
+         color:  '#263238'
+       },
+ },
+ yaxis: {
+   show: false,
+   labels: {
+   show: false
+   },
+   axisBorder: {
+   show: false
+   },
+   axisTicks: {
+   show: false
+   }
+ },
+ };
+
+ var ChartCTI = new ApexCharts(document.querySelector("#chartCTI"), optionsChartCTI);
+ ChartCTI.render();
+}
+
+//
+
 var optionsBar1 = {
   colors:['#bf0000', '#ff0000','#6B66B7','#090088','#d6d6d6'],
   chart: {

@@ -16,6 +16,10 @@ console.log(country); */
  
  let CTI=[];
  let sampling=[];
+ var Overall_Index = [];
+ var Volunteers_Index = [];
+ var Beneficiaries_Index = [];
+ var NonBeneficiaries_Index = [];
  var CTIdata = [];
  var SamplingData = [];
  var GeoSamplingData = [];
@@ -36,28 +40,43 @@ console.log(country); */
          ]).then(function(data) {
              CTI=data[0];
              sampling=data[1];
-             CTIdata = [parseInt(CTI[0]['Non-beneficiaries']), parseInt(CTI[0]['Beneficiaries']), parseInt(CTI[0]['Volunteers'])];
+             Overall_Index = [parseFloat(CTI[0]['Index']).toFixed(0)]; 
+             Volunteers_Index = [parseFloat(CTI[0]['Volunteers']).toFixed(0)];
+             Beneficiaries_Index = [parseFloat(CTI[0]['Beneficiaries']).toFixed(0)];
+             NonBeneficiaries_Index = [parseFloat(CTI[0]['Non-beneficiaries']).toFixed(0)];
+             CTIdata = [parseFloat(CTI[0]['Non-beneficiaries']), parseFloat(CTI[0]['Beneficiaries']), parseFloat(CTI[0]['Volunteers'])];
              console.log(CTI);
              SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
              totSampling = sampling[0]['Total_respondent'];
              chartCTIData = data[4];
-              var beneficiariesArr = [];
-              var volunteersArr = [];
-              var othersArr = [];
-              var driversArr= [];
+              var OverallComp = [];
+              var beneficiariesComp= [];
+              var volunteersComp = [];
+              var othersComp = [];
+              var driversComp= [];
+              var OverallValue = [];
+              var beneficiariesValue = [];
+              var volunteersValue = [];
+              var othersValue = [];
+              var driversValue = [];
             
              chartCTIData.forEach(element => {
-              if(element.Dimension == "Competency"){
-              beneficiariesArr.push(element.beneficiaries);
-              volunteersArr.push(element.volunteers);
-              othersArr.push(element.others);
-              driversArr.push(element.Drivers);
+              if(element.Dimension == "Value"){
+              OverallValue.push(element.Overall);
+              beneficiariesValue.push(element.beneficiaries);
+              volunteersValue.push(element.volunteers);
+              othersValue.push(element.others);
+              driversValue.push(element.Drivers);
               }
+              if(element.Dimension == "Competency"){
+                OverallComp.push(element.Overall);
+                beneficiariesComp.push(element.beneficiaries);
+                volunteersComp.push(element.volunteers);
+                othersComp.push(element.others);
+                driversComp.push(element.Drivers);
+                }
              });
 
-              console.log(driversArr);
-              console.log(othersArr);
-             
               // for ColorScale
              GeoSamplingData = data[3];
              GeoSamplingValue = [];
@@ -75,8 +94,12 @@ console.log(country); */
              report(CTI);
              coverage(CTI);
              lead(CTI);
-             generateRadialChart(CTIdata);
-             generateChartCTI (beneficiariesArr, volunteersArr, othersArr, driversArr);
+             generateRadialChart(Overall_Index);
+             generateRadial_Chart1(Volunteers_Index);             
+             generateRadial_Chart2(Beneficiaries_Index);
+             generateRadial_Chart3(NonBeneficiaries_Index);
+             generateChartCTI (OverallComp, driversComp);
+             generate_chartRadar2 (OverallValue, driversValue),
              
              // sampling
              figures(sampling);
@@ -119,7 +142,7 @@ console.log(country); */
  };
  
  
-  // Overview Radial Chart 
+  // Overall Radial Chart 
  
  function generateRadialChart(data){
      var optionsCircle4 = {
@@ -130,27 +153,38 @@ console.log(country); */
          },
          plotOptions: {
            radialBar: {
-             size: undefined,
              dataLabels: {
-              total: {
+              name: {
+                show: false,
+                fontSize: '16px',
+                fontFamily: undefined,
+                fontWeight: 600,
+                color: undefined,
+                offsetY: -10
+              },
+              value: {
                 show: true,
-                label: 'SCORE',
-                
+                fontSize: '36px',
+                fontWeight: 600,
+                color: undefined,
+                offsetY: 16,
+                formatter: function (val) {
+                return val /10 + ''
               }
+            }
             },
              inverseOrder: true,
              hollow: {
                margin: 10,
-               size: '35%',
-               background: 'transparent', //'#FFF', 
+               size: '50%',
        
              },
              track: {
-               show: false,
-             },
+              show: false
+          },
              
-             startAngle: -180,
-             endAngle: 180
+             startAngle: -0,
+             endAngle: 360
        
            },
          },
@@ -158,255 +192,366 @@ console.log(country); */
            lineCap: 'round'
          },
          series: data,
-         labels: ['Others', 'Beneficiaries', 'Volunteers'],
-         colors: ['#EEEEEE', '#ff9999', '#FF0000'],
+         labels: ['Index'],
+         colors: ['#FF0000'],
          legend: {
            inverseOrder: true,
-           show: true,
+           show: false,
            floating: true,
            position: 'bottom',
            offsetX: 0,
            offsetY: 0
          },
+         tooltip: {
+          enabled: true,
+          y: {
+            show: true,
+            formatter: function (val) {
+              return  val /10 + ' on 10'
+            }
+        }
+        }
        }
        
        var chartCircle4 = new ApexCharts(document.querySelector('#radialBarBottom'), optionsCircle4);
        chartCircle4.render();
          
  }
- 
- var optionsBar1 = {
-   colors:['#bf0000', '#ff0000','#6B66B7','#090088','#d6d6d6'],
-   chart: {
-     height: 380,
-     width:'100%',
-     type: 'bar',
-     stacked: true,
-     stackType: '100%'
-   },
-   plotOptions: {
-     bar: {
-       columnWidth: '30%',
-       horizontal: true,
-     },
-   },
- 
-   series: [{
-     name: 'Not at all',
-     data: [1, 1.2, 1.9, 1.5, 1.9, 1.7, 4.4, 2.3]
-   }, {
-     name: 'Not so much',
-     data: [2.7, 4, 3.3, 2.5, 3.7, 3.7, 6.7, 3.7]
-   }, {
-     name: 'Mostly yes',
-     data: [7.1, 8.3, 8.9, 10.2, 10.2, 11.0, 5.8, 11.9]
-   }, {
-     name: 'Yes completely',
-     data: [85.9, 84.8, 84.0, 83.6, 81.3, 81.3, 79, 78.4]
-   }, {
-     name: 'Don’t know',
-     data: [3.3, 1.7, 1.9, 2.3, 2.9, 2.3, 4.2, 3.7]
-   }
- ],
-   xaxis: {
-     categories: ['Goodwill', 'Fairness', 'Inclusiveness', 'No discrimination', 'Participation', 'Integrity', 'Transparency','Neutrality'],
-   },
- 
-   yaxis: {
-    
-     labels: {
-      style: {
-         colors: [],
-         fontSize: '15px',
-         fontFamily: 'Helvetica, Arial, sans-serif',
-         fontWeight: 400,
-         cssClass: 'apexcharts-yaxis-label',
-         },
-     },
-   },
- 
-   fill: {
-     opacity: 1
-   },
-   grid: {
-     show: false,
-     },
-    title: {
-         text: 'Perception of Value',
-         align: 'center',
-         margin: 10,
-         offsetX: 50,
-         style: {
-             fontSize:  '14px',
-             fontWeight:  'bold',
-             fontFamily:  "Open Sans",
-             color:  '#263238'
-           },
-     },
-     legend: { 
-       offsetX: 65,
-     }
- }
- 
- var chartBar1 = new ApexCharts(
-   document.querySelector("#barchart-value"),
-   optionsBar1
- );
- 
- 
- chartBar1.render();
- 
- 
- var optionsBar2 = {
-     colors:['#bf0000', '#ff0000','#6B66B7','#090088','#d6d6d6'],
-     chart: {
-       height: 380,
-       width:'100%',
-       type: 'bar',
-       stacked: true,
-       stackType: '100%'
-     },
-     plotOptions: {
-       bar: {
-         columnWidth: '30%',
-         horizontal: true,
-       },
-     },
-   
-     series: [{
-       name: 'Not at all',
-       data: [1, 1.2, 1.9, 1.5, 1.9, 1.7]
-     }, {
-       name: 'Not so much',
-       data: [2.7, 4, 3.3, 2.5, 3.7, 3.7]
-     }, {
-       name: 'Mostly yes',
-       data: [7.1, 8.3, 8.9, 10.2, 10.2, 11.0]
-     }, {
-       name: 'Yes completely',
-       data: [85.9, 84.8, 84.0, 83.6, 81.3, 81.3]
-     }, {
-       name: 'Don’t know',
-       data: [3.3, 1.7, 1.9, 2.3, 2.9, 2.3]
-     }
-   ],
-     xaxis: {
-       categories: ['Capability', 'Responsiveness', 'Knowledge', 'Approachability', 'Effectiveness', 'Relevance'],
-     },
-   
-     yaxis: {
-      
-       labels: {
-        style: {
-           colors: [],
-           fontSize: '15px',
-           fontFamily: 'Helvetica, Arial, sans-serif',
-           fontWeight: 400,
-           cssClass: 'apexcharts-yaxis-label',
-           },
-       },
-     },
-   
-     fill: {
-       opacity: 1
-     },
-     grid: {
-       show: false,
-       },
-     title: {
-           text: 'Perception of Competencies',
-           align: 'center',
-           margin: 10,
-           offsetX: 50,
-           style: {
-               fontSize:  '14px',
-               fontWeight:  'bold',
-               fontFamily:  "Open Sans",
-               color:  '#263238'
-             },
-       },
-       legend: { 
-         offsetX: 65,
-       }
-   }
-   
-   var chartBar2 = new ApexCharts(
-     document.querySelector("#barchart-comp"),
-     optionsBar2
-   );
-   
-   
-   chartBar2.render();
 
-   // chart1 - horizontal barchart
+
+ //
+
+
+ // Volunteer Radial Chart 
+ 
+ function generateRadial_Chart1(data){
+  var optionsCircle1 = {
+      chart: {
+        type: 'radialBar',
+        height: 250,
+        width: '100%',
+        toolbar: false,
+      },
+      plotOptions: {
+        radialBar: {
+          dataLabels: {
+           name: {
+             show: true,
+             fontSize: '16px',
+             fontFamily: undefined,
+             fontWeight: 600,
+             color: undefined,
+             offsetY: -10
+           },
+           value: {
+             show: true,
+             fontSize: '36px',
+             fontWeight: 600,
+             color: '#FF0000',
+             offsetY: 16,
+             formatter: function (val) {
+             return  val/10 + ''
+           }
+         }
+         },
+          inverseOrder: true,
+          hollow: {
+            margin: 10,
+            size: '75%',
+            background:'#eeeeee',
+    
+          },
+          track: {
+           show: true
+       },
+          
+          startAngle: -0,
+          endAngle: 360
+    
+        },
+      },
+      stroke: {
+        lineCap: 'round'
+      },
+      
+      series: data,
+      labels: ['Score'],
+      colors: ['#FF0000'],
+      legend: {
+        inverseOrder: true,
+        show: false,
+        floating: true,
+        position: 'bottom',
+        offsetX: 0,
+        offsetY: 0
+      },
+      tooltip: {
+       enabled: true,
+       y: {
+         show: true,
+         formatter: function (val) {
+           return  val /10 + ' on 10'
+         }
+     }
+     }
+    }
+    
+    var chartCircle1 = new ApexCharts(document.querySelector('#chartCTI_0'), optionsCircle1);
+    chartCircle1.render();
+      
+}
+
+
+ // Beneficiaries Radial Chart 
+ 
+ function generateRadial_Chart2(data){
+  var optionsCircle2 = {
+      chart: {
+        type: 'radialBar',
+        height: 250,
+        width: '100%',
+        toolbar:false,
+      },
+      plotOptions: {
+        radialBar: {
+          dataLabels: {
+           name: {
+             show: true,
+             fontSize: '16px',
+             fontFamily: undefined,
+             fontWeight: 600,
+             color: undefined,
+             offsetY: -10
+           },
+           value: {
+             show: true,
+             fontSize: '36px',
+             fontWeight: 600,
+             color: '#5F61B5',
+             offsetY: 16,
+             formatter: function (val) {
+             return  val /10 + ''
+           }
+         }
+         },
+          inverseOrder: true,
+          hollow: {
+            margin: 10,
+            size: '75%',
+            background: '#eeeeee',
+    
+          },
+          track: {
+           show: true
+       },
+          
+          startAngle: -0,
+          endAngle: 360
+    
+        },
+      },
+      stroke: {
+        lineCap: 'round'
+      },
+      series: data,
+      labels: ['Score'],
+      colors: ['#5F61B5'],
+      legend: {
+        inverseOrder: true,
+        show: false,
+        floating: true,
+        position: 'bottom',
+        offsetX: 0,
+        offsetY: 0
+      },
+      tooltip: {
+       enabled: true,
+       y: {
+         show: true,
+         formatter: function (val) {
+           return  val /10 + ' on 10'
+         }
+     }
+     }
+    }
+    
+    var chartCircle2 = new ApexCharts(document.querySelector('#chartCTI_1'), optionsCircle2);
+    chartCircle2.render();
+      
+}
+
+ // Other Radial Chart  
+ 
+ function generateRadial_Chart3(data){
+  var optionsCircle3 = {
+      chart: {
+        type: 'radialBar',
+        height: 250,
+        width: '100%',
+        toolbar: false,
+      },
+      plotOptions: {
+        radialBar: {
+          dataLabels: {
+           name: {
+             show: true,
+             fontSize: '16px',
+             fontFamily: undefined,
+             fontWeight: 600,
+             color: undefined,
+             offsetY: -10
+           },
+           value: {
+             show: true,
+             fontSize: '36px',
+             fontWeight: 600,
+             color: '#18396C',
+             offsetY: 16,
+             formatter: function (val) {
+             return  val /10 + ''
+           }
+         }
+         },
+          inverseOrder: true,
+          hollow: {
+            margin: 10,
+            size: '75%',
+            background: '#eeeeee',
+    
+          },
+          track: {
+           show: true,
+           color: '#CCC',
+       },
+          
+          startAngle: -0,
+          endAngle: 360
+    
+        },
+      },
+      stroke: {
+        lineCap: 'round'
+      },
+      series: data,
+      labels: ['Score'],
+      colors: ['#18396C'],
+      legend: {
+        inverseOrder: true,
+        show: false,
+        floating: true,
+        position: 'bottom',
+        offsetX: 0,
+        offsetY: 0
+      },
+      tooltip: {
+       enabled: true,
+       colorScale: '#18396C',
+       y: {
+         show: true,
+         formatter: function (val) {
+           return  val /10 + ' on 10'
+         }
+     }
+     }
+    }
+    
+    var chartCircle3 = new ApexCharts(document.querySelector('#chartCTI_2'), optionsCircle3);
+    chartCircle3.render();
+      
+}
+
+ 
+// chart1 - radial
    
-   function generateChartCTI (beneficiariesArr, volunteersArr, othersArr, driversArr){
+   function generateChartCTI (OverallComp, driversComp){
 
    var optionsChartCTI = {
     
     colors: ['#FF0000', '#ff9999', '#CCCCCC'],
     series: [{
+        name: 'Overall' ,
+        data: OverallComp, /* Overall data*/
+      }
+/*       , {
     name: 'Beneficiaries' ,
-    data: beneficiariesArr /* beneficiaries data*/
+    data: beneficiariesArr 
   }, {
     name: 'Volunteers' ,
-    data: volunteersArr /* volunteers data*/
+    data: volunteersArr 
   }, {
     name: 'Other' ,
-    data: othersArr /* others data*/
-  }],
+    data: othersArr 
+  } */
+],
     chart: {
-    type: 'bar',
-    height: 430
-  },
+      height: 420,
+      width:'100%',
+      type: 'radar',
+      toolbar:false
+    },
   plotOptions: {
-    
-    
-    bar: {
-      horizontal: false,
-      dataLabels: {
-        position: 'top',
-      },
+    bar: 
+    {
+      margin: 10,
+      horizontal: true,
+      barHeight:'60%',
+      colors: {
+        backgroundBarColors: ['#CCC'],
+        backgroundBarOpacity: 1,
+        backgroundBarRadius: 0,
+    },
+    dataLabels: {
+      position: 'top',
+    },
     }
   },
   dataLabels: {
-    enabled: true,
-    align: 'center',
-    style: {
-      fontSize: '12px',
-      colors: ['#000']
+    textAnchor: 'end',
+    formatter: function (val) {
+      return parseFloat(val/10).toFixed(1)
     },
-    formatter: (val) => { return parseFloat(val).toFixed(1) },
-  },
-  stroke: {
-    show: true,
-    width: 1,
-    colors: ['#fff']
   },
   tooltip: {
-    shared: true,
-    intersect: false
+    theme: 'dark',
+    x: {
+      show: true
+    },
+    y: {
+      title: {
+        formatter: function () {
+          return ''
+        }
+      }
+    }
   },
+  
   xaxis: {
-    categories: driversArr, /* dimensions*/
+    
+    labels: {
+    show: true
+    },
+    axisBorder: {
+    show: false
+    },
+    axisTicks: {
+    show: false
+    },
+    categories: driversComp, /* dimensions*/
   },
   grid: {
-    show: false,
+    show: false
     },
-  title: {
-      text: 'Trust Index for Competencies',
-      align: 'center',
-      margin: 10,
-      offsetX: 50,
-      style: {
-          fontSize:  '14px',
-          fontWeight:  'bold',
-          fontFamily:  "Open Sans",
-          color:  '#263238'
-        },
-  },
   yaxis: {
     show: false,
+    labels: {
+    show: false
+    },
+    axisBorder: {
+    show: false
+    },
+    axisTicks: {
+    show: false
+    }
   },
   };
 
@@ -414,88 +559,61 @@ console.log(country); */
   ChartCTI.render();
 }
 
-// chart2 - horizontal barchart
-   
-function generateChartCTI2 (beneficiariesArr, volunteersArr, othersArr, driversArr){
-
-  var optionsChartCTI2 = {
-   
-   colors: ['#FF0000', '#ff9999', '#CCCCCC'],
-   series: [{
-   name: 'Beneficiaries' ,
-   data: beneficiariesArr /* beneficiaries data*/
- }, {
-   name: 'Volunteers' ,
-   data: volunteersArr /* volunteers data*/
- }, {
-   name: 'Other' ,
-   data: othersArr /* others data*/
- }],
-   chart: {
-   type: 'bar',
-   height: 430
- },
- plotOptions: {
-   
-   
-   bar: {
-     horizontal: false,
-     dataLabels: {
-       position: 'top',
-     },
-   }
- },
- dataLabels: {
-   enabled: true,
-   align: 'center',
-   style: {
-     fontSize: '12px',
-     colors: ['#000']
-   },
-   formatter: (val) => { return parseFloat(val).toFixed(1) },
- },
- stroke: {
-   show: true,
-   width: 1,
-   colors: ['#fff']
- },
- tooltip: {
-   shared: true,
-   intersect: false
- },
- xaxis: {
-   categories: driversArr, /* dimensions*/
- },
- grid: {
-   show: false,
-   },
- title: {
-     text: 'Trust Index for Competencies',
-     align: 'center',
-     margin: 10,
-     offsetX: 50,
-     style: {
-         fontSize:  '14px',
-         fontWeight:  'bold',
-         fontFamily:  "Open Sans",
-         color:  '#263238'
-       },
- },
- yaxis: {
-   show: false,
- },
- };
-
- var ChartCTI2 = new ApexCharts(document.querySelector("#chartCTI2"), optionsChartCTI2);
- ChartCTI2.render();
+// chart2 - radar
+function generate_chartRadar2 (OverallValue, driversValue){
+ 
+var optionsRadar2 = {
+  series: [{
+  name: 'Series 1',
+  data: OverallValue,
+}],
+  chart: {
+    height: '100%',
+    width:'100%',
+    type: 'radar',
+    toolbar:false
+},
+plotOptions: {
+  bar: 
+  {
+    margin: 10,
+    horizontal: true,
+    barHeight:'60%',
+    colors: {
+      backgroundBarColors: ['#CCC'],
+      backgroundBarOpacity: 1,
+      backgroundBarRadius: 0,
+  },
+  dataLabels: {
+    position: 'top',
+  },
+  }
+},
+dataLabels: {
+  textAnchor: 'end',
+  formatter: function (val) {
+    return parseFloat(val/10).toFixed(1)
+  },
+},
+xaxis: {
+  categories: driversValue
 }
+
+};
+
+var chartRadar2 = new ApexCharts(document.querySelector("#chartCTI2"), optionsRadar2);
+chartRadar2.render();
+
+}
+
  
   // Sampling charts
   // Age group
        
  var optionsDist = {
      series: [{
-     data: [  11.08, 16.96, 12.95, 14.69], 
+      name: 'Age',
+     data: [  33.15822002, 22.00247219, 18.07787392, 11.06304079, 8.714462299],
    },
    ],
      chart: {
@@ -514,7 +632,8 @@ function generateChartCTI2 (beneficiariesArr, volunteersArr, othersArr, driversA
      },
    },
    dataLabels: {
-     enabled: true
+     enabled: true,
+     formatter: (val) => { return parseFloat(val).toFixed(1) + '%' }
    },
    stroke: {
      width: 3,
@@ -539,19 +658,17 @@ function generateChartCTI2 (beneficiariesArr, volunteersArr, othersArr, driversA
      shared: false,
      x: {
        formatter: function (val) {
-         return "Age group:" + val
+         return "Age group: " + val
        }
      },
      y: {
-       formatter: function (val) {
-         return Math.abs(val) + "%"
-       }
+      formatter: (val) => { return parseFloat(val).toFixed(1) + '%' }
      }
    },
    title: {
    },
    xaxis: {
-     categories: ['18-24','25-34', '35-44','45+' ],
+     categories: ['18-24','25-34', '35-44','45-59', '+60' ],
      axisTicks: {
        show: false
    },
@@ -586,7 +703,7 @@ function generateChartCTI2 (beneficiariesArr, volunteersArr, othersArr, driversA
  
   var coverage = parseFloat(CTI[0]['Coverage']*100, 2).toFixed(0);
         d3.select("#coverage").append("span")
-        .html(''+ coverage + '% of provinces'); 
+        .html(''+ coverage + ' provinces'); 
 };
  
  
