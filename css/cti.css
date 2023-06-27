@@ -99,6 +99,12 @@ hr.divider {
     text-transform: uppercase;
 }
 
+.Subsection_title {
+  font-weight:lighter;
+  font-size: 2rem;
+  color: rgba(107, 117, 125, 0.616);
+  text-transform:capitalize;
+}
 
 /* HOME PAGE */
 .navbar-shrink .navbar-brand,
@@ -150,18 +156,10 @@ hr.divider {
 }
 
 .rotate {
-
-  /* Safari */
   -webkit-transform: rotate(-90deg);
   -webkit-transform-origin: 51%  55%;
-
-  /* Firefox */
   -moz-transform: rotate(-90deg);
-
-  /* IE */
   -ms-transform: rotate(-90deg);
-
-  /* Opera */
   -o-transform: rotate(-90deg);
 
   /* Internet Explorer */
@@ -443,7 +441,7 @@ header.masthead {
     background-size: cover;
   }
 
-  .header-box {background-color: #0A182D ; padding:10px;}
+  .header-box {background-color: #0A182D ; padding:10px 20px; border: solid 3px #5383cc; margin-top:-100px; height: 65px; width: 200px; text-align: center;}
 /* Buttons */
 
 
@@ -703,6 +701,8 @@ border: #FFF solid 5px;
   margin-bottom: 20px;
   width: 400px;
 }
+.close {font-weight: 700;float: right; padding: 5px; width: 45px; text-align: center;} 
+.close:hover{background-color:#EEE; color:#FFF!important;} 
 
 
 blockquote {
