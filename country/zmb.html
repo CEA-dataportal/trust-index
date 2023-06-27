@@ -30,10 +30,15 @@
         <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
     </head>
     <body id="page-top">
-
-      <div id="topbar"><div class="Tab">CEA Data Portal</div></div>
+        
         <!-- Navigation-->
-      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4 t" id="mainNav">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4" id="mainNav">
+    
+        <div id="topbar" class="fixed-top">
+            <button class="btn btn-primary rotate" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                CEA Data Portal
+            </button>
+        </div>
                     <div class="container px-4 px-lg-4 mt-md-4">
                         <div class="navbar-brand"><a href="../index.html">Community Trust</a> Index</div>
                         <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -51,32 +56,86 @@
         
         <!-- Masthead-->
         <header class="masthead" id="country_profile">
-           
+
+            <!-- leftside panel-->
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div class="offcanvas-header">
+                  
+                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <img src="../assets\img\cea-logo.JPG" width="60%"> | Data Portal
+                  <div>
+                    <p class="intro font-weight-normal p-lg-3">
+                    Explore the below pages to find out more data about community engagement and accountability (CEA) through following thematic pilars
+                    </p>
+                  </div>
+                  
+                  <h5 class="mt-4">CEA Data</h5>
+                  <ul><li class="">Latest news</li>
+                  <div class="dropdown mt-3">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                     Countries
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <li><a class="dropdown-item" href="#">Argentina</a></li>
+                      <li><a class="dropdown-item" href="#">Guatemala</a></li>
+                      <li><a class="dropdown-item" href="#">Malawi</a></li>
+                    </ul>
+                  </div>
+                </ul>
+                 
+                  <h5 class="mt-4">Projects</h5>
+                  <ul><li class="">Community Perception</li>
+                  <li class="">Impact Research</li>
+                  <li class=""><a href="https://cea-dataportal.github.io/trust-index/">Building Trust</a></li>
+                    </ul>
+            
+                  
+                  <div class="mt-5"></div>
+                  <a href="https://communityengagementhub.org/" target="_blank">Learn more about CEA</a>
+                 
+                  
+                </div>
+              </div>
+
+            <!-- End leftside panel-->
+
+            <!-- Country Profile Header -->
+                <div class="arrow-left-nav"><a href="ARG.html"><i class="bi bi-chevron-left"></i></a></div>
+                <div class="arrow-right-nav"><a href="ARG.html"><i class="bi bi-chevron-right xl"></i></a></div>
             <div class="container px-4" >
+
+                
                 <div class="row px-lg-0">
+                    
                 <div class="col-lg-7 px-lg-0 mb-5">
                     <div class="row text-left px-lg-0">
                         <h1 class="text-white font-weight-bold"><div id="title_country"></div></h1>
-                        <h2 class="text-white fw-light">Country Profile</h2>
+                        <!-- <h2 class="text-white fw-light">Country Profile</h2> -->
                     </div>
                     <div class="row text-left px-lg-0 mt-5">
                      <div class="block-header">
                             <h3 class="text-white font-weight-normal mb-5">Background</h3>
                         </div>
                         <div id="background" class="text-white  pe-5"></div>
+                        <div id="lead" class="text-white pe-5 mt-4"></div>
+                        <div id="keywords"></div>
                     </div>
                 </div>
                 <div class="col-lg-5 px-lg-0 mb-5">
                     <div class="row px-lg-5 h-5 py-5 justify-content-center">
+                        <h6 class="text-white text-center">Overall Score</h6>
+                       
                         <div id="radialBarBottom" class="text-center"></div>
-                    </div>
-                   
-                    <div class="row px-lg-5 justify-content-center">
-                        <div class="text-center">
-                            <div id="report"></div>
-                        </div>
                         
                     </div>
+                    <div class="row px-lg-5 justify-content-center">
+                      
+                        
+                    </div>
+                   
                 </div>
                 
                 </div>
@@ -90,22 +149,54 @@
         <section class="page-section bg-light" id="finding1">
             <div class="container px-4 text-secondary">
                 <div class="row text-left px-lg-0 mb-5">
-                    <div class="block-header">
-                        <div class="square "></div>
-                        <h3 class="tex font-weight-normal ">Findings</h3>
-    
-                    </div>    
-
+                    <div class="block-header ">
+                        <h3 class="text font-weight-normal text-white header-box">Findings</h3>
+                    </div>
                 </div>
-                <div class="row text-left px-lg-0 mb-5 ">
-                  
-                    <div class="col-lg-6 px-lg-1">
-                    <h6>Value</h6>
-                    <p class="pe-5">Fostering community trust, social cohesion and civil responsibility through the active engagement of communities is a necessary condition to successfully deliver impact, build resilience and sustainability.</p><p>Building community trust though is complex and requires systematic understanding of trust variation and the social, economic, cultural, and environmental factors that influence trust. It requires understanding the root causes of mistrust and the local dynamics of trust.</p><p>Without a tool to measure the different dimensions of trust among providers and receivers of services, it is hard for public health and humanitarian responders to take action and create strategies to rebuild and maintain community trust.</p>
-                    
+                <div class="row text-left px-lg-0 mb-5">
+                    <div class="block-header">
+                        <h5 class="text font-weight-normal ">Community trust</h5>
+                    </div>
+                </div>
+                <div class="row text-left px-lg-0 mb-5">
+                    <p>In the districts where the Zambian Red Cross is prioritising its interventions, the Community Trust Index can vary between different population groups, including volunteers, people receiving support and the general population.</p>
+                </div>
+                <div class="row text-left px-lg-0 mb-5">
+                    <div class="col-lg-4 px-lg-5 text-center">
+                        <div id="chartCTI_0"></div>
+                        <h6>Volunteers</h6>
+                        <p class="text-secondary small">Volunteers are individuals who actively participate in various Argentina Red Cross programs, initiatives, or projects. </p>
+                        
+                    </div><div class="col-lg-4 px-lg-5 text-center">
+                        <div id="chartCTI_1"></div>
+                        <h6>People receiving support</h6>
+                        <p class="text-secondary small">Individuals who directly receive benefits or support from Argentina Red Cross programs, such as social welfare, healthcare, or education initiatives</p>
+                        
+                    </div>
+                    <div class="col-lg-4 px-lg-5 text-center">
+                        <div id="chartCTI_2"></div>
+                        <h6>Others</h6>
+                        <p class="text-secondary small">Individual who do not receive benefits or support from Argentina Red Cross programs or engaged with the Argentina Red Cross in general</p>
+                        
+                    </div>
+                </div>
+                <div class="row text-left px-lg-0 mb-5">
+                    <div class="block-header">
+                        <h5 class="text font-weight-normal ">Perceptions of community trust</h5>
+    
+                    </div>
+                </div>
+                <div class="row text-left px-lg-0 mb-5">
+                    <p>It's important to note that community trust in the Red Cross is a complex and multifaceted concept. It is influenced by a range of factors beyond the population groups above, such as competencies or ethical values. The following charts explain which factors is contributing to the Community Trust Index in Argentina.</p>
+                </div>
+                <div class="row text-left px-lg-0 mb-5">
+                    <div class="col-lg-6 px-lg-5 text-center">
+                        <h6>Competencies</h6>
+                        <div id="chartCTI"></div>
                     </div>
                     <div class="col-lg-6 px-lg-5 text-center">
-                        <div id="barchart-value"></div>
+                        <h6>Values</h6>
+                        <div id="chartCTI2"></div>
                     </div>
                 </div>
                 <div class="row text-left px-lg-0 mb-5 ">
@@ -121,6 +212,9 @@
                 </div>
                 
              
+            </div>
+            <div class="text-center">
+                <div id="report"></div>
             </div>
             </section>
     
