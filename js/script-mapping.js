@@ -494,8 +494,8 @@ $(document).ready(function() {
 });
 
 
-  $(function(){
-    $(".always").click(function() {
+ $(".always").on("click",function() {
+    console.log("test");
         $(".togglee").slideToggle();
-    });
-});
+  });
+ 
