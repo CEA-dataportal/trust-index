@@ -495,7 +495,6 @@ $(document).ready(function() {
 
 
  $(".always").on("click",function() {
-    console.log("test");
         $(".togglee").slideToggle();
   });
  
