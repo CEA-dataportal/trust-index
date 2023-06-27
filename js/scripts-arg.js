@@ -207,7 +207,7 @@ console.log(country); */
           y: {
             show: true,
             formatter: function (val) {
-              return  val /10 + ' on 10'
+              return  val /10 + ' out of 10'
             }
         }
         }
@@ -290,7 +290,7 @@ console.log(country); */
        y: {
          show: true,
          formatter: function (val) {
-           return  val /10 + ' on 10'
+           return  val /10 + ' out of10'
          }
      }
      }
@@ -369,7 +369,7 @@ console.log(country); */
        y: {
          show: true,
          formatter: function (val) {
-           return  val /10 + ' on 10'
+           return  val /10 + ' out of 10'
          }
      }
      }
@@ -449,7 +449,7 @@ console.log(country); */
        y: {
          show: true,
          formatter: function (val) {
-           return  val /10 + ' on 10'
+           return  val /10 + ' out of 10'
          }
      }
      }
@@ -469,7 +469,7 @@ console.log(country); */
     
     colors: ['#FF0000', '#ff9999', '#CCCCCC'],
     series: [{
-        name: 'Overall' ,
+        name: 'Score' ,
         data: OverallComp, /* Overall data*/
       }
 /*       , {
@@ -510,25 +510,35 @@ console.log(country); */
     formatter: function (val) {
       return parseFloat(val/10).toFixed(1)
     },
+    style: {
+      fontSize: '14px',
+      fontWeight: 'bold',
+      colors: undefined
+    }
   },
   tooltip: {
     theme: 'dark',
+     marker: {
+      show: false,
+    },
     x: {
       show: true
     },
     y: {
-      title: {
-        formatter: function () {
-          return ''
-        }
-      }
+
+      formatter: function (val){
+        return parseFloat(val/10).toFixed(8)
+            }
     }
   },
   
   xaxis: {
-    
+   
     labels: {
-    show: true
+    show: true,
+    style: {
+     fontSize: '14px',
+   },
     },
     axisBorder: {
     show: false
@@ -538,13 +548,13 @@ console.log(country); */
     },
     categories: driversComp, /* dimensions*/
   },
-  grid: {
-    show: false
-    },
   yaxis: {
-    show: false,
+    show: true,
     labels: {
-    show: false
+    show: false,
+    formatter: function (val){
+      return parseFloat(val/10)
+          }
     },
     axisBorder: {
     show: false
@@ -564,11 +574,11 @@ function generate_chartRadar2 (OverallValue, driversValue){
  
 var optionsRadar2 = {
   series: [{
-  name: 'Series 1',
+  name: 'Score',
   data: OverallValue,
 }],
   chart: {
-    height: '100%',
+    height: 410,
     width:'100%',
     type: 'radar',
     toolbar:false
@@ -589,15 +599,64 @@ plotOptions: {
   },
   }
 },
+  tooltip: {
+    theme: 'dark',
+     marker: {
+      show: false,
+    },
+    x: {
+      show: true
+    },
+    y: {
+
+      formatter: function (val){
+        return parseFloat(val/10).toFixed(8)
+            }
+    }
+  },
 dataLabels: {
   textAnchor: 'end',
   formatter: function (val) {
     return parseFloat(val/10).toFixed(1)
   },
+  style: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    colors: undefined
+  }
 },
 xaxis: {
-  categories: driversValue
-}
+   
+  labels: {
+  show: true,
+  style: {
+   fontSize: '14px',
+ },
+  },
+  axisBorder: {
+  show: false
+  },
+  axisTicks: {
+  show: false
+  },
+  categories: driversValue, /* dimensions*/
+},
+
+yaxis: {
+  show: true,
+  labels: {
+  show: false,
+  formatter: function (val){
+    return parseFloat(val/10)
+        }
+  },
+  axisBorder: {
+  show: false
+  },
+  axisTicks: {
+  show: false
+  }
+},
 
 };
 
