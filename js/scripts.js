@@ -66,3 +66,17 @@ $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();  
 });
 
+
+    // Display user - About page
+const NS_Div = document.getElementById("NS_purpose");
+const IFRC_Div = document.getElementById("IFRC_purpose");
+const btnNS = document.getElementById("NS");
+const btnIFRC = document.getElementById("IFRC");
+btnNS.onclick = function () {
+    NS_Div.style.display = "contents";
+    IFRC_Div.style.display = "none";
+};
+btnIFRC.onclick = function () {
+    IFRC_Div.style.display = "contents";
+    NS_Div.style.display = "none";
+  };
