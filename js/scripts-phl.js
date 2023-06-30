@@ -35,7 +35,7 @@ $(document).ready(function() {
         Promise.all([
             d3.csv(overviewURL),
             d3.csv(samplingURL),
-            d3.json("../data/ZMB.geojson"),
+            d3.json("../data/PHL.geojson"),
             d3.csv(geosamplingURL),
             d3.csv(chartCTI_url),
         ]).then(function(data) {
@@ -95,6 +95,7 @@ $(document).ready(function() {
             report(CTI);
             coverage(CTI);
             lead(CTI);
+            date(CTI);
             generateRadialChart(Overall_Index);
             generateRadial_Chart1(Volunteers_Index);             
             generateRadial_Chart2(Beneficiaries_Index);
@@ -772,6 +773,13 @@ function background() {
 
 
 };
+function date() {
+  var date = CTI[0]['Date'];
+        d3.select("#text-date").append("span")
+        .html('<b>Date</b>: '+ date); 
+        console.log(date);
+};
+
 function lead() {
 
  var lead = CTI[0]['Lead'];

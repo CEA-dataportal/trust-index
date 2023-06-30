@@ -94,6 +94,7 @@ console.log(country); */
              report(CTI);
              coverage(CTI);
              lead(CTI);
+             date(CTI);
              generateRadialChart(Overall_Index);
              generateRadial_Chart1(Volunteers_Index);             
              generateRadial_Chart2(Beneficiaries_Index);
@@ -750,6 +751,13 @@ chartRadar2.render();
  
  
  };
+ function date() {
+  var date = CTI[0]['Date'];
+        d3.select("#text-date").append("span")
+        .html('<b>Date</b>: '+ date); 
+        console.log(date);
+};
+
  function lead() {
  
   var lead = CTI[0]['Lead'];

@@ -40,13 +40,14 @@ $(document).ready(function() {
             d3.csv(chartCTI_url),
         ]).then(function(data) {
             CTI=data[0];
+            console.log(CTI);
             sampling=data[1];
             Overall_Index = [parseFloat(CTI[0]['Index']).toFixed(0)]; 
             Volunteers_Index = [parseFloat(CTI[0]['Volunteers']).toFixed(0)];
             Beneficiaries_Index = [parseFloat(CTI[0]['Beneficiaries']).toFixed(0)];
             NonBeneficiaries_Index = [parseFloat(CTI[0]['Non-beneficiaries']).toFixed(0)];
             CTIdata = [parseFloat(CTI[0]['Non-beneficiaries']), parseFloat(CTI[0]['Beneficiaries']), parseFloat(CTI[0]['Volunteers'])];
-            console.log(CTI);
+           
             SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
             totSampling = sampling[0]['Total_respondent'];
             chartCTIData = data[4];
@@ -89,12 +90,15 @@ $(document).ready(function() {
             .range(["#ffcccc", "#FF0000"]);
 
             mapData = data[2];
-            // Overview
+            // Text
             title(CTI);
             background(CTI);
             report(CTI);
             coverage(CTI);
             lead(CTI);
+            date(CTI);
+            
+          // Chart
             generateRadialChart(Overall_Index);
             generateRadial_Chart1(Volunteers_Index);             
             generateRadial_Chart2(Beneficiaries_Index);
@@ -770,8 +774,15 @@ function background() {
           d3.select("#background").append("span")
         .text(desc); 
 
-
 };
+
+function date() {
+  var date = CTI[0]['Date'];
+        d3.select("#text-date").append("span")
+        .html('<b>Date</b>: '+ date); 
+        console.log(date);
+};
+
 function lead() {
 
  var lead = CTI[0]['Lead'];
