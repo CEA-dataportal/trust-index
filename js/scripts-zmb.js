@@ -817,14 +817,19 @@ xaxis: {
 grid: {
   xaxis: {
     lines: {
-      show: true
+      show: false
+    }
+  },
+  yaxis: {
+    lines: {
+      show: false
     }
   }
 },
 yaxis: {
   reversed: false,
   axisTicks: {
-    show: true
+    show: false
   }
 }
 };
