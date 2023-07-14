@@ -791,12 +791,13 @@ var optionsDistrict = {
 annotations: {
   xaxis: [{
     x: 8.4,
-    borderColor: '#00E396',
+    borderColor: '#FF0000',
     label: {
-      borderColor: '#00E396',
+      borderColor: '#FF0000',
       style: {
         color: '#fff',
-        background: '#00E396',
+        background: '#FF0000',
+        fontSize: '14px',
       },
       text: 'Overall Score',
     }
