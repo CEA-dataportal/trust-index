@@ -22,7 +22,8 @@ var Volunteers_Index = [];
 var Beneficiaries_Index = [];
 var NonBeneficiaries_Index = [];
 var CTIdata = [];
-var SamplingData = [];
+var SamplingAge_label = [];
+var SamplingAge_Data = [];
 var GeoSamplingData = [];
 var chartCTIData = [];
 var mapData ;
@@ -47,8 +48,9 @@ $(document).ready(function() {
             Beneficiaries_Index = [parseFloat(CTI[0]['Beneficiaries']).toFixed(0)];
             NonBeneficiaries_Index = [parseFloat(CTI[0]['Non-beneficiaries']).toFixed(0)];
             CTIdata = [parseFloat(CTI[0]['Non-beneficiaries']), parseFloat(CTI[0]['Beneficiaries']), parseFloat(CTI[0]['Volunteers'])];
-           
-            SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
+            SamplingAge_label = [sampling[2]['Age1'], sampling[2]['Age2'], sampling[2]['Age3'], sampling[2]['Age4']];
+            SamplingAge_Data = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
+            console.log(SamplingAge_Data);
             totSampling = sampling[0]['Total_respondent'];
             chartCTIData = data[4];
              var OverallComp = [];
@@ -110,7 +112,8 @@ $(document).ready(function() {
             figures(sampling);
             figFemales(sampling);
             figMales(sampling);
-            limits(sampling)
+            limits(sampling);
+            samplingAge(SamplingAge_Data,SamplingAge_label);
             map(mapData);
         }); // then
        
@@ -782,11 +785,11 @@ chartDistrict_Val.render();
 
  // Sampling charts
  // Age group
-      
+function samplingAge(SamplingAge_Data, SamplingAge_label) {     
 var optionsDist = {
     series: [{
      name: 'Age',
-    data: [  33.15822002, 22.00247219, 18.07787392, 11.06304079, 8.714462299],
+    data: SamplingAge_Data,
   },
   ],
     chart: {
@@ -841,7 +844,7 @@ var optionsDist = {
   title: {
   },
   xaxis: {
-    categories: ['18-24','25-34', '35-44','45-59', '+60' ],
+    categories: SamplingAge_label,
     axisTicks: {
       show: false
   },
@@ -855,6 +858,8 @@ var optionsDist = {
 
   var chartDist = new ApexCharts(document.querySelector("#chartDist"), optionsDist);
   chartDist.render();
+}
+
 
 function background() {
 
