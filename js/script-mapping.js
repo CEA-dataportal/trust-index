@@ -97,11 +97,18 @@ function updateLatLon(iso3, x, y) {
     for (let index = 0; index < prioritiesData.length; index++) {
         const element = prioritiesData[index];
         if (element.ISO3 == iso3) {
-            element.x = x;
-            element.y = y;
-            break;
+            if(element.ISO3 == 'MYS') {
+                element.x = x-18;
+                element.y = y;
+                break;
+            } else {
+                element.x = x;
+                element.y = y;
+                break;
+            }
         }
     }
+    console.log(prioritiesData)
 
 }
 
