@@ -11,6 +11,7 @@ const overviewURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU
 const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=110833577&single=true&output=csv&force=on";
 const geosamplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=1873376386&single=true&output=csv&force=on";
 const chartCTI_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=1760705416&single=true&output=csv&force=on";
+const chartGeo_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=1444352522&single=true&output=csv&force=on";
 
 
 const country = "Zambia";
@@ -18,6 +19,9 @@ const country = "Zambia";
 let CTI=[];
 let sampling=[];
 var Overall_Index = [];
+var Value_Index = [];
+var Comp_Index = [];
+
 var Volunteers_Index = [];
 var Beneficiaries_Index = [];
 var NonBeneficiaries_Index = [];
@@ -26,6 +30,7 @@ var SamplingAge_label = [];
 var SamplingAge_Data = [];
 var GeoSamplingData = [];
 var chartCTIData = [];
+var chartGeoData = [];
 var mapData ;
 var totSampling ;
 // for ColorScale
@@ -35,23 +40,30 @@ $(document).ready(function() {
     function getData() {
         Promise.all([
             d3.csv(overviewURL),
-            d3.csv(samplingURL),
+            d3.csv(samplingURL), // Sampling data
             d3.json("../data/ZMB.geojson"),
-            d3.csv(geosamplingURL),
-            d3.csv(chartCTI_url),
+            d3.csv(geosamplingURL), // Sampling map
+            d3.csv(chartCTI_url), // Chart data
+            d3.csv(chartGeo_url), // Geo Chart data
         ]).then(function(data) {
             CTI=data[0];
-            console.log(CTI);
-            sampling=data[1];
+            
             Overall_Index = [parseFloat(CTI[0]['Index']).toFixed(0)]; 
+            Comp_Index = [parseFloat(CTI[0]['Competencies']).toFixed(0)]; 
+            Value_Index = [parseFloat(CTI[0]['Values']).toFixed(0)]; 
             Volunteers_Index = [parseFloat(CTI[0]['Volunteers']).toFixed(0)];
             Beneficiaries_Index = [parseFloat(CTI[0]['Beneficiaries']).toFixed(0)];
             NonBeneficiaries_Index = [parseFloat(CTI[0]['Non-beneficiaries']).toFixed(0)];
             CTIdata = [parseFloat(CTI[0]['Non-beneficiaries']), parseFloat(CTI[0]['Beneficiaries']), parseFloat(CTI[0]['Volunteers'])];
+            
+             // Sampling data
+            sampling=data[1];
             SamplingAge_label = [sampling[2]['Age1'], sampling[2]['Age2'], sampling[2]['Age3'], sampling[2]['Age4']];
             SamplingAge_Data = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
             console.log(SamplingAge_Data);
             totSampling = sampling[0]['Total_respondent'];
+
+             // Chart data
             chartCTIData = data[4];
              var OverallComp = [];
              var beneficiariesComp= [];
@@ -81,7 +93,28 @@ $(document).ready(function() {
                }
             });
 
-             // for ColorScale
+            // Geo Chart data
+            chartGeoData = data[5];
+            console.log(chartGeoData);
+            var GeoDataComp = [];
+            var GeoLabelComp= [];
+            var GeoDataValue = [];
+            var GeoLabelValue= [];
+            chartGeoData.forEach(element => {
+              if(element.Dimension == "Value"){
+              GeoDataValue.push(element.Overall);
+              GeoLabelValue.push(element.Geo);
+              }
+              if(element.Dimension == "Competency"){
+                GeoDataComp.push(element.Overall);
+                GeoLabelComp.push(element.Geo);
+                }
+             });
+             console.log(GeoLabelComp);
+
+
+
+             // Sampling map
             GeoSamplingData = data[3];
             GeoSamplingValue = [];
             GeoSamplingData.forEach(element => {
@@ -105,9 +138,10 @@ $(document).ready(function() {
             generateRadial_Chart1(Volunteers_Index);             
             generateRadial_Chart2(Beneficiaries_Index);
             generateRadial_Chart3(NonBeneficiaries_Index);
-            generateChartCTI (OverallComp, driversComp);
-            generate_chartRadar2 (OverallValue, driversValue),
-            
+            generate_chartRadar1 (OverallComp, driversComp);
+            generate_chartRadar2 (OverallValue, driversValue);
+            generate_chart_geo_Comp (GeoDataComp, GeoLabelComp, Comp_Index);
+            generate_chart_geo_Val (GeoDataValue, GeoLabelValue, Value_Index);
             // sampling
             figures(sampling);
             figFemales(sampling);
@@ -150,7 +184,7 @@ window.Apex = {
 };
 
 
- // Overall Radial Chart 
+ // Overall Chart 
 
 function generateRadialChart(data){
     var optionsCircle4 = {
@@ -469,27 +503,17 @@ function generateRadial_Chart3(data){
 }
 
 
-// chart1 - radial
+// Radar Chart Competencies
   
-  function generateChartCTI (OverallComp, driversComp){
+  function generate_chartRadar1 (OverallComp, driversComp){
 
   var optionsChartCTI = {
    
-   colors: ['#FF0000', '#ff9999', '#CCCCCC'],
+   colors: ['#FF0000'],
    series: [{
        name: 'Score' ,
-       data: OverallComp, /* Overall data*/
+       data: OverallComp,
      }
-/*       , {
-   name: 'Beneficiaries' ,
-   data: beneficiariesArr 
- }, {
-   name: 'Volunteers' ,
-   data: volunteersArr 
- }, {
-   name: 'Other' ,
-   data: othersArr 
- } */
 ],
    chart: {
      height: 420,
@@ -586,10 +610,11 @@ function generateRadial_Chart3(data){
  ChartCTI.render();
 }
 
-// chart2 - radar
+//  Radar Chart Values
 function generate_chartRadar2 (OverallValue, driversValue){
 
 var optionsRadar2 = {
+ colors: ['#5383cc'],
  series: [{
  name: 'Score',
  data: OverallValue,
@@ -696,10 +721,12 @@ chartRadar2.render();
 
 
       
-// Value per District charts 
-var optionsDistrict_Val = {
+// District charts 
+  // COMPENTENCIES
+function generate_chart_geo_Comp (GeoDataComp, GeoLabelComp, Comp_Index) {
+  var optionsDistrict_Comp = {
   series: [{
-  data: [8.333,8.367, 8.667, 9.23],
+  data: GeoDataComp,
   name: 'Score',
 }],
   chart: {
@@ -708,7 +735,7 @@ var optionsDistrict_Val = {
 },
 annotations: {
   xaxis: [{
-    x: 8.4,
+    x: Comp_Index/10,
     borderColor: '#FF0000',
     label: {
       borderColor: '#FF0000',
@@ -717,7 +744,7 @@ annotations: {
         background: '#FF0000',
         fontSize: '14px',
       },
-      text: 'Overall Score',
+      text: 'Competencies Score',
     }
   }],
   yaxis: []
@@ -743,7 +770,97 @@ stroke: {
   colors: ["#fff"]
 },
 xaxis: {
-  categories: ['Mazabuka', 'Petauke', 'Katete', 'Choma',],
+  categories: GeoLabelComp,
+  labels: {
+    show: true,
+    style: {
+     fontSize: '14px',
+     color: '#CCC',
+   },
+    }
+},
+grid: {
+  xaxis: {
+    lines: {
+      show: false
+    }
+  },
+  yaxis: {
+    lines: {
+      show: false
+    }
+  }
+},
+yaxis: {
+  reversed: false,
+  axisTicks: {
+    show: false
+  },
+  labels: {
+    show: true,
+    style: {
+     fontSize: '14px',
+   },
+    }
+},
+};
+
+var chartDistrict_Comp = new ApexCharts(document.querySelector("#chartDistrict_Comp"), optionsDistrict_Comp);
+chartDistrict_Comp.render();
+
+}
+
+
+  // VALUES
+
+function generate_chart_geo_Val (GeoDataValue, GeoLabelValue, Value_Index) {
+  var optionsDistrict_Val = {
+  series: [{
+  data: GeoDataValue,
+  name: 'Score',
+}],
+  chart: {
+  type: 'bar',
+  height: 350
+},
+annotations: {
+  xaxis: [{
+    x: Value_Index/10,
+    borderColor: '#5383cc',
+    label: {
+      borderColor: '#5383cc',
+      style: {
+        color: '#fff',
+        background: '#5383cc',
+        fontSize: '14px',
+      },
+      text: 'Values Score',
+    }
+  }],
+  yaxis: []
+}, //end of annotation
+
+colors: ['#18396C'],
+
+plotOptions: {
+  bar: {
+    horizontal: true,
+    distributed: false,
+    rangeBarOverlap: true
+  }
+},//end of plotOption
+dataLabels: {
+  enabled: true,
+  formatter: function (val){
+    return parseFloat(val).toFixed(1)
+        }
+},
+stroke: {
+  width: 1,
+  colors: ["#fff"]
+},
+xaxis: {
+  categories: GeoLabelValue,
   labels: {
     show: true,
     style: {
@@ -781,6 +898,7 @@ yaxis: {
 var chartDistrict_Val = new ApexCharts(document.querySelector("#chartDistrict_Val"), optionsDistrict_Val);
 chartDistrict_Val.render();
 
+}
 
 
  // Sampling charts
@@ -788,8 +906,8 @@ chartDistrict_Val.render();
 function samplingAge(SamplingAge_Data, SamplingAge_label) {     
 var optionsDist = {
     series: [{
-     name: 'Age',
-    data: SamplingAge_Data,
+     name: 'Percentage',
+     data: SamplingAge_Data,
   },
   ],
     chart: {
