@@ -1081,6 +1081,7 @@ svg.style("border","10px");
 
 function map(data){
 
+  console.log(data),
         svg.append("g")
             .selectAll("path")
             .data(data.features)

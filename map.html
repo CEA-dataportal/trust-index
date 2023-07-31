@@ -1,98 +1,51 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-    div.tooltip {   
-        position: absolute;         
-        text-align: center;          
-        font: 12px sans-serif;      
-        background: #000000; 
-        border: 10px;
-        color: #FFFFFF;
-        border-color: #FFFFFF;
-        border-radius: 4px;         
-        pointer-events: none;           
-    }
-</style>
-<head>
-    <script src="https://d3js.org/d3.v4.js"></script>
-    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-</head>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>India</title>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    </head>
+    <body>
+
+        <script type="text/javascript">
+
+            //Width and height
+            var w = 500;
+            var h = 500;
+
+            var projection = d3.geoMercator()
+                            .translate([w, h/4])
+                            .scale(120);
+
+            //Define default path generator
+            var path = d3.geoPath()
+                        .projection(projection);
 
 
+            //Create SVG element
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
 
-<!-- Create an element where the map will take place -->
-<body>
-    <h2>Map</h2>
-<svg id="my_dataviz" width="250" height="500" padding = "0px"></svg>
-<div id="map"></div>
-</body>
-<script>
+            var rectangle = svg.append("rect")
+                        .attr("height", h).attr("width", w)
+                        .attr("fill", "transparent")
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1);
 
+            //Load in GeoJSON data
+            d3.json("../data/PHL2.geojson", function(json) {
 
+                //Bind data and create one path per GeoJSON feature
+                svg.selectAll("path")
+                   .data(json.features)
+                   .enter()
+                   .append("path")
+                   .attr("d", path)
 
+        });
 
-
-// Define the div for the tooltip
-var div = d3.select("body").append("div")   
-    .attr("class", "tooltip")               
-    .style("opacity", 0);
-
-// The svg
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height"),
-    overflow = "hidden";
-
-// Map and projection
-var projection = d3.geoMercator()
-    .scale(500)
-    .translate([700, -150])
-
-    
-
-//Zoom the map
-
-svg.call(d3.zoom().on("zoom", function () {
-    svg.attr("transform", d3.event.transform)
-}))
-
-
-svg.style("border","10px");
-
-// Load external data and boot
-
-d3.json("/data/ARG2.geojson", function(data){
-console.log(data)
-
-    // Draw the map
-    svg.append("g")
-        .selectAll("path")
-        .data(data.features)
-        .enter().append("path")
-            .attr("fill", "#737CA1")
-            .attr("stroke", "#FFF")
-            .attr("stroke-width", "2px")
-            .attr("d", d3.geoPath()
-                .projection(projection)
-            )
-        .on("mouseover", function(d) {      
-            div.transition()        
-                .duration(200)      
-                .style("opacity", .9);      
-            div.html(d.properties.nombre)
-                .style("left", (d3.event.pageX) + "px")  
-                .style("font-size", "1rem")
-                .style("padding", "5px")   
-                .style("top", (d3.event.pageY - 28) + "px");    
-                })                  
-            .on("mouseout", function(d) {       
-                div.transition()        
-                    .duration(500)  
-                .style("stroke", "#fff")
-            })
-            
-})
-
-   
-</script>
+        </script>
+    </body>
+</html>

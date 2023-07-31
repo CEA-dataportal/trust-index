@@ -159,7 +159,11 @@ function generateRadialChart(data){
           type: 'radialBar',
           height: 350,
           width: '100%',
+          toolbar: {
+            show: false
+          },
         },
+        
         plotOptions: {
           radialBar: {
             dataLabels: {
