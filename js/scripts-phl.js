@@ -52,7 +52,7 @@ $(document).ready(function() {
              // Sampling data
              sampling=data[1];
              SamplingAge_label = [sampling[2]['Age1'], sampling[2]['Age2'], sampling[2]['Age3'], sampling[2]['Age4'], sampling[2]['Age5']];
-             SamplingAge_Data = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'], parseFloat(sampling[1]['Age5']))];
+             SamplingAge_Data = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4']), parseFloat(sampling[1]['Age5'])];
  
             totSampling = sampling[0]['Total_respondent'];
             chartCTIData = data[4];
