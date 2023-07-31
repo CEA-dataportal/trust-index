@@ -23,6 +23,8 @@ var Beneficiaries_Index = [];
 var NonBeneficiaries_Index = [];
 var CTIdata = [];
 var SamplingData = [];
+var SamplingAge_label = [];
+var SamplingAge_Data = [];
 var GeoSamplingData = [];
 var chartCTIData = [];
 var mapData ;
@@ -35,7 +37,7 @@ $(document).ready(function() {
         Promise.all([
             d3.csv(overviewURL),
             d3.csv(samplingURL),
-            d3.json("../data/PHL.geojson"),
+            d3.json("../data/PHL3.json"),
             d3.csv(geosamplingURL),
             d3.csv(chartCTI_url),
         ]).then(function(data) {
@@ -46,8 +48,12 @@ $(document).ready(function() {
             Beneficiaries_Index = [parseFloat(CTI[0]['Beneficiaries']).toFixed(0)];
             NonBeneficiaries_Index = [parseFloat(CTI[0]['Non-beneficiaries']).toFixed(0)];
             CTIdata = [parseFloat(CTI[0]['Non-beneficiaries']), parseFloat(CTI[0]['Beneficiaries']), parseFloat(CTI[0]['Volunteers'])];
-            console.log(CTI);
-            SamplingData = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'])];
+
+             // Sampling data
+             sampling=data[1];
+             SamplingAge_label = [sampling[2]['Age1'], sampling[2]['Age2'], sampling[2]['Age3'], sampling[2]['Age4'], sampling[2]['Age5']];
+             SamplingAge_Data = [parseFloat(sampling[1]['Age1']), parseFloat(sampling[1]['Age2']), parseFloat(sampling[1]['Age3']), parseFloat(sampling[1]['Age4'], parseFloat(sampling[1]['Age5']))];
+ 
             totSampling = sampling[0]['Total_respondent'];
             chartCTIData = data[4];
              var OverallComp = [];
@@ -107,7 +113,8 @@ $(document).ready(function() {
             figures(sampling);
             figFemales(sampling);
             figMales(sampling);
-            limits(sampling)
+            limits(sampling)            
+            samplingAge(SamplingAge_Data,SamplingAge_label);
             map(mapData);
         }); // then
        
@@ -691,79 +698,80 @@ chartRadar2.render();
 
  // Sampling charts
  // Age group
-      
-var optionsDist = {
-    series: [{
-     name: 'Age',
-    data: [  33.15822002, 22.00247219, 18.07787392, 11.06304079, 8.714462299],
-  },
-  ],
-    chart: {
-    type: 'bar',
-    height: 300,
-    stacked: false,
-    toolbar: {
-      show: false
-    }
-  },
-  colors: ['#FF0000'],
-  plotOptions: {
-    bar: {
-      horizontal: false,
-      barHeight: '80%',
+ function samplingAge(SamplingAge_Data, SamplingAge_label) {     
+  var optionsDist = {
+      series: [{
+       name: 'Percentage',
+       data: SamplingAge_Data,
     },
-  },
-  dataLabels: {
-    enabled: true,
-    formatter: (val) => { return parseFloat(val).toFixed(1) + '%' }
-  },
-  stroke: {
-    width: 3,
-    colors: ["#12284C"]
-  },
-  
-  grid: {
-    xaxis: {
-      lines: {
+    ],
+      chart: {
+      type: 'bar',
+      height: 300,
+      stacked: false,
+      toolbar: {
         show: false
+      }
+    },
+    colors: ['#FF0000'],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        barHeight: '80%',
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: (val) => { return parseFloat(val).toFixed(1) + '%' }
+    },
+    stroke: {
+      width: 3,
+      colors: ["#12284C"]
+    },
+    
+    grid: {
+      xaxis: {
+        lines: {
+          show: false
+        }
+      },
+      yaxis: {
+        lines: {
+          show: false
+        }
       }
     },
     yaxis: {
-      lines: {
-        show: false
-      }
-    }
-  },
-  yaxis: {
-  },
-  tooltip: {
-    shared: false,
-    x: {
-      formatter: function (val) {
-        return "Age group: " + val
+    },
+    tooltip: {
+      shared: false,
+      x: {
+        formatter: function (val) {
+          return "Age group: " + val
+        }
+      },
+      y: {
+       formatter: (val) => { return parseFloat(val).toFixed(1) + '%' }
       }
     },
-    y: {
-     formatter: (val) => { return parseFloat(val).toFixed(1) + '%' }
-    }
-  },
-  title: {
-  },
-  xaxis: {
-    categories: ['18-24','25-34', '35-44','45-59', '+60' ],
-    axisTicks: {
-      show: false
-  },
+    title: {
+    },
+    xaxis: {
+      categories: SamplingAge_label,
+      axisTicks: {
+        show: false
+    },
+      
+    },
+    yaxis: {
+      show:false,
+    },
     
-  },
-  yaxis: {
-    show:false,
-  },
+    };
   
-  };
-
-  var chartDist = new ApexCharts(document.querySelector("#chartDist"), optionsDist);
-  chartDist.render();
+    var chartDist = new ApexCharts(document.querySelector("#chartDist"), optionsDist);
+    chartDist.render();
+  }
 
 function background() {
 
@@ -792,7 +800,7 @@ function coverage() {
 
  var coverage = parseInt(CTI[0]['Coverage']);
        d3.select("#coverage").append("span")
-       .html(''+ coverage + ' provinces'); 
+       .html(''+ coverage + ' regions'); 
 };
 
 
@@ -853,27 +861,27 @@ var div = d3.select("#map_sampling").select("#tooltip")
     .style("opacity", 0);
 
 // The svg
-var svg = d3.select("#map_sampling").select("svg").attr("width", 350).attr("height",350),
+var svg = d3.select("#map_sampling").select("svg").attr("width", 350).attr("height",400),
     width = +svg.attr("width"),
     height = +svg.attr("height");
 
 // Map and projection
-var projection = d3.geoAitoff()
-    .scale(1250)
-    .translate([-455,-125])
+var projection = d3.geoMercator()
+    .scale(1150)
+    .translate([-2370,450])
 
-svg.style("border","10px");
+svg.style("border","0px");
 
 
 function map(data){
-
+console.log("test")
         svg.append("g")
             .selectAll("path")
             .data(data.features)
             .enter().append("path")
                 .attr("fill", function(d) {
 
-                 ProvinceData = GeoSamplingData.filter(item => { return d.properties.name == item.Name; });//mettre les PCODE
+                 ProvinceData = GeoSamplingData.filter(item => { return d.properties.ADM1_PCODE == item.PCODE; });//mettre les PCODE
                  var Val = ProvinceData.length != 0 ? parseInt(ProvinceData[0].Value) : 0;
                  return Val != 0 ? colorScale(Val) : "#CCC"; 
                  
@@ -886,9 +894,9 @@ function map(data){
                     .projection(projection)
                 )
             .on("mouseover", function(d) { 
-               ProvinceData = GeoSamplingData.filter(item => { return d.properties.name == item.Name; });
+               ProvinceData = GeoSamplingData.filter(item => { return d.properties.ADM1_PCODE == item.PCODE; });
                var Val = ProvinceData.length != 0 ? parseInt(ProvinceData[0].Value) : 0;
-               Tooltip = "<h6>" + d.properties.name + " Province</h6>" + Val; 
+               Tooltip = "<h6>" + d.properties.ADM1_EN + "</h6>" + Val; 
                 div.transition()        
                     .duration(200)      
                     .style("opacity", .9);      
