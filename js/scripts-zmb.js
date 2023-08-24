@@ -132,6 +132,8 @@ $(document).ready(function() {
             coverage(CTI);
             lead(CTI);
             date(CTI);
+            scale(CTI);
+            response(CTI);
             
           // Chart
             generateRadialChart(Overall_Index);
@@ -1001,6 +1003,21 @@ function lead() {
        d3.select("#lead").append("span")
        .html('<b>Lead</b>: '+ lead + '<br><b>Support</b>: ' + partners); 
 };
+
+function scale() {
+
+  var scale = CTI[0]['Scale'];
+        d3.select("#Scale").append("span")
+        .html('<label class="btn tag-'+ scale +'">' + scale + '</label>'); 
+ };
+
+ function response() {
+
+  var response = CTI[0]['Response'];
+        d3.select("#Response").append("span")
+        .html('<label class="btn tag-response">' + response + '</label>'); 
+        
+ };
 
 function coverage() {
 

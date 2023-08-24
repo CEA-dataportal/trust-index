@@ -11,13 +11,22 @@ const overviewURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYbWzFHRZW
 const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYbWzFHRZW9gYnaMr7InGDJOQenFffk9wxKxmeeivTHxbnwh9_RDOjGdiXFYBqgk2bhNJdJZUaWn_G/pub?gid=110833577&single=true&output=csv&force=on";
 const geosamplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYbWzFHRZW9gYnaMr7InGDJOQenFffk9wxKxmeeivTHxbnwh9_RDOjGdiXFYBqgk2bhNJdJZUaWn_G/pub?gid=1120370117&single=true&output=csv&force=on";
 const chartCTI_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYbWzFHRZW9gYnaMr7InGDJOQenFffk9wxKxmeeivTHxbnwh9_RDOjGdiXFYBqgk2bhNJdJZUaWn_G/pub?gid=15486601&single=true&output=csv&force=on";
-
-
+const chartGeo_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYbWzFHRZW9gYnaMr7InGDJOQenFffk9wxKxmeeivTHxbnwh9_RDOjGdiXFYBqgk2bhNJdJZUaWn_G/pub?gid=1873376386&single=true&output=csv&force=on";
+const textURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYbWzFHRZW9gYnaMr7InGDJOQenFffk9wxKxmeeivTHxbnwh9_RDOjGdiXFYBqgk2bhNJdJZUaWn_G/pub?gid=1139909146&single=true&output=csv&force=on";
+const recommendURL ="https://docs.google.com/spreadsheets/d/e/2PACX-1vQYbWzFHRZW9gYnaMr7InGDJOQenFffk9wxKxmeeivTHxbnwh9_RDOjGdiXFYBqgk2bhNJdJZUaWn_G/pub?gid=721834992&single=true&output=csv&force=on";
 const country = "Philippines";
 
 let CTI=[];
 let sampling=[];
+let CustomizedText=[];
+let recommendations_list=[];
+// for Text
+
 var Overall_Index = [];
+var Value_Index = [];
+var Comp_Index = [];
+
+
 var Volunteers_Index = [];
 var Beneficiaries_Index = [];
 var NonBeneficiaries_Index = [];
@@ -27,6 +36,7 @@ var SamplingAge_label = [];
 var SamplingAge_Data = [];
 var GeoSamplingData = [];
 var chartCTIData = [];
+var chartGeoData = [];
 var mapData ;
 var totSampling ;
 // for ColorScale
@@ -40,9 +50,13 @@ $(document).ready(function() {
             d3.json("../data/PHL3.json"),
             d3.csv(geosamplingURL),
             d3.csv(chartCTI_url),
+            d3.csv(chartGeo_url), // Geo Chart data
+            d3.csv(textURL),
+            d3.csv(recommendURL),
         ]).then(function(data) {
             CTI=data[0];
             sampling=data[1];
+            
             Overall_Index = [parseFloat(CTI[0]['Index']).toFixed(0)]; 
             Volunteers_Index = [parseFloat(CTI[0]['Volunteers']).toFixed(0)];
             Beneficiaries_Index = [parseFloat(CTI[0]['Beneficiaries']).toFixed(0)];
@@ -83,6 +97,30 @@ $(document).ready(function() {
                driversComp.push(element.Drivers);
                }
             });
+            // Geo Chart data
+            chartGeoData = data[5];
+            
+            var GeoDataComp = [];
+            var GeoLabelComp= [];
+            var GeoDataValue = [];
+            var GeoLabelValue= [];
+            chartGeoData.forEach(element => {
+              if(element.Dimension == "Value"){
+              GeoDataValue.push(element.Overall);
+              GeoLabelValue.push(element.Geo);
+              }
+              if(element.Dimension == "Competency"){
+                GeoDataComp.push(element.Overall);
+                GeoLabelComp.push(element.Geo);
+                }
+             });
+             
+
+
+          // for Text
+            CustomizedText=data[6];
+            recommendations_list=data[7];
+            console.log(recommendations_list);
 
              // for ColorScale
             GeoSamplingData = data[3];
@@ -95,27 +133,48 @@ $(document).ready(function() {
             .range(["#ffcccc", "#FF0000"]);
 
             mapData = data[2];
-            // Overview
+
+            // Run functions
+
+            // Header
             title(CTI);
             background(CTI);
             report(CTI);
             coverage(CTI);
+            scale(CTI);
+            response(CTI);
             lead(CTI);
             date(CTI);
+
+            // Charts
             generateRadialChart(Overall_Index);
             generateRadial_Chart1(Volunteers_Index);             
             generateRadial_Chart2(Beneficiaries_Index);
             generateRadial_Chart3(NonBeneficiaries_Index);
             generateChartCTI (OverallComp, driversComp);
-            generate_chartRadar2 (OverallValue, driversValue),
+            generate_chartRadar2 (OverallValue, driversValue);
             
+            generate_chart_geo_Comp (GeoDataComp, GeoLabelComp, Comp_Index);
+            generate_chart_geo_Val (GeoDataValue, GeoLabelValue, Value_Index);
+
+            
+
             // sampling
             figures(sampling);
             figFemales(sampling);
-            figMales(sampling);
-            limits(sampling)            
+            figMales(sampling);        
             samplingAge(SamplingAge_Data,SamplingAge_label);
             map(mapData);
+
+            section1(CustomizedText);
+            section2(CustomizedText);
+            section3(CustomizedText);
+            section4(CustomizedText);
+            
+            analysis(CustomizedText);
+            findings(CustomizedText);
+            recommendations(recommendations_list);
+            limits(CustomizedText);
         }); // then
        
     } // getData
@@ -699,6 +758,185 @@ chartRadar2.render();
 
 }
 
+// District charts 
+  // COMPENTENCIES
+  function generate_chart_geo_Comp (GeoDataComp, GeoLabelComp, Comp_Index) {
+    var optionsDistrict_Comp = {
+    series: [{
+    data: GeoDataComp,
+    name: 'Score',
+  }],
+    chart: {
+    type: 'bar',
+    height: 350
+  },
+  annotations: {
+    xaxis: [{
+      x: Comp_Index/10,
+      borderColor: '#FF0000',
+      label: {
+        borderColor: '#FF0000',
+        style: {
+          color: '#fff',
+          background: '#FF0000',
+          fontSize: '14px',
+        },
+        text: 'Competencies Score',
+      }
+    }],
+    yaxis: []
+  }, //end of annotation
+  
+  colors: ['#18396C'],
+  
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      distributed: false,
+      rangeBarOverlap: true
+    }
+  },//end of plotOption
+  dataLabels: {
+    enabled: true,
+    formatter: function (val){
+      return parseFloat(val).toFixed(1)
+          }
+  },
+  stroke: {
+    width: 1,
+    colors: ["#fff"]
+  },
+  xaxis: {
+    categories: GeoLabelComp,
+    labels: {
+      show: true,
+      style: {
+       fontSize: '14px',
+       color: '#CCC',
+     },
+      }
+  },
+  grid: {
+    xaxis: {
+      lines: {
+        show: false
+      }
+    },
+    yaxis: {
+      lines: {
+        show: false
+      }
+    }
+  },
+  yaxis: {
+    reversed: false,
+    axisTicks: {
+      show: false
+    },
+    labels: {
+      show: true,
+      style: {
+       fontSize: '14px',
+     },
+      }
+  },
+  };
+  
+  var chartDistrict_Comp = new ApexCharts(document.querySelector("#chartDistrict_Comp"), optionsDistrict_Comp);
+  chartDistrict_Comp.render();
+  
+  }
+  
+  
+    // VALUES
+  
+  function generate_chart_geo_Val (GeoDataValue, GeoLabelValue, Value_Index) {
+    var optionsDistrict_Val = {
+    series: [{
+    data: GeoDataValue,
+    name: 'Score',
+  }],
+    chart: {
+    type: 'bar',
+    height: 350
+  },
+  annotations: {
+    xaxis: [{
+      x: Value_Index/10,
+      borderColor: '#5383cc',
+      label: {
+        borderColor: '#5383cc',
+        style: {
+          color: '#fff',
+          background: '#5383cc',
+          fontSize: '14px',
+        },
+        text: 'Values Score',
+      }
+    }],
+    yaxis: []
+  }, //end of annotation
+  
+  colors: ['#18396C'],
+  
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      distributed: false,
+      rangeBarOverlap: true
+    }
+  },//end of plotOption
+  dataLabels: {
+    enabled: true,
+    formatter: function (val){
+      return parseFloat(val).toFixed(1)
+          }
+  },
+  stroke: {
+    width: 1,
+    colors: ["#fff"]
+  },
+  xaxis: {
+    categories: GeoLabelValue,
+    labels: {
+      show: true,
+      style: {
+       fontSize: '14px',
+       color: '#CCC',
+     },
+      }
+  },
+  grid: {
+    xaxis: {
+      lines: {
+        show: false
+      }
+    },
+    yaxis: {
+      lines: {
+        show: false
+      }
+    }
+  },
+  yaxis: {
+    reversed: false,
+    axisTicks: {
+      show: false
+    },
+    labels: {
+      show: true,
+      style: {
+       fontSize: '14px',
+     },
+      }
+  },
+  };
+  
+  var chartDistrict_Val = new ApexCharts(document.querySelector("#chartDistrict_Val"), optionsDistrict_Val);
+  chartDistrict_Val.render();
+  
+  }
+
 
  // Sampling charts
  // Age group
@@ -788,7 +1026,7 @@ function background() {
 function date() {
   var date = CTI[0]['Date'];
         d3.select("#text-date").append("span")
-        .html('<b>Date</b>: '+ date); 
+        .html('Last update: '+ date); 
         console.log(date);
 };
 
@@ -799,6 +1037,21 @@ function lead() {
        d3.select("#lead").append("span")
        .html('<b>Lead</b>: '+ lead + '<br><b>Support</b>: ' + partners); 
 };
+
+function scale() {
+
+  var scale = CTI[0]['Scale'];
+        d3.select("#Scale").append("span")
+        .html('<a href="#sampling" title="See sampling"><label class="btn tag-'+ scale +'">' + scale + ' level</label></a>'); 
+ };
+
+ function response() {
+
+  var response = CTI[0]['Response'];
+        d3.select("#Response").append("span")
+        .html('<label class="btn tag-response">' + response + ' focus</label>'); 
+        
+ };
 
 function coverage() {
 
@@ -811,7 +1064,15 @@ function coverage() {
 function title() {
     var title = country;
         d3.select("#title_country").append("span")
-        .text(title); 
+        .text(title);
+        d3.select("#name_country1").append("span")
+        .text(title);
+        d3.select("#name_country2").append("span")
+        .text(title);
+        d3.select("#name_country3").append("span")
+        .text(title);
+        d3.select("#name_country4").append("span")
+        .text(title);
 };
 
 function report() {
@@ -822,13 +1083,94 @@ function report() {
       .html('<a href="' + rep + '" ><div class="btn btn-primary btn-xl">See Analysis</div></a>');
     }
 }; 
+
+
+// Text
+
+function section1() {
+
+  var section1_txt = CustomizedText[0]['Text'];
+        d3.select("#text_section1").append("span")
+      .html('<p>' + section1_txt + '</p>');
+};
+function section2() {
+
+  var section2_txt = CustomizedText[1]['Text'];
+        d3.select("#text_section2").append("span")
+      .html('<p>' + section2_txt + '</p>');
+};
+function section3() {
+
+  var section3_txt = CustomizedText[2]['Text'];
+        d3.select("#text_section3").append("span")
+      .html('<p>' + section3_txt + '</p>');
+};
+
+function section4() {
+
+  var section4_txt = CustomizedText[3]['Text'];
+        d3.select("#text_section4").append("span")
+      .html('<p>' + section4_txt + '</p>');
+};
+
+function analysis() {
+
+  var analysis_txt = CustomizedText[4]['Text'];
+        d3.select("#text_section5").append("span")
+      .html('<p>' + analysis_txt + '</p>');
+};
+
+function findings() {
+  var findings_text = CustomizedText[5]['Text'];
+        d3.select("#text_section6").append("span")
+      .text(findings_text); 
+};
+
+
+
+function recommendations(data) {
+
+// accordeon
+
+$('#accordionFlush').html(''); // permet de vider le container de
+
+var accordeons = "";
+
+for (let index = 0; index < data.length; index++) {
+    const titre = data[index]['Title']; // a remplacer
+    const recommendation = data[index]['Recommendation']; // a remplacer    
+    
+    accordeons += '<div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse' + index +'" aria-expanded="false" aria-controls="flush-collapse' + index +'">'
+
+            + titre +'</button></h2>'
+
+            +'<div id="flush-collapse' + index +'" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">'
+
+            +'<div class="accordion-body">'+recommendation
+
+            +'</div></div>';
+
+}
+
+ 
+
+$('#accordionFlushExample').append(accordeons);
+};
+
+
+function limits() {
+  var limitation = CustomizedText[7]['Text'];
+        d3.select("#text-limitations").append("span")
+      .text(limitation); 
+};
+
+// Sampling
   
 function figures() {
 
     var respondents = sampling[0]['Total_respondent'];
           d3.select("#item-1").append("span")
         .text(respondents); 
-
 
 };
 
@@ -849,11 +1191,7 @@ function figMales() {
 
 };
 
-function limits() {
-  var limitation = sampling[0]['Limitations'];
-        d3.select("#text-limitations").append("span")
-      .text(limitation); 
-};
+
 
 
 // SAMPLING MAP

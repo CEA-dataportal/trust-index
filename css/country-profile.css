@@ -8,6 +8,10 @@ h1, h2, h3, h4, h5, h6, strong {
   font-weight: 600;
 }
 
+p {
+  white-space:break-spaces;
+}
+
 .content-area {
   max-width: 1280px;
   margin: 0 auto;
@@ -119,3 +123,54 @@ h1, h2, h3, h4, h5, h6, strong {
 #item-1, #item-2, #item-3 {color:#FF0000; margin-left: auto;margin-right: auto; height: 40px; width: 60px;font-size: 2em; font-weight: bold; }
 .desc{color:#FFF;font-size: 0.75em; font-weight: 500;text-align: center; text-transform: uppercase ; padding:5px;}
 #text-limitations{color:#FFF;font-size: 0.75em; font-weight: 500;text-align: justify; padding:5px;}
+.date{color:#FFF;font-size: 0.75em; font-weight: 300;text-align: center; padding:5px; font-style: italic;}
+
+
+
+.tagging {
+  display: flex;
+  row-gap: 1em;
+  column-gap: 1em;
+}
+
+.tagging .btn {
+  outline: none;
+  display: inline;
+  padding: 5px 8px 5px 8px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #fff;
+  margin-right:10px;
+}
+
+.tagging a {
+  text-decoration: none;
+}
+.tagging .tag-response {
+  background: #CB4335;
+  border: solid 1px #CB4335;
+}
+.tagging .tag-National {
+  background: #1A5276;
+  border: solid 1px #1A5276;
+}
+.tagging .tag-Subnational {
+  background: #2471A3;
+  border: solid 1px #2471A3;
+}
+
+
+.apexcharts-xaxistooltip {
+  background: transparent; 
+  border: none;
+  color: #2b63dc;
+  margin-top: 4px;
+  padding-bottom: 0;
+  font-weight: bold;
+}
+.apexcharts-xaxistooltip-bottom:before{
+  opacity: 0  
+}
+.apexcharts-xaxistooltip-bottom:after{
+  opacity: 0 
+}

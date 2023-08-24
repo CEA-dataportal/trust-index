@@ -1,6 +1,8 @@
 /* Color map */
 .primary {color: #FF0000;}
 .secondary {color: #0A182D;}
+.blue-lighter {color: #153361;}
+.blue-lightest {color: #466089;}
 .fourth {color: #5383cc;}
 
 
@@ -105,6 +107,12 @@ hr.divider {
   color: rgba(107, 117, 125, 0.616);
   text-transform:capitalize;
 }
+
+.small {
+  font-weight:lighter;
+  font-size: 0.7rem;
+}
+
 
 /* HOME PAGE */
 .navbar-shrink .navbar-brand,
@@ -441,7 +449,13 @@ header.masthead {
     background-size: cover;
   }
 
-  .header-box {background-color: #0A182D ; padding:10px 20px; border: solid 3px #5383cc; margin-top:-100px; height: 65px; width: 200px; text-align: center;}
+  .header-box {color: #0A182D ; text-transform: uppercase; font-weight:700; text-align: left;}
+
+  .bi {
+    display: inline-block;
+    vertical-align: -0.125em;
+    fill: currentcolor;
+}
 /* Buttons */
 
 
@@ -669,6 +683,7 @@ border: #FFF solid 5px;
   height: 100%; /* Full height */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  
 }
 
 /* Modal Content/Box */
@@ -687,6 +702,17 @@ border: #FFF solid 5px;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 30px;
 }
+
+.modal .popup {
+  top:0;
+  overflow:hidden !important;
+  overflow-y:auto;
+  width: 35vw;
+  max-height: 50vh !important; /* Could be more or less, depending on screen size */
+  background-color: #fefefe;
+  color: #212529;
+}
+
 .modal-content h3,.modal-content h5 {
   color:rgba(18, 40, 78, 1);
   font-weight: 700;
@@ -701,8 +727,8 @@ border: #FFF solid 5px;
   margin-bottom: 20px;
   width: 400px;
 }
-.close {font-weight: 700;float: right; padding: 5px; width: 45px; text-align: center;} 
-.close:hover{background-color:#EEE; color:#FFF!important;} 
+.close {margin-top:-30px;margin-right:-30px;font-weight: 700;float: right; padding: 5px; width: 45px; text-align: center; color:rgba(18, 40, 78, 1)!important;} 
+.close:hover{color:#CCC!important;} 
 
 
 blockquote {
