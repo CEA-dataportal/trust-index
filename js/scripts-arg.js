@@ -1157,7 +1157,7 @@ for (let index = 0; index < data.length; index++) {
 
  
 
-$('#accordionFlushExample').append(accordeons);
+$('#accordionFlush').append(accordeons);
 };
 
 

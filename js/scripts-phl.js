@@ -120,7 +120,6 @@ $(document).ready(function() {
           // for Text
             CustomizedText=data[6];
             recommendations_list=data[7];
-            console.log(recommendations_list);
 
              // for ColorScale
             GeoSamplingData = data[3];
@@ -1130,6 +1129,7 @@ function findings() {
 
 function recommendations(data) {
 
+  console.log(data);
 // accordeon
 
 $('#accordionFlush').html(''); // permet de vider le container de
@@ -1154,7 +1154,7 @@ for (let index = 0; index < data.length; index++) {
 
  
 
-$('#accordionFlushExample').append(accordeons);
+$('#accordionFlush').append(accordeons);
 };
 
 
