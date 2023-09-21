@@ -12,12 +12,18 @@ const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU
 const geosamplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=1873376386&single=true&output=csv&force=on";
 const chartCTI_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=1760705416&single=true&output=csv&force=on";
 const chartGeo_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=1444352522&single=true&output=csv&force=on";
+const textURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=491238546&single=true&output=csv&force=on";
+const recommendURL ="https://docs.google.com/spreadsheets/d/e/2PACX-1vTLurpBx5OU04mhO3C6586ht-5N2FTSBlFIwQITW0AqSo6uj6jCHTyAbDMIgJuGBq04PPNNuQ9ojbcB/pub?gid=1591832154&single=true&output=csv&force=on";
 
 
 const country = "Zambia";
 
 let CTI=[];
 let sampling=[];
+let CustomizedText=[];
+let recommendations_list=[];
+
+
 var Overall_Index = [];
 var Value_Index = [];
 var Comp_Index = [];
@@ -45,6 +51,8 @@ $(document).ready(function() {
             d3.csv(geosamplingURL), // Sampling map
             d3.csv(chartCTI_url), // Chart data
             d3.csv(chartGeo_url), // Geo Chart data
+            d3.csv(textURL),
+            d3.csv(recommendURL),
         ]).then(function(data) {
             CTI=data[0];
             
@@ -113,6 +121,10 @@ $(document).ready(function() {
              console.log(GeoLabelComp);
 
 
+            // for Text
+            CustomizedText=data[6];
+            recommendations_list=data[7];
+            console.log(recommendations_list);
 
              // Sampling map
             GeoSamplingData = data[3];
@@ -125,7 +137,8 @@ $(document).ready(function() {
             .range(["#ffcccc", "#FF0000"]);
 
             mapData = data[2];
-            // Text
+            
+            // Header
             title(CTI);
             background(CTI);
             report(CTI);
@@ -151,6 +164,18 @@ $(document).ready(function() {
             limits(sampling);
             samplingAge(SamplingAge_Data,SamplingAge_label);
             map(mapData);
+
+
+            // Text
+            section1(CustomizedText);
+            section2(CustomizedText);
+            section3(CustomizedText);
+            section4(CustomizedText);
+            
+            analysis(CustomizedText);
+            findings(CustomizedText);
+            recommendations(recommendations_list);
+            limits(CustomizedText);
         }); // then
        
     } // getData
@@ -1068,8 +1093,84 @@ function figMales() {
 
 };
 
+
+
+
+// Text
+
+function section1() {
+
+  var section1_txt = CustomizedText[0]['Text'];
+        d3.select("#text_section1").append("span")
+      .html('<p>' + section1_txt + '</p>');
+};
+function section2() {
+
+  var section2_txt = CustomizedText[1]['Text'];
+        d3.select("#text_section2").append("span")
+      .html('<p>' + section2_txt + '</p>');
+};
+function section3() {
+
+  var section3_txt = CustomizedText[2]['Text'];
+        d3.select("#text_section3").append("span")
+      .html('<p>' + section3_txt + '</p>');
+};
+
+function section4() {
+
+  var section4_txt = CustomizedText[3]['Text'];
+        d3.select("#text_section4").append("span")
+      .html('<p>' + section4_txt + '</p>');
+};
+
+function analysis() {
+
+  var analysis_txt = CustomizedText[4]['Text'];
+        d3.select("#text_section5").append("span")
+      .html('<p>' + analysis_txt + '</p>');
+};
+
+function findings() {
+  var findings_text = CustomizedText[5]['Text'];
+        d3.select("#text_section6").append("span")
+      .text(findings_text); 
+};
+
+
+
+function recommendations(data) {
+
+// accordeon
+
+$('#accordionFlush').html(''); // permet de vider le container de
+
+var accordeons = "";
+
+for (let index = 0; index < data.length; index++) {
+    const titre = data[index]['Title']; // a remplacer
+    const recommendation = data[index]['Recommendation']; // a remplacer    
+    
+    accordeons += '<div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse' + index +'" aria-expanded="false" aria-controls="flush-collapse' + index +'">'
+
+            + titre +'</button></h2>'
+
+            +'<div id="flush-collapse' + index +'" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">'
+
+            +'<div class="accordion-body">'+recommendation
+
+            +'</div></div>';
+
+}
+
+ 
+
+$('#accordionFlush').append(accordeons);
+};
+
+
 function limits() {
-  var limitation = sampling[0]['Limitations'];
+  var limitation = CustomizedText[7]['Text'];
         d3.select("#text-limitations").append("span")
       .text(limitation); 
 };
