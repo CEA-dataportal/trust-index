@@ -10,9 +10,9 @@ console.log(country); */
 
 
 const overviewURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3YRBooWl6Q9OEdYDQzk2HHXtTfaYGMYKziq8VjgxALBPrR-pwpI7CtEzt8l08xUab2gnhAlGepkk8/pub?gid=1401474139&single=true&output=csv&force=on";
-const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvzBmXnsG40DyGmwKUEXvNRhdlNwWVCDTrbjpBoL1I6DTAbDZnN2Qu0p0OBE53KjpoyFkmYhrGdTW/pub?gid=110833577&single=true&output=csv&force=on";
-const geosamplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvzBmXnsG40DyGmwKUEXvNRhdlNwWVCDTrbjpBoL1I6DTAbDZnN2Qu0p0OBE53KjpoyFkmYhrGdTW/pub?gid=1120370117&single=true&output=csv&force=on";
-const chartCTI_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvzBmXnsG40DyGmwKUEXvNRhdlNwWVCDTrbjpBoL1I6DTAbDZnN2Qu0p0OBE53KjpoyFkmYhrGdTW/pub?gid=15486601&single=true&output=csv&force=on";
+const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3YRBooWl6Q9OEdYDQzk2HHXtTfaYGMYKziq8VjgxALBPrR-pwpI7CtEzt8l08xUab2gnhAlGepkk8/pub?gid=110833577&single=true&output=csv&force=on";
+const geosamplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3YRBooWl6Q9OEdYDQzk2HHXtTfaYGMYKziq8VjgxALBPrR-pwpI7CtEzt8l08xUab2gnhAlGepkk8/pub?gid=1120370117&single=true&output=csv&force=on";
+const chartCTI_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3YRBooWl6Q9OEdYDQzk2HHXtTfaYGMYKziq8VjgxALBPrR-pwpI7CtEzt8l08xUab2gnhAlGepkk8/pub?gid=15486601&single=true&output=csv&force=on";
 
 const chartGeo_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvzBmXnsG40DyGmwKUEXvNRhdlNwWVCDTrbjpBoL1I6DTAbDZnN2Qu0p0OBE53KjpoyFkmYhrGdTW/pub?gid=1873376386&single=true&output=csv&force=on";
 const textURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvzBmXnsG40DyGmwKUEXvNRhdlNwWVCDTrbjpBoL1I6DTAbDZnN2Qu0p0OBE53KjpoyFkmYhrGdTW/pub?gid=134227077&single=true&output=csv&force=on";
