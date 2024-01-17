@@ -103,8 +103,8 @@ function updateLatLon(iso3, x, y) {
                 element.y = y;
                 break;
             }  else if(element.ISO3 == 'TUV') {
-                element.x = 0;
-                element.y = 395;
+                element.x = 1197;
+                element.y = 393;
                 break;
             } else {
                 element.x = x;
