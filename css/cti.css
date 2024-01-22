@@ -281,7 +281,7 @@ hr.divider {
   font-size: 0.73rem;
   margin-top: 5px;
   margin-right: 10px;
-  color: #FF0000;
+  color: hsl(0, 100%, 50%);
 }
 header.masthead {
     padding-top: 10rem;
@@ -297,6 +297,9 @@ header.masthead {
     border-bottom: #5383cc solid 5px;
   
 }
+
+
+
 .v-align {
   vertical-align: middle!important;
 }
@@ -315,10 +318,9 @@ header.masthead {
   background-size: cover;
   background-color:#0A182D;
   background-blend-mode: normal,luminosity; 
-
-
   border-bottom: #5383cc solid 5px;
 }
+
 
 #faq {
   background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/p-MDG1813.jpg"); 
@@ -370,6 +372,21 @@ header.masthead {
   background-size: cover;
   background-color: #0A182D;
   background-blend-mode: normal,luminosity; 
+}
+
+#country_ecu {
+  
+  min-height: 400px!important;
+  padding-top: 10rem;
+  padding-bottom: 1rem!important;
+  background: linear-gradient(to bottom, rgba(18, 40, 78, 1) 00%, rgba(18, 40, 78, 1) 25%, rgba(18, 40, 78, 0.7) 100%), url("../assets/img/p-ECU0357.jpg"); 
+  background-position: top;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: cover;
+  background-color: #0A182D;
+  background-blend-mode: normal,luminosity; 
+ 
 }
 
 #toolkit {
