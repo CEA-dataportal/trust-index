@@ -23,18 +23,15 @@ let CTI=[];
 let sampling=[];
 let CustomizedText=[];
 let recommendations_list=[];
-// for Text
 
 var Overall_Index = [];
 var Value_Index = [];
 var Comp_Index = [];
 
-
 var Volunteers_Index = [];
 var Beneficiaries_Index = [];
 var NonBeneficiaries_Index = [];
 var CTIdata = [];
-var SamplingData = [];
 var SamplingAge_label = [];
 var SamplingAge_Data = [];
 var GeoSamplingData = [];
@@ -59,8 +56,9 @@ $(document).ready(function() {
         ]).then(function(data) {
             CTI=data[0];
             sampling=data[1];
-            
             Overall_Index = [parseFloat(CTI[0]['Index']).toFixed(0)]; 
+            Comp_Index = [parseFloat(CTI[0]['Competencies']).toFixed(0)]; 
+            Value_Index = [parseFloat(CTI[0]['Values']).toFixed(0)]; 
             Volunteers_Index = [parseFloat(CTI[0]['Volunteers']).toFixed(0)];
             Beneficiaries_Index = [parseFloat(CTI[0]['Beneficiaries']).toFixed(0)];
             NonBeneficiaries_Index = [parseFloat(CTI[0]['Non-beneficiaries']).toFixed(0)];
@@ -117,6 +115,8 @@ $(document).ready(function() {
                 GeoLabelComp.push(element.Geo);
                 }
              });
+             
+            console.log(chartGeoData);
              
 
 
@@ -762,7 +762,7 @@ chartRadar2.render();
 }
 
 // District charts 
-  // COMPENTENCIES
+  // COMPETENCIES
   function generate_chart_geo_Comp (GeoDataComp, GeoLabelComp, Comp_Index) {
     var optionsDistrict_Comp = {
     series: [{
@@ -849,7 +849,6 @@ chartRadar2.render();
   chartDistrict_Comp.render();
   
   }
-  
   
     // VALUES
   
