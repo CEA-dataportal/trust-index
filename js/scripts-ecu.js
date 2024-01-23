@@ -865,21 +865,21 @@ chartRadar2.render();
   annotations: {
     xaxis: [{
       x: Value_Index/10,
-      borderColor: '#5383cc',
+      borderColor: '#262626',
       label: {
-        borderColor: '#5383cc',
+        borderColor: '#262626',
         style: {
           color: '#fff',
-          background: '#5383cc',
+          background: '#262626',
           fontSize: '14px',
         },
-        text: 'Values Score',
+        text: 'Average Score',
       }
     }],
     yaxis: []
   }, //end of annotation
   
-  colors: ['#18396C'],
+  colors: ['#5178B6'],
   
   plotOptions: {
     bar: {
