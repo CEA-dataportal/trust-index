@@ -248,7 +248,7 @@ function generateRadialChart(data){
              }
            }
            },
-            inverseOrder: true,
+            inverseOrder: false,
             hollow: {
               margin: 10,
               size: '50%',
@@ -267,10 +267,10 @@ function generateRadialChart(data){
           lineCap: 'round'
         },
         series: data,
-        labels: ['Index','Comp','Value'],
-        colors: ['#FF0000','#FF0000','#FF0000'],
+        labels: ['Trust Index'],
+        colors: ['#FF0000'],
         legend: {
-          inverseOrder: true,
+          inverseOrder: false,
           show: false,
           floating: true,
           position: 'bottom',
