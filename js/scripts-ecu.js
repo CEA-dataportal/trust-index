@@ -776,21 +776,21 @@ chartRadar2.render();
   annotations: {
     xaxis: [{
       x: Comp_Index/10,
-      borderColor: '#FF0000',
+      borderColor: '#262626',
       label: {
-        borderColor: '#FF0000',
+        borderColor: '#262626',
         style: {
           color: '#fff',
-          background: '#FF0000',
+          background: '#262626',
           fontSize: '14px',
         },
-        text: 'Competencies Score',
+        text: 'Average Score',
       }
     }],
     yaxis: []
   }, //end of annotation
   
-  colors: ['#18396C'],
+  colors: ['#f5333f'],
   
   plotOptions: {
     bar: {
