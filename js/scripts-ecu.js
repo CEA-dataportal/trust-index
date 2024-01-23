@@ -63,7 +63,7 @@ $(document).ready(function() {
             Beneficiaries_Index = [parseFloat(CTI[0]['Beneficiaries']).toFixed(0)];
             NonBeneficiaries_Index = [parseFloat(CTI[0]['Non-beneficiaries']).toFixed(0)];
             CTIdata = [parseFloat(CTI[0]['Non-beneficiaries']), parseFloat(CTI[0]['Beneficiaries']), parseFloat(CTI[0]['Volunteers'])];
-
+            console.log(Comp_Index);
              // Sampling data
              sampling=data[1];
              SamplingAge_label = [sampling[2]['Age1'], sampling[2]['Age2'], sampling[2]['Age3'], sampling[2]['Age4'], sampling[2]['Age5']];
@@ -116,7 +116,7 @@ $(document).ready(function() {
                 }
              });
              
-            console.log(chartGeoData);
+            
              
 
 
@@ -150,7 +150,7 @@ $(document).ready(function() {
             date(CTI);
 
             // Charts
-            generateRadialChart(Overall_Index);
+            generateRadialChart(Overall_Index, Comp_Index, OverallValue);
             generateRadial_Chart1(Volunteers_Index);             
             generateRadial_Chart2(Beneficiaries_Index);
             generateRadial_Chart3(NonBeneficiaries_Index);
@@ -267,8 +267,8 @@ function generateRadialChart(data){
           lineCap: 'round'
         },
         series: data,
-        labels: ['Index'],
-        colors: ['#FF0000'],
+        labels: ['Index','Comp','Value'],
+        colors: ['#FF0000','#FF0000','#FF0000'],
         legend: {
           inverseOrder: true,
           show: false,
@@ -290,6 +290,7 @@ function generateRadialChart(data){
       
       var chartCircle4 = new ApexCharts(document.querySelector('#radialBarBottom'), optionsCircle4);
       chartCircle4.render();
+      console.log(data);
         
 }
 
@@ -654,110 +655,95 @@ function generateRadial_Chart3(data){
 }
 
 // chart2 - radar
-function generate_chartRadar2 (OverallValue, driversValue){
+function generate_chartRadar2(OverallValue, driversValue) {
 
-var optionsRadar2 = {
- series: [{
- name: 'Score',
- data: OverallValue,
-}],
- chart: {
-   height: 410,
-   width:'100%',
-   type: 'radar',
-   toolbar:false
-},
-plotOptions: {
- bar: 
- {
-   margin: 10,
-   horizontal: true,
-   barHeight:'60%',
-   colors: {
-     backgroundBarColors: ['#CCC'],
-     backgroundBarOpacity: 1,
-     backgroundBarRadius: 0,
- },
- dataLabels: {
-   position: 'top',
- 
- },
- }
-},
+    var optionsRadar2 = {
+        series: [{
+            name: 'Score',
+            data: OverallValue,
+            color: '#5178B6',
+        }],
+        chart: {
+            height: 410,
+            width: '100%',
+            type: 'radar',
+            toolbar: false
+        },
+        plotOptions: {
+         
+            dataLabels: {
+                position: 'top',
+            }
+        },
 
-dataLabels: {
- textAnchor: 'end',
- formatter: function (val) {
-   return parseFloat(val/10).toFixed(1)
- },
- style: {
-  fontSize: '14px',
-  fontWeight: 'bold',
-  colors: undefined
-},
-background: {
-  enabled: true,
-  foreColor: '#fff',
-  padding: 4,
-  borderRadius: 1,
-  borderWidth: 1,
-  borderColor: '#fff',
-  opacity: 0.9,
-}
-},
-tooltip: {
-  theme: 'dark',
-   marker: {
-    show: false,
-  },
-  x: {
-    show: true
-  },
-  y: {
+        dataLabels: {
+            textAnchor: 'end',
+            formatter: function (val) {
+                return parseFloat(val / 10).toFixed(1);
+            },
+            style: {
+                fontSize: '14px',
+                fontWeight: 'bold',
+                colors: ['#5178B6'] 
+            },
+            background: {
+                enabled: true,
+                foreColor: '#FFF',
+                padding: 4,
+                borderRadius: 1,
+                borderWidth: 1,
+                borderColor: '#fff',
+                opacity: 0.9,
+            }
+        },
+        tooltip: {
+            theme: 'dark',
+            marker: {
+                show: false,
+            },
+            x: {
+                show: true
+            },
+            y: {
+                formatter: function (val) {
+                    return parseFloat(val / 10).toFixed(8);
+                }
+            }
+        },
+        xaxis: {
+            labels: {
+                show: true,
+                style: {
+                    fontSize: '14px',
+                },
+            },
+            axisBorder: {
+                show: false
+            },
+            axisTicks: {
+                show: false
+            },
+            categories: driversValue, /* dimensions*/
+        },
+        yaxis: {
+            show: true,
+            labels: {
+                show: false,
+                formatter: function (val) {
+                    return parseFloat(val / 10);
+                },
+            },
+            axisBorder: {
+                show: false
+            },
+            axisTicks: {
+                show: false
+            }
+        },
+    };
 
-    formatter: function (val){
-      return parseFloat(val/10).toFixed(8)
-          }
-  }
-},
-xaxis: {
-   
-  labels: {
-  show: true,
-  style: {
-   fontSize: '14px',
- },
-  },
-  axisBorder: {
-  show: false
-  },
-  axisTicks: {
-  show: false
-  },
-  categories: driversValue, /* dimensions*/
-},
-
-yaxis: {
- show: true,
- labels: {
- show: false,
- formatter: function (val){
-   return parseFloat(val/10)
-       },
-  
- },
- axisBorder: {
- show: false
- },
- axisTicks: {
- show: false
- }
-},
-
-};
-
-var chartRadar2 = new ApexCharts(document.querySelector("#chartCTI2"), optionsRadar2);
-chartRadar2.render();
+    var chartRadar2 = new ApexCharts(document.querySelector("#chartCTI2"), optionsRadar2);
+    chartRadar2.render();
 
 }
 

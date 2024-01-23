@@ -170,8 +170,7 @@ $(document).ready(function() {
             section1(CustomizedText);
             section2(CustomizedText);
             section3(CustomizedText);
-            section4(CustomizedText);
-            
+            section4(CustomizedText);            
             analysis(CustomizedText);
             findings(CustomizedText);
             recommendations(recommendations_list);
