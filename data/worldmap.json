@@ -396,7 +396,7 @@
 					"FORMAL_EN": "Territory of the French Southern and Antarctic Lands",
 					"POP_EST": 140,
 					"LASTCENSUS": -99,
-					"ISO_A3": "ATF",
+					"ISO_A3": "TUV",
 					"CONTINENT": "Seven seas (open ocean)",
 					"Zika": null,
 					"Zika_Level": null,
@@ -5539,7 +5539,7 @@
 				"arcs": [
 					[2646]
 				]
-			}, {
+			},	{
 				"type": "Polygon",
 				"properties": {
 					"SOVEREIGNT": "Suriname",

@@ -758,7 +758,7 @@ chartRadar2.render();
 }
 
 // District charts 
-  // COMPENTENCIES
+  // COMPETENCIES
   function generate_chart_geo_Comp (GeoDataComp, GeoLabelComp, Comp_Index) {
     var optionsDistrict_Comp = {
     series: [{
