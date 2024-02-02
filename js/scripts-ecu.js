@@ -123,7 +123,6 @@ $(document).ready(function() {
           // for Text
             CustomizedText=data[6];
             recommendations_list=data[7];
-            console.log(recommendations_list);
 
              // for ColorScale
             GeoSamplingData = data[3];
@@ -147,6 +146,9 @@ $(document).ready(function() {
             scale(CTI);
             response(CTI);
             lead(CTI);
+            dash(CTI);
+            contact(CTI);
+            email(CTI);
             date(CTI);
 
             // Charts
@@ -173,7 +175,6 @@ $(document).ready(function() {
             section2(CustomizedText);
             section3(CustomizedText);
             section4(CustomizedText);
-            
             analysis(CustomizedText);
             findings(CustomizedText);
             recommendations(recommendations_list);
@@ -1026,6 +1027,22 @@ function lead() {
        .html('<b>Lead</b>: '+ lead + '<br><b>Support</b>: ' + partners); 
 };
 
+
+function contact() {
+
+  var contact = CTI[0]['Contact'];
+        d3.select("#contact").append("span")
+        .html(''+ contact + '<br>'); 
+ };
+
+ function email() {
+
+  var email = CTI[0]['Email'];
+        d3.select("#email").append("span")
+        .html('<a href="mailto:' + email +'" class="btn btn-primary">Contact us</a><br>'); 
+ };
+
+
 function scale() {
 
   var scale = CTI[0]['Scale'];
@@ -1068,7 +1085,15 @@ function report() {
   var rep = CTI[0]['Report'];
   if (rep != '') {
         d3.select("#report").append("span")
-      .html('<a href="' + rep + '" ><div class="btn btn-primary btn-xl">See Analysis</div></a>');
+      .html('<a href="' + rep + '" ><div class="btn btn-primary mb-2">Summary Report</div></a>');
+    }
+};
+function dash() {
+
+  var dash = CTI[0]['Dashboard'];
+  if (dash != '') {
+        d3.select("#dashboard").append("span")
+      .html('<a href="' + dash + '" ><div class="btn btn-primary  mb-2">Dashboard</div></a>');
     }
 }; 
 
@@ -1113,6 +1138,7 @@ function findings() {
         d3.select("#text_section6").append("span")
       .text(findings_text); 
 };
+
 
 
 

@@ -30,13 +30,15 @@
         <script src="https://d3js.org/d3-geo-projection.v4.min.js"></script>
     </head>
     <body id="page-top">
+        <!--content here-->
+        
         
         <!-- Navigation-->
       <nav class="navbar navbar-expand-lg navbar-light fixed-top py-4" id="mainNav">
     
         <div id="topbar" class="fixed-top">
             <button class="btn btn-primary rotate" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                CEA Data Portal
+                NAVIGATION
             </button>
         </div>
                     <div class="container px-4 px-lg-4 mt-md-4">
@@ -104,7 +106,7 @@
             <!-- End leftside panel-->
 
             <!-- Country Profile Header -->
-                
+            <div class="fixed-bottom "><a href="#page-top"><i class="bi bi-arrow-up-circle xl blue-lighter backtop"></i></a></div>
             <div class="container px-4" >
                 <div class="arrow-left-nav"><a href="arg.html"><i class="bi bi-chevron-left"></i></a></div>
                 <div class="arrow-right-nav"><a href="phl.html"><i class="bi bi-chevron-right xl"></i></a></div>
@@ -122,6 +124,7 @@
                     </div>
                         <div id="background" class="text-white  pe-5"></div>
                         <div id="lead" class="text-white pe-5 mt-4"></div>
+                        
                         <div class=" mt-5 tagging">
                             <div id="Response"></div>     
                             <div id="Scale"></div>
@@ -176,20 +179,23 @@
                     </div>
                 </div>
                 <div class="row text-left px-lg-0 mb-5">
-                    <div class="col-lg-8 px-lg-5 text-justify">
+                    <div class="col-lg-7 px-lg-5 text-justify">
                        <div id="text_section1"></div>
-                            <li><a href="#profile">Population profile</a></li>
-                            <li><a href="#perceptions">Perceptions of trust</a></li>
-                            <li><a href="#sampling">Sampling</a></li>
-                            
+                       
+                            <li><a href="#profile" class="secondary">Population profile</a></li>
+                            <li><a href="#perceptions" class="secondary">Perceptions of trust</a></li>
+                            <li><a href="#Geographic"  class="secondary">Perceptions by area</a></li>
+                            <li><a href="#analysis"  class="secondary">Analysis</a></li>
+                            <li><a href="#findings"  class="secondary">Findings</a></li>
+                            <li><a href="#sampling" class="secondary">Sampling</a></li>
                         </p>
                     </div>
-                    <div class="col-lg-4 px-lg-5">
+                    <div class="col-lg-5 px-lg-5">
                         <div class="card">
                             <div class="card-body text-center">
-                               <div class="subtitle text-left mb-2">Learn more</div><h5 class="card-title text-left mb-3 blue-lighter">Understand Trust in Ecuador</h5>
-                              <p class="card-text text-left mb-3">Explore the following contextual analysis aims to provide a comprehensive understanding of the factors influencing the current situation in Ecuador.</p>
-                              <a href="../assets/pdf/ECU_Context_Analysis.pdf" class="btn btn-primary ">Contextual Analysis</a>
+                               <div class="subtitle text-left mb-2">Learn more</div><h5 class="card-title text-left mb-3 blue-lighter">The state of trust in Ecuador</h5>
+                              <p class="card-text text-left mb-3">Explore the following summary to provide a comprehensive understanding of the factors influencing the current situation in Ecuador.</p>
+                              <a href="../assets/pdf/ECU_Context_Analysis.pdf" class="btn btn-primary ">Download</a>
                             </div>
                           </div>
                     </div>
@@ -259,17 +265,30 @@
                     </div>
                 </div>
                 
-                <div class="row text-left px-lg-0 mb-5">
-                    <div class="block-header d-inline-flex align-items-center mb-3">
+                <div class="row text-left px-lg-0 mb-2">
+                    <div class="block-header d-inline-flex align-items-center mb-3" id="analysis">
                         <i class="bi bi-diamond-fill blue-lightest mb-2 "></i><h3 class="text font-weight-bold px-3 blue-lighter">Analysis</h3>
                     </div>
-                    <div class="col-lg-6 px-lg-5 text-left mb-5">
+                    <div class="col-lg-7 px-lg-5 text-left mb-5">
                         <div id="text_section5" class="px-lg-0 pre"></div>
-                        <div id="report"></div>
                     </div>
-                    <div class="col-lg-6 px-lg-3 text-center">
-                        <img src="../assets/img/country/ecu-1.jpeg" width="75%" style="border:5px #CCC solid" >
+                    
+                    <div class="col-lg-5 px-lg-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="subtitle text-left mb-2">Learn more</div>
+                               <h5 class="card-title text-left mb-3 blue-lighter">Data analysis</h5>
+                               <div class=" text-left mt-4 mb-2">Find out more about the statistical details of the study by accessing the following products</div>
+                               
+                               <div class="row text-left px-lg-0 mt-4 mb-0">
+                                <div id="report"></div>
+                                <div id="dashboard"></div>
+                             </div>
+                            </div>
+                        </div>
+                        
                  </div>
+                
                 </div>
                 
 
@@ -315,15 +334,29 @@
                     </div>
                 </div>
                 <div class="row text-left px-lg-0 mb-5">
-                    <div class="col-lg-6 text-justify">
-                    <div id="text_section6" class="px-4"></div>    
-                    </div>
-                    <div class="col-lg-6 px-lg-5">
-                        <div class="subtitle text-left mb-4">Recommendations</div>
-                        <div class="accordion accordion-flush" id="accordionFlush">
-                           
+                    <div class="col-lg-7 text-justify">
+                        <div class="row px-4">
+                            <div id="text_section6"></div>
                         </div>
-
+                    <div class="row px-4 mt-3">
+                        <div class="block-header d-inline-flex align-items-center  mb-3">
+                            <i class="bi bi-diamond blue-lightest pe-3"></i><div class="subtitle text-left blue-lighter ">Recommendations</div>
+                        </div>
+                       
+                        <div class="accordion accordion-flush" id="accordionFlush"></div>
+                    </div>
+                    
+                    </div>
+                    <div class="col-lg-5 px-lg-5">
+                        
+                        <img src="../assets/img/country/ecu-1.jpeg" width="100%" style="border:5px #CCC solid"  class="text-center">
+                         
+                        
+                            <div class="card-body text-center mt-2">
+                                <div class="subtitle text-left mb-2">Any Questions?</div>
+                               <div class=" text-left pe-5 mt-4">You have a question or you are seeking additional information, don&#8217;t hesitate to reach out us</div>
+                               <div id="email" class="text pe-5 mt-4"></div>
+                            </div>
 
                     </div>
                 </div>
@@ -333,6 +366,9 @@
             </div>
             
         </section>
+
+
+
         <!-- Sampling -->
         <section class="page-section" id="sampling">
             <div class="container px-2 text-white">
