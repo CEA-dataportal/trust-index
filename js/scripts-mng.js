@@ -8,15 +8,14 @@ console.log(country); */
  // settings
 
 
-
-const overviewURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=361636222&single=true&output=csv&force=on";
-const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=110833577&single=true&output=csv&force=on";
-const geosamplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=1120370117&single=true&output=csv&force=on";
-const chartCTI_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=15486601&single=true&output=csv&force=on";
-
-const chartGeo_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=1873376386&single=true&output=csv&force=on";
-const textURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=134227077&single=true&output=csv&force=on";
-const recommendURL ="https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=1609508017&single=true&output=csvforce=on";
+ const overviewURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=361636222&single=true&output=csv&force=on";
+ const samplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=110833577&single=true&output=csv&force=on";
+ const geosamplingURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=1120370117&single=true&output=csv&force=on";
+ const chartCTI_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=15486601&single=true&output=csv&force=on";
+ 
+ const chartGeo_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=1873376386&single=true&output=csv&force=on";
+ const textURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=134227077&single=true&output=csv&force=on";
+ const recommendURL ="https://docs.google.com/spreadsheets/d/e/2PACX-1vT8dUdEPexoBycRdi7XiNs0pRuatAFobLfb2FDFyimq7teAJWwO6HFXJzlqGqXrNxwqhLq4NXw0pnsm/pub?gid=1609508017&single=true&output=csv&force=on";
 const country = "Mongolia";
 
 let CTI=[];
