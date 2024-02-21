@@ -407,7 +407,7 @@ function generateRadial_Chart2(data){
             color: '#5F61B5',
             offsetY: 16,
             formatter: function (val) {
-            return  val /10 + ''
+              return parseFloat(val/10).toFixed(1) + ''
           }
         }
         },
@@ -485,7 +485,7 @@ function generateRadial_Chart3(data){
             color: '#18396C',
             offsetY: 16,
             formatter: function (val) {
-            return  val /10 + ''
+            return parseFloat(val/10).toFixed(1) + ''
           }
         }
         },
@@ -526,7 +526,7 @@ function generateRadial_Chart3(data){
       y: {
         show: true,
         formatter: function (val) {
-          return  val /10 + ' out of 10'
+          return parseFloat(val/10).toFixed(1) + ' out of 10'
         }
     }
     }
@@ -1015,7 +1015,7 @@ function background() {
 function date() {
   var date = CTI[0]['Date'];
         d3.select("#text-date").append("span")
-        .html('Last update: '+ date); 
+        .html('Date: '+ date); 
         console.log(date);
 };
 
