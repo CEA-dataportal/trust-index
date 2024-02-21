@@ -46,7 +46,7 @@ $(document).ready(function() {
         Promise.all([
             d3.csv(overviewURL),
             d3.csv(samplingURL),
-            d3.json("../data/ECU.geojson"),
+            d3.json("../data/MNG1.geojson"),
             d3.csv(geosamplingURL),
             d3.csv(chartCTI_url),
             d3.csv(chartGeo_url), // Geo Chart data
@@ -1218,8 +1218,8 @@ function figMales() {
      height = +svg.attr("height");
  
  var projection = d3.geoMercator()
-     .scale(1200)
-     .translate([1920,120])
+     .scale(600)
+     .translate([-910,680])
  
      
  svg.style("border","10px");
@@ -1233,7 +1233,7 @@ function figMales() {
              .enter().append("path")
                  .attr("fill", function(d) {
  
-                  ProvinceData = GeoSamplingData.filter(item => { return d.properties.nombre == item.Name; });//mettre les PCODE
+                  ProvinceData = GeoSamplingData.filter(item => { return d.properties.shapeName == item.Name; });//mettre les PCODE
                   var Val = ProvinceData.length != 0 ? parseInt(ProvinceData[0].Value) : 0;
                   return Val != 0 ? colorScale(Val) : "#CCC"; 
                   
@@ -1246,9 +1246,9 @@ function figMales() {
                      .projection(projection)
                  )
              .on("mouseover", function(d) { 
-                ProvinceData = GeoSamplingData.filter(item => { return d.properties.nombre == item.Name; });
+                ProvinceData = GeoSamplingData.filter(item => { return d.properties.shapeName == item.Name; });
                 var Val = ProvinceData.length != 0 ? parseInt(ProvinceData[0].Value) : 0;
-                Tooltip = "<h6>" + d.properties.nombre + "</h6>" + Val; 
+                Tooltip = "<h6>" + d.properties.shapeName + "</h6>" + Val; 
                  div.transition()        
                      .duration(200)      
                      .style("opacity", .9);      
