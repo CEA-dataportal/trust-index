@@ -4470,7 +4470,7 @@
 },
 {
     "type": "Feature",
-    "properties": {"shapeName": "GoviAltai"},
+    "properties": {"shapeName": "Govi-Altai"},
     "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -6810,7 +6810,7 @@
 },
 {
     "type": "Feature",
-    "properties": {"shapeName": "Khuvsgul"},
+    "properties": {"shapeName": "Khovsgol"},
     "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -9982,7 +9982,7 @@
 },
 {
     "type": "Feature",
-    "properties": {"shapeName": "Umnugovi"},
+    "properties": {"shapeName": "Omnogovi"},
     "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -11400,7 +11400,7 @@
 },
 {
     "type": "Feature",
-    "properties": {"shapeName": "Uvurkhangai" },
+    "properties": {"shapeName": "Ovorkhangai" },
     "geometry": {
         "type": "Polygon",
         "coordinates": [
