@@ -29041,7 +29041,7 @@
         "type": "Feature", 
         "properties": {
           "id": "ZW17", 
-          "Nombre": "Midlands"
+          "nombre": "Midlands"
         }, 
         "id": 8
       }, 
