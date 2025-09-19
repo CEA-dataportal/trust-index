@@ -10,6 +10,9 @@ https://trust.communityengagementhub.org
 Methodology & Framework
 
 Summary and data
+Country | Modules 
+--- | --- 
+**Nepal** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_summary.html) [`EWS`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_EWS_summary.html) 
 
 Geojson
 
