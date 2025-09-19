@@ -12,8 +12,7 @@ Methodology & Framework
 Summary and data
 Modules | Institution | EWS
 --- | --- | ---
-**Nepal** | [`Summary`](https://cea-dataportal.github.io/trust-index/summary/NPL
-/NPL_summary.html) | `Summary`
+**Nepal** | [`Summary`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_summary.html) | `Summary`
 
 Geojson
 
