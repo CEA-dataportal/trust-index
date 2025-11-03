@@ -12,6 +12,8 @@ Methodology & Framework
 Summary and data
 Country | Modules 
 --- | --- 
+**Argentina** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/ARG/ARG_summary.html) 
+**Ecuador** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/ECU/ECU_summary.html) 
 **Nepal** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_summary.html) [`EWS`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_EWS_summary.html) 
 
 Geojson
