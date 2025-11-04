@@ -19,7 +19,7 @@ Country | Modules
 **Philippines** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/PHL/PHL_summary.html)
 **Tuvalu** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/TUV/TUV_summary.html)
 **Zambia** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/ZAM/ZAM_summary.html)
-**Zimbabwe** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/ZWB/ZWB_summary.html)
+**Zimbabwe** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/ZWE/ZWE_summary.html)
 
 Geojson
 
