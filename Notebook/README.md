@@ -1,5 +1,5 @@
-Community Trust Index
-=====================
+Notebook for Score Calculation
+==================================
 
 This notebook documents the standardized workflow used to prepare and analyze data for the Community Trust Index (CTI). It is structured into several chapters, each guiding a specific step in the process — from importing and cleaning raw survey data to computing harmonized CTI scores.
 The steps outlined here are designed to ensure that data from different surveys or contexts can be analyzed consistently and comparably.
