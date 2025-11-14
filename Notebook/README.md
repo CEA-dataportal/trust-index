@@ -12,5 +12,5 @@ Each chapter includes:
   
 Together, these steps provide a transparent, reproducible framework for conducting standardized data analysis and generating reliable Community Trust Index scores across datasets and time periods.
 
-[Data Transformation](Data-Transformation.md)
-[Data Recode](Data-Recode.md)
+- [Data Transformation](Data-Transformation.md)
+- [Data Recode](Data-Recode.md)
