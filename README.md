@@ -9,6 +9,8 @@ https://trust.communityengagementhub.org
 
 Methodology & Framework
 
+[`Notebook`](/Notebook)
+
 Summary and data
 Country | Modules 
 --- | --- 
