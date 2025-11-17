@@ -1,10 +1,10 @@
-Data Preparation
+Data Transformation
 ================
 
 ### Introduction
 
 This notebook documents the workflow used to prepare survey data from
-the **Community Trust Index (CTI)** and other related survey instruments
+the **Community Trust Index (CTI)** and other related survey instruments
 for analysis. The goal is to take raw survey exports (e.g. CSV, Excel)
 and transform them into a clean, standardized dataset with consistent
 variable names, formats, and coding schemes.
@@ -20,7 +20,7 @@ The code that follows will:
 
 - Output an analysis-ready dataset that can be reused across projects
 
-All steps are implemented in **R**. Each transformation is performed
+All steps are implemented in **R**. Each transformation is performed
 programmatically (rather than manually) and is documented in the
 notebook so that the process can be re-run when new data become
 available or when additional surveys are added. This ensures that
@@ -35,6 +35,20 @@ export
 ``` r
 library(readxl)
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(stringr)
 library(writexl)
 ```
@@ -45,7 +59,7 @@ Define your working directory if it doesn’t exist. All files will be
 saved in this directory.
 
 ``` r
-country <- "Mozambique"
+country <- "../Mozambique"
 
 # Create the folder if it doesn't exist
 if (!dir.exists(country)) {
@@ -65,7 +79,7 @@ survey.
 processed.
 
 ``` r
-path        <- "Mozambique/"
+path        <- "../Mozambique/"
 file        <- "MOZ_CTI_rawdata.xlsx" # Raw file (original version)
 output      <- "MOZ_Data.xlsx" # Output standardized file
 data_sheet  <- "DATA" # Sheet name with data
@@ -201,4 +215,4 @@ write_xlsx(list(data = new_df, Code = code_df), path = paste0(path, output))
 message("Standardized file written to: ", paste0(path, output))
 ```
 
-    ## Standardized file written to: Mozambique/MOZ_Data.xlsx
+    ## Standardized file written to: ../Mozambique/MOZ_Data.xlsx

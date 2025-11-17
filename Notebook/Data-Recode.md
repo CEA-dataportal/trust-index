@@ -1,9 +1,9 @@
 Data Recoding
 ================
 
-This section describes how we **recode and harmonize survey response
-options** to a common CTI schema so the **Community Trust Index (CTI)
-score** can be computed consistently across sources. Starting from raw
+This section describes how we **recode and harmonize survey response
+options** to a common CTI schema so the **Community Trust Index (CTI)
+score** can be computed consistently across sources. Starting from raw
 survey exports (CSV/Excel), we align differing scales (e.g., 1–5
 vs. 0–10), standardize directionality (ensuring higher values = higher
 trust), map text labels to numeric codes, and resolve “Don’t
@@ -39,17 +39,18 @@ library(writexl)
 ### File paths and sheet configuration
 
 ``` r
-path        <- "Mozambique/"
+path        <- "../Mozambique/"
 file        <- "MOZ_Data.xlsx" # Standardized file (selected columns only)
 output      <- "MOZ_Data_recoded.xlsx" # Output recoded file
 data_sheet  <- "data" # Sheet name with data
+code_sheet  <- "Code" # Sheet name with data
 ```
 
 ### Import data
 
 ``` r
 data_df   <- read_excel(paste0(path, file), sheet = data_sheet)
-
+code_df   <- read_excel(paste0(path, file), sheet = code_sheet)
 # View a few rows
 #dplyr::glimpse(original_df)
 ```
@@ -169,7 +170,7 @@ hazard_map <- c(
 )
 ```
 
-Recode
+### Recode
 
 ``` r
 std_df <- data_df %>%
@@ -204,28 +205,28 @@ std_df <- data_df %>%
     EXTRA_CHANNEL_SOCIALMOBILIZATION = recode_with_map(EXTRA_CHANNEL_SOCIALMOBILIZATION, yn_map),
     EXTRA_CHANNEL_FAMILY = recode_with_map(EXTRA_CHANNEL_FAMILY, yn_map),
     EXTRA_CHANNEL_LOCALAUTHORITIES = recode_with_map(EXTRA_CHANNEL_LOCALAUTHORITIES, yn_map),
-    WARNING_AWARENESS = recode_with_map(employment, score_map_1),
-    WARNING_RESPONSIVENESS = recode_with_map(employment, score_map_1),
-    WARNING_EFFECTIVENESS = recode_with_map(employment, score_map_1),
-    WARNING_INCLUSIVENESS = recode_with_map(employment, score_map_1),
-    WARNING_PARTICIPATION = recode_with_map(employment, score_map_1),
-    WARNING_FEEDBACK = recode_with_map(employment, score_map_1),
-    WARNING_TRANSPARENCY = recode_with_map(employment, score_map_1),
-    ACTION_AWARENESS = recode_with_map(employment, score_map_1),
-    ACTION_RESPONSIVENESS = recode_with_map(employment, score_map_1),
-    ACTION_PARTICIPATION = recode_with_map(employment, score_map_1),
-    ACTION_EFFECTIVENESS = recode_with_map(employment, score_map_1),
-    ACTION_FEEDBACK = recode_with_map(employment, score_map_1),
-    ACTION_INCLUSIVENESS = recode_with_map(employment, score_map_1),
-    ACTION_TRANSPARENCY = recode_with_map(employment, score_map_1),
+    WARNING_AWARENESS = recode_with_map(WARNING_AWARENESS, score_map_1),
+    WARNING_RESPONSIVENESS = recode_with_map(WARNING_RESPONSIVENESS, score_map_1),
+    WARNING_EFFECTIVENESS = recode_with_map(WARNING_EFFECTIVENESS, score_map_1),
+    WARNING_INCLUSIVENESS = recode_with_map(WARNING_INCLUSIVENESS, score_map_1),
+    WARNING_PARTICIPATION = recode_with_map(WARNING_PARTICIPATION, score_map_1),
+    WARNING_FEEDBACK = recode_with_map(WARNING_FEEDBACK, score_map_1),
+    WARNING_TRANSPARENCY = recode_with_map(WARNING_TRANSPARENCY, score_map_1),
+    ACTION_AWARENESS = recode_with_map(ACTION_AWARENESS, score_map_1),
+    ACTION_RESPONSIVENESS = recode_with_map(ACTION_RESPONSIVENESS, score_map_1),
+    ACTION_PARTICIPATION = recode_with_map(ACTION_PARTICIPATION, score_map_1),
+    ACTION_EFFECTIVENESS = recode_with_map(ACTION_EFFECTIVENESS, score_map_1),
+    ACTION_FEEDBACK = recode_with_map(ACTION_FEEDBACK, score_map_1),
+    ACTION_INCLUSIVENESS = recode_with_map(ACTION_INCLUSIVENESS, score_map_1),
+    ACTION_TRANSPARENCY = recode_with_map(ACTION_TRANSPARENCY, score_map_1),
     
     # ensure numeric columns really are numeric
     age           = as.numeric(age)
   )
 ```
 
-Export
+### Export
 
 ``` r
-write_xlsx(std_df, path = output)  
+write_xlsx(list(data = std_df, Code = code_df), path = paste0(path, output))  
 ```
