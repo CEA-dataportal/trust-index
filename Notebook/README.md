@@ -14,3 +14,4 @@ Together, these steps provide a transparent, reproducible framework for conducti
 
 - [Data Transformation](Data-Transformation.md)
 - [Data Recode](Data-Recode.md)
+- [Data Weighting](Data-Weighting.md)
