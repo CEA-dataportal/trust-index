@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Community Trust Index – IFRC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --ifrc-red: #e30613;
+      --text-main: #111827;
+      --text-muted: #4b5563;
+      --border-color: #e5e7eb;
+      --bg-page: #f9fafb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #ffffff;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 40px;
+    }
+
+    /* HEADER */
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-img {
+      height: 36px;
+    }
+
+    .site-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .site-title span:first-child {
+      color: var(--ifrc-red);
+    }
+
+    /* FOOTER AREA */
+
+    .content-footer {
+      margin-top: auto;
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .description {
+      max-width: 720px;
+    }
+
+    .description a {
+      color: var(--ifrc-red);
+      font-weight: 600;
+    }
+
+    .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .links-left,
+    .links-right {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .language-select {
+      position: relative;
+    }
+
+    .language-select select {
+      padding: 8px 32px 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-page);
+      font-size: 0.9rem;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .language-select::after {
+      content: "▾";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      pointer-events: none;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 16px 20px;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <!-- FOOTER CONTENT -->
+    <footer class="content-footer">
+
+        <div class="logo-area">
+        <img
+          src="https://trust.communityengagementhub.org/wp-content/uploads/2024/03/ifrc-logo.svg"
+          alt="IFRC Logo"
+          class="logo-img"
+        />
+      </div>
+
+        <div class="site-title">
+        <span>Community Trust</span> <span>Index</span>
+      </div>
+      <div class="description">
+        Community Trust Index is a project led by Community Engagement and Accountability Team.
+        Website supported by <a href="#">British Red Cross</a> © IFRC 2025
+      </div>
+
+      <div class="bottom-row">
+        <div class="links-left">
+          <a href="#">Community Engagement Hub</a>
+          <a href="#">IFRC CEA</a>
+        </div>
+
+        <div class="links-right">
+          <a href="#">Privacy Policies</a>
+          <a href="#">Terms &amp; Conditions</a>
+
+    
+        </div>
+      </div>
+    </footer>
+</body>
+</html>
