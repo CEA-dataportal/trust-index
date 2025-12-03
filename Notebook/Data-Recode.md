@@ -10,6 +10,9 @@ trust), map text labels to numeric codes, and resolve “Don’t
 know/Refuse” categories. The output is a set of uniformly coded CTI
 items ready for reliable index calculation and cross-survey comparison.
 
+*ONLY if your data requires recoding from value to label. If your
+dataset is already harmonized, skip this step.*
+
 ### Load packages
 
 Load required libraries for data import, cleaning, transformation, and
@@ -18,39 +21,24 @@ export
 ``` r
 library(readxl)
 library(dplyr)
-```
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-``` r
 library(stringr)
 library(writexl)
 ```
 
-### File paths and sheet configuration
+### File paths
 
 ``` r
-path        <- "../Mozambique/"
-file        <- "MOZ_Data.xlsx" # Standardized file (selected columns only)
-output      <- "MOZ_Data_recoded.xlsx" # Output recoded file
+### ------ FOR TRAINING ------ ###
+path        <- "../Test/"
+file        <- "TEST_Data.xlsx" # Standardized file (selected columns only)
+output      <- "TEST_Data_recoded.xlsx" # Output recoded file
 data_sheet  <- "data" # Sheet name with data
-code_sheet  <- "Code" # Sheet name with data
 ```
 
 ### Import data
 
 ``` r
 data_df   <- read_excel(paste0(path, file), sheet = data_sheet)
-code_df   <- read_excel(paste0(path, file), sheet = code_sheet)
 # View a few rows
 #dplyr::glimpse(original_df)
 ```
@@ -58,9 +46,8 @@ code_df   <- read_excel(paste0(path, file), sheet = code_sheet)
 ### Recode function
 
 ``` r
-###############################################
-## 5. Helper: generic recode using named vector
-###############################################
+# Generic recode using named vector
+
 recode_with_map <- function(x, map, default = NA_character_) {
   y <- as.character(x)
   out <- unname(map[y])
@@ -73,10 +60,11 @@ recode_with_map <- function(x, map, default = NA_character_) {
 
 ``` r
 ####################################
-#       Answers  mapping           #
+#       YOUR INPUT                 #
 ####################################
 
-# Template: "Answer option from Excel"  = "LABEL DISPLAY",
+# Template to use
+# "Answer option from Excel" = "LABEL DISPLAY", (remove the comma for last element)
 
 gender_map <- c(
   "2"  = "Female",
@@ -88,8 +76,8 @@ education_map <- c(
   "1" = "None",
   "2" = "Primary",
   "3" = "Secondary",
-  "5" = "University",
-  "4" = "Professional"
+  "4" = "Technical",
+  "5" = "University"
   #"Don't know" = "Don't know",
   #"Prefer not to answer" = "Prefer not to answer"
 )
@@ -103,9 +91,9 @@ employment_map <- c(
 score_map_1 <- c(
   "1"    = "Yes, completely",
   "2"    = "Mostly yes",
+  "3"    = "Don’t know",
   "4"    = "Not so much",
-  "5"    = "Not at all",
-  "3"    = "Don’t know"
+  "5"    = "Not at all"
 )
 
 answer_extra_map <- c(
@@ -175,7 +163,9 @@ hazard_map <- c(
 ``` r
 std_df <- data_df %>%
   mutate(
-    # cast first to numeric/character as needed
+    # Use this template for each column you want to recode
+    # COLUMN  = recode_with_map (COLUMN, RECODE MAP)
+    
     gender          = recode_with_map(gender, gender_map),
     education       =   recode_with_map(education, education_map),
     employment      = recode_with_map(employment, employment_map),
@@ -228,5 +218,9 @@ std_df <- data_df %>%
 ### Export
 
 ``` r
-write_xlsx(list(data = std_df, Code = code_df), path = paste0(path, output))  
+write_xlsx(list(data = std_df), path = file.path(path, output))
+
+message("Recoded Data file written to: ", file.path(path, output))
 ```
+
+    ## Recoded Data file written to: ../Test//TEST_Data_recoded.xlsx
