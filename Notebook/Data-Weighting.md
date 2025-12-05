@@ -18,20 +18,6 @@ export
 ``` r
 library(readxl)
 library(dplyr)
-```
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-``` r
 library(stringr)
 library(writexl)
 ```
@@ -39,25 +25,45 @@ library(writexl)
 ### File paths
 
 ``` r
-path        <- "../Mozambique"
+### ------ FOR TRAINING ------ ###
+path        <- "../Test"
 
-data_file   <- "MOZ_Data_recoded.xlsx" # 
-output      <- "MOZ_Data_weighted.xlsx" # Output recoded file
+data_file   <- "TEST_Data_recoded.xlsx" #
+output      <- "TEST_Data_weighted.xlsx" # Output recoded file
 data_sheet  <- "data" # Sheet name with data
-code_sheet  <- "Code" 
 
-pop_file <- "MOZ_population_data.xlsx"
+pop_file <- "TEST_population_data.xlsx"
 demo_tab <- "age"        # age group x gender
 geo_tab  <- "geo"        # geographic area
 edu_tab  <- "education"  # education level
 employment_tab  <- "employment"  # employment category
+
+# ---- Level of geographic level use for weighting
+geo_var1 = "admin2" # from survey data
+geo_var2 = "Admin2" # from population data
+
+### ------ FOR TRAINING ------ ###
+# path        <- "../Slovakia"
+# 
+# data_file   <- "SVK_Data.xlsx" #
+# output      <- "SVK_Data_weighted.xlsx" # Output recoded file
+# data_sheet  <- "data" # Sheet name with data
+# 
+# pop_file <- "SVK_population_data.xlsx"
+# demo_tab <- "age"        # age group x gender
+# geo_tab  <- "geo"        # geographic area
+# edu_tab  <- "education"  # education level
+# employment_tab  <- "employment"  # employment category
+# 
+# ---- Level of geographic level use for weighting
+# geo_var1 = "admin1" # from survey data
+# geo_var2 = "Admin1" # from population data
 ```
 
 ### Import data
 
 ``` r
 data_df   <- read_excel(file.path(path, data_file), sheet = data_sheet)
-code_df   <- read_excel(file.path(path, data_file), sheet = code_sheet)
 # View a few rows
 #dplyr::glimpse(data_df)
 ```
@@ -177,7 +183,7 @@ if (!is.null(population_geo)) {
 
   pop_geo_tbl <- population_geo |>
     mutate(
-      strata = Admin2
+      strata = .data[[geo_var2]]
     ) |>
     group_by(strata) |>
     summarise(
@@ -287,37 +293,18 @@ population_summary <- bind_rows(
   pop_edu_tbl,
   pop_emp_tbl
 )
-
-print(population_summary)
 ```
-
-    ## # A tibble: 20 × 3
-    ##    strata_type strata                  pop_prop
-    ##    <chr>       <chr>                      <dbl>
-    ##  1 demo        18-29_Female              0.233 
-    ##  2 demo        18-29_Male                0.191 
-    ##  3 demo        30-39_Female              0.114 
-    ##  4 demo        30-39_Male                0.0846
-    ##  5 demo        40-49_Female              0.0870
-    ##  6 demo        40-49_Male                0.0673
-    ##  7 demo        50-59_Female              0.0563
-    ##  8 demo        50-59_Male                0.0441
-    ##  9 demo        60+_Female                0.0692
-    ## 10 demo        60+_Male                  0.0543
-    ## 11 geo         Buzi                      0.889 
-    ## 12 geo         Chubugo                   0.111 
-    ## 13 education   No formal education       0.0638
-    ## 14 education   Primary School            0.276 
-    ## 15 education   Secondary school          0.434 
-    ## 16 education   University                0.227 
-    ## 17 employment  Active but unemployed    NA     
-    ## 18 employment  Employed                 NA     
-    ## 19 employment  Not economically active  NA     
-    ## 20 employment  Not usually active       NA
 
 ### Sampling Data
 
 **Demography** : age and gender
+
+We first standardize the age variable: if it is numeric, we convert it
+into predefined age groups; if it is already categorical, we simply
+rename it. Next, we create a demographic stratum by combining age group
+and gender for respondents with valid information. For these strata, we
+count the sample cases and compute their sample proportions, stored in
+sample_demo_tbl. If no valid strata exist, this table is set to NULL.
 
 ``` r
 if (is.numeric(data_df$age)) {
@@ -335,7 +322,7 @@ if (is.numeric(data_df$age)) {
     )
 } else {
   # If age is already categorical with the right labels, you could just rename
-  # data_df <- data_df |> rename(Age_group = age)
+  data_df <- data_df |> rename(Age_group = age)
 }
 
 ## 2) Create demo strata = Age_group + Gender
@@ -366,7 +353,8 @@ if (any(!is.na(data_df$demo))) {
     select(
       strata_type,
       strata,
-      sample_prop
+      sample_prop,
+      Count
     )
 } else {
   sample_demo_tbl <- NULL
@@ -375,11 +363,17 @@ if (any(!is.na(data_df$demo))) {
 
 **Geographic**
 
+We first create a geographic variable geo based on the chosen input
+variable (geo_var1). If any respondents have non-missing values on geo,
+we form geographic strata, count the number of cases in each, and
+compute their sample proportions, storing the results in sample_geo_tbl
+with strata_type = “geo”. If all geo values are missing, sample_geo_tbl
+is set to NULL.
+
 ``` r
-## 3) Use Admin2 as geo strata
 data_df <- data_df |>
   mutate(
-    geo = admin2    # direct copy, but makes the intention explicit
+    geo = .data[[geo_var1]] 
   )
 
 if (any(!is.na(data_df$geo))) {
@@ -397,7 +391,8 @@ if (any(!is.na(data_df$geo))) {
     select(
       strata_type,
       strata,
-      sample_prop
+      sample_prop,
+      Count
     )
 } else {
   sample_geo_tbl <- NULL
@@ -406,8 +401,13 @@ if (any(!is.na(data_df$geo))) {
 
 **Education**
 
+If an education variable exists and has valid values, we define
+education strata, count respondents in each, and compute their sample
+proportions in sample_edu_tbl (with strata_type = “edu”). If not,
+sample_edu_tbl is set to NULL.
+
 ``` r
-if (any(!is.na(data_df$education))) {
+if ("education" %in% names(data_df) && any(!is.na(data_df$education))) {
   sample_edu_tbl <- data_df |>
     filter(!is.na(education)) |>
     count(strata = education, name = "Count") |>
@@ -422,7 +422,8 @@ if (any(!is.na(data_df$education))) {
     select(
       strata_type,
       strata,
-      sample_prop
+      sample_prop,
+      Count
     )
 } else {
   sample_edu_tbl <- NULL
@@ -431,8 +432,13 @@ if (any(!is.na(data_df$education))) {
 
 **Employment**
 
+If an employment variable exists and has valid values, we create
+employment strata, count respondents in each, and compute their sample
+proportions in sample_employment_tbl (with strata_type = “employment”);
+otherwise, sample_employment_tbl is set to NULL.
+
 ``` r
-if (any(!is.na(data_df$employment))) {
+if ("employment" %in% names(data_df) && any(!is.na(data_df$employment))) {
   sample_employment_tbl <- data_df |>
     filter(!is.na(employment)) |>
     count(strata = employment, name = "Count") |>
@@ -447,12 +453,17 @@ if (any(!is.na(data_df$employment))) {
     select(
       strata_type,
       strata,
-      sample_prop
+      sample_prop,
+      Count
     )
 } else {
   sample_employment_tbl <- NULL
 }
 ```
+
+We then combine all available strata tables (demographic, geographic,
+education, and employment) into a single sample_summary table, which
+contains the sample proportions and counts for all defined strata types.
 
 ``` r
 sample_summary <- bind_rows(
@@ -461,24 +472,7 @@ sample_summary <- bind_rows(
   sample_edu_tbl,
   sample_employment_tbl
 )
-
-print (sample_summary)
 ```
-
-    ## # A tibble: 21 × 3
-    ##    strata_type strata       sample_prop
-    ##    <chr>       <chr>              <dbl>
-    ##  1 demo        18-29_Female      0.196 
-    ##  2 demo        18-29_Male        0.0893
-    ##  3 demo        30-39_Female      0.153 
-    ##  4 demo        30-39_Male        0.0721
-    ##  5 demo        40-49_Female      0.112 
-    ##  6 demo        40-49_Male        0.0619
-    ##  7 demo        50-59_Female      0.0852
-    ##  8 demo        50-59_Male        0.0471
-    ##  9 demo        60+_Female        0.0959
-    ## 10 demo        60+_Male          0.0876
-    ## # ℹ 11 more rows
 
 ### Weight calculation
 
@@ -487,10 +481,37 @@ print (sample_summary)
 For each stratum, we calculate the ratio between the population
 proportion (target) and the sample proportion (survey).
 
+In some strata, this ratio can become very large when the sample share
+is much smaller than the population share. Such extreme weights can
+distort estimates and inflate variance.
+
+Therefore, if any raw weight exceeds 4, we trim all weights at this
+threshold and rescale them. This limits the influence of extreme cases
+while preserving overall representativeness.
+
 ``` r
 weights_tbl <- population_summary |>
   inner_join(sample_summary, by = c("strata_type", "strata")) |>
-  mutate(weight = pop_prop / sample_prop)
+  mutate(weight_raw = pop_prop / sample_prop)
+
+# Only trim & rescale if any weight_raw > 4
+if (max(weights_tbl$weight_raw, na.rm = TRUE) > 4) {
+  weights_tbl <- weights_tbl |>
+    mutate(weight_trimmed = pmin(weight_raw, 4))
+  
+  # rescale so the sum of weights stays the same as for weight_raw
+  scale_factor <- sum(weights_tbl$weight_raw, na.rm = TRUE) /
+                  sum(weights_tbl$weight_trimmed, na.rm = TRUE)
+  weights_tbl <- weights_tbl |>
+        mutate(weight = weight_trimmed * scale_factor)
+  neutral_coefficient <- 1 * scale_factor
+
+  } else {
+  # no trimming needed, just use raw weights
+  weights_tbl <- weights_tbl |>
+    mutate(weight = weight_raw)
+  neutral_coefficient <- 1
+}
 ```
 
   
@@ -516,16 +537,35 @@ emp_weights <- weights_tbl |>
   filter(strata_type == "employment") |>
   select(strata, emp_weight = weight)
 
+if (!is.null(demo_weights) && any(!is.na(demo_weights$strata))) {
+  data_df <- data_df |>
+    dplyr::left_join(demo_weights, by = c("demo" = "strata")) # Join demo weight on demo strata
+  } else {
+  data_df <- data_df |>
+    dplyr::mutate(demo_weight = neutral_coefficient)
+  }
+ 
+if (!is.null(geo_weights) && any(!is.na(geo_weights$strata))) { 
+  data_df <- data_df |>
+      left_join(geo_weights,  by = c("geo"  = "strata")) # Join geo weight on geo strata
+  } else {
+  data_df <- data_df |>
+    dplyr::mutate(geo_weight = neutral_coefficient)
+  }
 
-data_df <- data_df |>
-  # Join demo weight on demo strata
-  left_join(demo_weights, by = c("demo" = "strata")) |>
-  # Join geo weight on geo strata
-  left_join(geo_weights,  by = c("geo"  = "strata")) |>
-  # Join education weight on edu strata
-  left_join(edu_weights,  by = c("education"  = "strata")) |>
-  # Join employment weight on employment strata
-  left_join(emp_weights,  by = c("employment"  = "strata"))
+if (!is.null(edu_weights) && any(!is.na(edu_weights$strata))) { 
+  left_join(edu_weights,  by = c("education"  = "strata")) # Join education weight on edu strata
+  } else {
+  data_df <- data_df |>
+    dplyr::mutate(edu_weight = neutral_coefficient)
+  }
+
+if (!is.null(emp_weights) && any(!is.na(emp_weights$strata))) { 
+  left_join(emp_weights,  by = c("employment"  = "strata"))  # Join employment weight on employment strata
+  } else {
+  data_df <- data_df |>
+    dplyr::mutate(emp_weight = neutral_coefficient)
+  }
 ```
 
 **Overall Weight Calculation**
@@ -537,14 +577,19 @@ strata in the survey and strata in the population data.
 data_df <- data_df |>
   mutate(
     # Replace missing weights with 1 (no adjustment)
-    demo_weight = ifelse(is.na(demo_weight), 1, demo_weight),
-    geo_weight  = ifelse(is.na(geo_weight),  1, geo_weight),
-    edu_weight  = ifelse(is.na(edu_weight),  1, edu_weight),
-    emp_weight  = ifelse(is.na(emp_weight),  1, emp_weight),
-    
+    demo_weight = ifelse(is.na(demo_weight), neutral_coefficient, demo_weight),
+    geo_weight  = ifelse(is.na(geo_weight),  neutral_coefficient, geo_weight),
+    edu_weight  = ifelse(is.na(edu_weight),  neutral_coefficient, edu_weight),
+    emp_weight  = ifelse(is.na(emp_weight),  neutral_coefficient, emp_weight),
+
   
     weight = demo_weight * geo_weight * edu_weight * emp_weight
   )
+```
+
+### Export
+
+``` r
 # Remove temporary column
 data_df <- data_df |>
   select(
@@ -556,15 +601,6 @@ data_df <- data_df |>
     -emp_weight
   )
 
-data_df <- data_df |>
-  relocate(Age_group, .after = age) |>
-  relocate(weight, .before = Date)
-```
 
-### 
-
-### Export
-
-``` r
-write_xlsx(list(data = data_df, Code = code_df), path = file.path(path, output))  
+write_xlsx(list(data = data_df), path = file.path(path, output))  
 ```
