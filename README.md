@@ -21,6 +21,8 @@ https://trust.communityengagementhub.org
 
 **Nepal** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_summary.html) | [`EWS`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_EWS_summary.html) 
 
+**Mozambique** | [`Early Warning`](https://cea-dataportal.github.io/trust-index/summary/MOZ/MOZ_report_EWS.html)|
+
 **Philippines** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/PHL/PHL_summary.html)|
 
 **Tuvalu** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/TUV/TUV_summary.html)|
