@@ -19,7 +19,9 @@ https://trust.communityengagementhub.org
 
 **Mongolia** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/MNG/MNG_summary.html) |
 
-**Nepal** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_summary.html) | [`EWS`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_EWS_summary.html) 
+**Nepal** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_summary.html) | [`Early Warning`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_EWS_summary.html) 
+
+**Mozambique** | [`Early Warning`](https://cea-dataportal.github.io/trust-index/summary/MOZ/MOZ_report_EWS.html)|
 
 **Philippines** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/PHL/PHL_summary.html)|
 
