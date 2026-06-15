@@ -14,6 +14,8 @@ https://trust.communityengagementhub.org
 **Summary and data**
 |
 **Argentina** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/ARG/ARG_summary.html)
+|
+**Colombia** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/COL/COL_report_INST.html)
 
 **DRC** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/DRC/DRC_report_INST.html)
 
