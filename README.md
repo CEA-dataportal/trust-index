@@ -29,6 +29,8 @@ https://trust.communityengagementhub.org
 
 **Philippines** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/PHL/PHL_summary.html)|
 
+**Slovakia** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/SVK/Slovakia.html)|
+
 **Tuvalu** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/TUV/TUV_summary.html)|
 
 **Zambia** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/ZAM/ZAM_summary.html)|
