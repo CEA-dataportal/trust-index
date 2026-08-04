@@ -12,7 +12,7 @@ https://trust.communityengagementhub.org
 [`Notebook`](/Notebook)
 
 **Summary and data**
-|
+
 **Argentina** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/ARG/ARG_summary.html)
 
 **Burundi** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/BDI/BDI_report_INST.html)
