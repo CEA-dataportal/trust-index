@@ -58,9 +58,9 @@ repo_path <- function(repo, ...) {
 }
 
 load_translation_dictionary <- function(
-  file = repo_path(repo, "R","base", "translations.csv"),
-  languages = c("EN", "FR", "ES"),
-  fallback_language = "EN"
+    file = repo_path(repo, "R", "base", "translations.csv"),
+    languages = c("EN", "FR", "ES"),
+    fallback_language = "EN"
 ) {
   if (length(file) != 1L || is.na(file) || !nzchar(trimws(as.character(file)))) {
     stop("A valid translation CSV path or URL must be provided.", call. = FALSE)
