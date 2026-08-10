@@ -58,7 +58,7 @@ repo_path <- function(repo, ...) {
 }
 
 load_translation_dictionary <- function(
-  file = repo_path(repo, "R", "translation.csv"),
+  file = repo_path(repo, "R", "translations.csv"),
   languages = c("EN", "FR", "ES"),
   fallback_language = "EN"
 ) {
