@@ -46,39 +46,85 @@
 # Load and validate dictionary
 # ------------------------------------------------------------
 
+repo <- "https://raw.githubusercontent.com/CEA-dataportal/trust-index/main"
+
+repo_path <- function(repo, ...) {
+  parts <- c(...)
+  if (grepl("^https?://", repo)) {
+    paste0(sub("/+$", "", repo), "/", paste(parts, collapse = "/"))
+  } else {
+    file.path(repo, ...)
+  }
+}
+
 load_translation_dictionary <- function(
-  file = file.path("R", "translation.csv"),
+  file = repo_path(repo, "R", "translation.csv"),
   languages = c("EN", "FR", "ES"),
   fallback_language = "EN"
 ) {
-  if (length(file) != 1L || is.na(file) || !nzchar(file)) {
-    stop("A valid translation CSV path must be provided.", call. = FALSE)
+  if (length(file) != 1L || is.na(file) || !nzchar(trimws(as.character(file)))) {
+    stop("A valid translation CSV path or URL must be provided.", call. = FALSE)
   }
 
-  if (!file.exists(file)) {
+  file <- as.character(file)
+  is_url <- grepl("^https?://", file)
+
+  if (!is_url && !file.exists(file)) {
     stop(
-      "Translation file not found: ", normalizePath(file, mustWork = FALSE),
+      "Translation file not found: ",
+      normalizePath(file, mustWork = FALSE),
       call. = FALSE
     )
   }
 
-  dictionary <- if (requireNamespace("readr", quietly = TRUE)) {
-    readr::read_csv(
-      file,
-      show_col_types = FALSE,
-      na = c("", "NA")
-    )
-  } else {
-    utils::read.csv(
-      file,
-      stringsAsFactors = FALSE,
-      check.names = FALSE,
-      fileEncoding = "UTF-8",
-      na.strings = c("", "NA")
-    )
-  }
+  dictionary <- tryCatch(
+    {
+      if (requireNamespace("readr", quietly = TRUE)) {
+        readr::read_csv(
+          file,
+          locale = readr::locale(encoding = "UTF-8"),
+          show_col_types = FALSE,
+          na = c("", "NA"),
+          trim_ws = TRUE
+        )
+      } else {
+        if (is_url) {
+          con <- url(file, open = "r", encoding = "UTF-8")
+          on.exit(close(con), add = TRUE)
+          utils::read.csv(
+            con,
+            stringsAsFactors = FALSE,
+            check.names = FALSE,
+            na.strings = c("", "NA")
+          )
+        } else {
+          utils::read.csv(
+            file,
+            stringsAsFactors = FALSE,
+            check.names = FALSE,
+            fileEncoding = "UTF-8",
+            na.strings = c("", "NA")
+          )
+        }
+      }
+    },
+    error = function(e) {
+      stop(
+        "Could not load translation dictionary from:\n",
+        file,
+        "\n\n",
+        conditionMessage(e),
+        call. = FALSE
+      )
+    }
+  )
 
   dictionary <- as.data.frame(dictionary, stringsAsFactors = FALSE)
+
+  dictionary[] <- lapply(dictionary, function(x) {
+    if (is.character(x)) x <- enc2utf8(x)
+    x
+  })
 
   required_columns <- c("key", "section", languages)
   missing_columns <- setdiff(required_columns, names(dictionary))
@@ -94,10 +140,26 @@ load_translation_dictionary <- function(
   dictionary$key <- trimws(as.character(dictionary$key))
   dictionary$section <- trimws(as.character(dictionary$section))
 
+  for (lang in languages) {
+    values <- as.character(dictionary[[lang]])
+    invalid <- !is.na(values) & !validUTF8(values)
+
+    if (any(invalid)) {
+      stop(
+        "Invalid UTF-8 text found in language '",
+        lang,
+        "' for translation key(s): ",
+        paste(dictionary$key[invalid], collapse = ", "),
+        call. = FALSE
+      )
+    }
+  }
+
   blank_keys <- is.na(dictionary$key) | !nzchar(dictionary$key)
   if (any(blank_keys)) {
     stop(
-      "The translation dictionary contains ", sum(blank_keys),
+      "The translation dictionary contains ",
+      sum(blank_keys),
       " blank translation key(s).",
       call. = FALSE
     )
@@ -119,35 +181,52 @@ load_translation_dictionary <- function(
     warn = FALSE
   )
 
-  if (any(vapply(dictionary[[fallback_language]], .is_blank_translation, logical(1)))) {
-    missing_fallback <- dictionary$key[
-      vapply(dictionary[[fallback_language]], .is_blank_translation, logical(1))
-    ]
+  missing_fallback <- vapply(
+    dictionary[[fallback_language]],
+    .is_blank_translation,
+    logical(1)
+  )
 
+  if (any(missing_fallback)) {
     warning(
-      "Missing ", fallback_language, " fallback translation(s) for: ",
-      paste(missing_fallback, collapse = ", "),
+      "Missing ",
+      fallback_language,
+      " fallback translation(s) for: ",
+      paste(dictionary$key[missing_fallback], collapse = ", "),
       call. = FALSE
     )
   }
 
   attr(dictionary, "languages") <- languages
   attr(dictionary, "fallback_language") <- fallback_language
-  attr(dictionary, "translation_file") <- normalizePath(file, mustWork = FALSE)
+  attr(dictionary, "translation_file") <- if (is_url) {
+    file
+  } else {
+    normalizePath(file, mustWork = FALSE)
+  }
 
   dictionary
 }
+
 
 # ------------------------------------------------------------
 # Default dictionary and language
 # ------------------------------------------------------------
 
-# Override translation_file before sourcing this script when needed.
-if (!exists("translation_file", inherits = TRUE) ||
-    is.null(translation_file) ||
-    is.na(translation_file) ||
-    !nzchar(as.character(translation_file))) {
-  translation_file <- file.path("R", "translation.csv")
+# Define translation_file before sourcing this script to override
+# the default GitHub translation dictionary.
+if (
+  !exists("translation_file", inherits = TRUE) ||
+  is.null(translation_file) ||
+  length(translation_file) == 0L ||
+  is.na(translation_file[1L]) ||
+  !nzchar(trimws(as.character(translation_file[1L])))
+) {
+  translation_file <- repo_path(
+    repo,
+    "R",
+    "translation.csv"
+  )
 }
 
 translation_dictionary <- load_translation_dictionary(
@@ -155,6 +234,7 @@ translation_dictionary <- load_translation_dictionary(
   languages = c("EN", "FR", "ES"),
   fallback_language = "EN"
 )
+
 
 # The configuration file can define translation as EN, FR or ES.
 if (!exists("translation", inherits = TRUE) ||
@@ -241,6 +321,15 @@ tr <- function(
   }
 
   translated_text <- as.character(translated_text[1L])
+  translated_text <- enc2utf8(translated_text)
+
+  if (!validUTF8(translated_text)) {
+    stop(
+      "Invalid UTF-8 translation for key: ",
+      key,
+      call. = FALSE
+    )
+  }
   arguments <- list(...)
 
   if (length(arguments) > 0L) {
