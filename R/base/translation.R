@@ -225,6 +225,7 @@ if (
   translation_file <- repo_path(
     repo,
     "R",
+    "base",
     "translation.csv"
   )
 }
