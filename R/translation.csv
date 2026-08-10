@@ -1,0 +1,79 @@
+﻿key,section,EN,FR,ES,source_files,usage
+common.overall,common,Overall,Global,General,charts_score.R; export.R,Generic displayed label
+common.others,common,Others,Autres,Otros,charts_sampling.R; charts_score.R,Generated category label
+common.total,common,Total,Total,Total,charts.R; tables.R,Table total row
+common.no_data,common,no data,données indisponibles,datos no disponibles,charts_sampling.R,Chart annotation
+common.source,common,Source,Source,Fuente,charts_sampling.R,Caption label
+common.note,common,Note,Note,Nota,charts_sampling.R,Caption label
+common.respondents,common,Respondents,Répondants,Personas encuestadas,charts_sampling.R,Map popup label
+common.total_respondents,common,Total respondents,Nombre total de répondants,Número total de personas encuestadas,charts_sampling.R; charts.R; tables.R,Legend/table header
+common.percentage,common,Percentage (%),Pourcentage (%),Porcentaje (%),charts.R; tables.R,Table header
+common.female,common,Female,Femme,Mujer,charts.R; tables.R; export.R,Gender category
+common.male,common,Male,Homme,Hombre,charts.R; tables.R; export.R,Gender category
+common.other_or_no_answer,common,Other or did not answer,Autre ou sans réponse,Otro o sin respuesta,charts.R; tables.R,Gender category
+sampling.title,sampling,Sampling,Échantillonnage,Muestreo,charts_sampling.R,Chart title
+sampling.from_survey,sampling,From survey,Données de l’enquête,Datos de la encuesta,charts_sampling.R,Chart subtitle
+sampling.population,sampling,Population,Population,Población,charts_sampling.R,Chart title/series label
+sampling.survey,sampling,Survey,Enquête,Encuesta,charts_sampling.R,Series/caption label
+sampling.survey_vs_population,sampling,Survey vs. population data,Comparaison entre les données de l’enquête et de la population,Comparación entre los datos de la encuesta y de la población,charts_sampling.R,Population pyramid title
+sampling.other_regions,sampling,Other regions,Autres régions,Otras regiones,charts_sampling.R,Generated geographic category/comment label
+sampling.total_respondents_map,sampling,Total respondents,Nombre total de répondants,Número total de personas encuestadas,charts_sampling.R,Map legend title
+sampling.region_column_missing,sampling,Region column missing from survey data,La variable région est absente des données de l’enquête,La variable de región no está disponible en los datos de la encuesta,charts_sampling.R,Placeholder message
+sampling.geo_population_missing,sampling,Geographic population data not available,Les données géographiques de population ne sont pas disponibles,Los datos geográficos de población no están disponibles,charts_sampling.R,Placeholder message
+sampling.category_data_missing,sampling,%s data not available,Les données pour %s ne sont pas disponibles,Los datos de %s no están disponibles,charts_sampling.R,Dynamic placeholder; one %s argument
+sampling.no_matching_geographies,sampling,No matching geographies after join. Check join keys or spelling.,Aucune correspondance géographique après la jointure. Vérifiez les clés de jointure ou l’orthographe.,No hay geografías coincidentes después de la unión. Verifique las claves de unión o la ortografía.,charts_sampling.R,Error message
+sampling.admin_levels_available,sampling,All administrative levels are available. Proceeding...,Tous les niveaux administratifs sont disponibles. Poursuite du traitement...,Todos los niveles administrativos están disponibles. Continuando...,charts_sampling.R,Runtime message
+sampling.excluded_standard_note,sampling,Note: 'Prefer not to answer' and 'Don't know' responses total %s%%.\nSource: %s,Note : les réponses « Préfère ne pas répondre » et « Ne sait pas » représentent %s %%.\nSource : %s,Nota: las respuestas «Prefiere no responder» y «No sabe» representan el %s%%.\nFuente: %s,charts_sampling.R,"Dynamic caption; percentage, source"
+sampling.excluded_custom_note,sampling,Note: %s responses total %s%%.\nSource: %s,Note : les réponses %s représentent %s %%.\nSource : %s,Nota: las respuestas %s representan el %s%%.\nFuente: %s,charts_sampling.R,"Dynamic caption; response list, percentage, source"
+sampling.no_data_note,sampling,Note: 'no data' indicates unreported or unavailable values.\nSource: %s.,Note : « données indisponibles » indique des valeurs non déclarées ou non disponibles.\nSource : %s.,Nota: «datos no disponibles» indica valores no declarados o no disponibles.\nFuente: %s.,charts_sampling.R,Dynamic caption; source
+sampling.gender_excluded_note,sampling,Note: Other or unanswered responses total %s%%.\nSource:\nSurvey: %s - Population data: %s (%s),Note : les réponses « Autre » ou sans réponse représentent %s %%.\nSource :\nEnquête : %s - Données de population : %s (%s),Nota: las respuestas «Otro» o sin respuesta representan el %s%%.\nFuente:\nEncuesta: %s - Datos de población: %s (%s),charts_sampling.R,Dynamic caption; percentage and three sources
+sampling.gender_source_note,sampling,Source:\nSurvey: %s - Population data: %s (%s),Source :\nEnquête : %s - Données de population : %s (%s),Fuente:\nEncuesta: %s - Datos de población: %s (%s),charts_sampling.R,Dynamic caption; three source values
+score.competencies,score,Competencies,Compétences,Competencias,charts_score.R; charts.R; export.R,Chart/export label
+score.values,score,Values,Valeurs,Valores,charts_score.R; charts.R; export.R,Chart/export label
+score.competency,score,Competency,Compétence,Competencia,charts_score.R; export.R,Dimension label
+score.value,score,Value,Valeur,Valor,charts_score.R; export.R,Dimension label
+score.overall_competencies,score,Overall competencies,Compétences globales,Competencias generales,charts_score.R,Generated score row
+score.overall_values,score,Overall values,Valeurs globales,Valores generales,charts_score.R,Generated score row
+score.trust_index,score,Trust Index,Indice de confiance,Índice de confianza,export.R,Export sheet label
+score.institutional,score,Institutional,Institutionnel,Institucional,export.R,Module/export label
+score.dimension,score,Dimension,Dimension,Dimensión,charts_advanced.R; charts.R; export.R,Facet/export label
+score.drivers,score,Drivers,Facteurs,Factores,charts_advanced.R; charts.R; export.R,Axis/export label
+score.score_variation,score,Score variation,Variation du score,Variación de la puntuación,charts_advanced.R; charts.R,Axis label
+score.group,score,Group,Groupe,Grupo,charts_score.R,Legend/data label
+score.mean,score,Mean,Moyenne,Promedio,charts_score.R,Data label
+drivers.responses_by_subdimension,drivers,Survey responses by subdimension,Réponses à l’enquête par sous-dimension,Respuestas de la encuesta por subdimensión,charts_drivers.R,Chart title
+drivers.opinions_subtitle,drivers,Respondents' opinions and perceptions about %s,Opinions et perceptions des répondants concernant %s,Opiniones y percepciones de las personas encuestadas sobre %s,charts_drivers.R,Dynamic subtitle; driver name
+response.yes,responses,Yes,Oui,Sí,charts_drivers.R,Response category/order
+response.no,responses,No,Non,No,charts_drivers.R,Response category
+response.dont_know,responses,Don't know,Ne sait pas,No sabe,charts_advanced.R; charts_sampling.R; charts_drivers.R,Response category
+response.prefer_not_answer,responses,Prefer not to answer,Préfère ne pas répondre,Prefiere no responder,charts_sampling.R,Response category in notes
+response.strongly_agree,responses,Strongly agree,Tout à fait d’accord,Totalmente de acuerdo,charts_drivers.R,Response category/order
+response.mostly_agree,responses,Mostly agree,Plutôt d’accord,Mayormente de acuerdo,charts_drivers.R,Response category/order
+response.mostly_disagree,responses,Mostly disagree,Plutôt pas d’accord,Mayormente en desacuerdo,charts_drivers.R,Response category/order
+response.strongly_disagree,responses,Strongly disagree,Pas du tout d’accord,Totalmente en desacuerdo,charts_drivers.R,Response category/order
+response.very_positively,responses,Very positively,Très positivement,Muy positivamente,charts_drivers.R,Experience response category
+response.somewhat_positively,responses,Somewhat positively,Plutôt positivement,Algo positivamente,charts_drivers.R,Experience response category
+response.yes_mostly,responses,"Yes, mostly","Oui, dans l’ensemble","Sí, en su mayoría",charts_drivers.R,Experience response category
+table.gender,tables,Gender,Genre,Género,charts.R; tables.R; export.R,Table/export label
+table.age_group,tables,Age group,Groupe d’âge,Grupo de edad,charts.R; tables.R; export.R,Table/export label
+table.profile,tables,Profile,Profil,Perfil,charts.R; tables.R,Table header
+table.respondents_by_gender,tables,Respondents by gender,Répondants par genre,Personas encuestadas por género,charts.R,Table caption
+table.respondents_by_age_group,tables,Respondents by age group,Répondants par groupe d’âge,Personas encuestadas por grupo de edad,charts.R,Table caption
+table.respondents_by_rc_relationship,tables,Respondents by relationship with the Red Cross,Répondants selon leur relation avec la Croix-Rouge,Personas encuestadas según su relación con la Cruz Roja,charts.R,Table caption
+table.respondents_by_one_level,tables,Respondents by %s,Répondants par %s,Personas encuestadas por %s,charts.R; tables.R,Dynamic geographic caption; one level
+table.respondents_by_two_levels,tables,Respondents by %s and %s,Répondants par %s et %s,Personas encuestadas por %s y %s,charts.R; tables.R,Dynamic geographic caption; two levels
+table.respondents_by_three_levels,tables,"Respondents by %s, %s and %s","Répondants par %s, %s et %s","Personas encuestadas por %s, %s y %s",charts.R; tables.R,Dynamic geographic caption; three levels
+table.adm1_missing,tables,"The adm1 variable is missing, empty, or does not correspond to a column in the dataset.","La variable adm1 est absente, vide ou ne correspond à aucune colonne du jeu de données.","La variable adm1 falta, está vacía o no corresponde a ninguna columna del conjunto de datos.",tables.R,Error message
+export.extra_questions,export,Extra questions,Questions supplémentaires,Preguntas adicionales,export.R,Worksheet/export label
+export.sampling_age,export,Sampling - age,Échantillonnage - âge,Muestreo - edad,export.R,Worksheet label
+export.sampling_gender,export,Sampling - gender,Échantillonnage - genre,Muestreo - género,export.R,Worksheet label
+export.sampling_geographic,export,Sampling - geographic,Échantillonnage - géographie,Muestreo - geografía,export.R,Worksheet label
+export.sampling_profile,export,Sampling - profile,Échantillonnage - profil,Muestreo - perfil,export.R,Worksheet label
+export.geographic,export,Geographic,Géographique,Geográfico,export.R,Export group/name
+export.factor,export,Factor,Facteur,Factor,export.R,Export group
+export.series,export,Series,Série,Serie,export.R,Export column label
+runtime.loading_charts,runtime,Loading charts and visual outputs...,Chargement des graphiques et des éléments visuels...,Cargando gráficos y elementos visuales...,charts_advanced.R; charts.R; charts_score.R; charts_sampling.R; charts_drivers.R,Console message
+runtime.charts_loaded,runtime,Charts and visual outputs loaded,Graphiques et éléments visuels chargés,Gráficos y elementos visuales cargados,charts_advanced.R; charts.R; charts_score.R; charts_drivers.R,Console message
+runtime.sampling_charts_loaded,runtime,Sampling charts and visual outputs loaded,Graphiques d’échantillonnage et éléments visuels chargés,Gráficos de muestreo y elementos visuales cargados,charts_sampling.R,Console message
+runtime.exporting_data,runtime,Exporting report data...,Exportation des données du rapport...,Exportando los datos del informe...,export.R,Console message
+runtime.data_exported,runtime,Report data exported,Données du rapport exportées,Datos del informe exportados,export.R,Console message
