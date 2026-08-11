@@ -21,9 +21,11 @@ report.drivers,report,Perception of trust,Perception de la confiance,Percepción
 report.competencies,report,Competencies,Compétences,Competencias,,
 report.values,report,Values,Valeurs,Valores,,
 report.contextual_questions,report,Contextual questions,Questions contextuelles,Preguntas contextuales,,
+report.contextual_questions.text,report,"This section presents findings on community members’ experiences with and behaviors toward the Red Cross. These questions explore interactions, perceptions, and engagement patterns, offering insights into how the Red Cross is viewed and utilized within the community.","Cette section présente les résultats relatifs aux expériences des membres de la communauté avec la Croix-Rouge ainsi qu'à leurs comportements à son égard. Ces questions explorent les interactions, les perceptions et les modes d'engagement, afin de mieux comprendre comment la Croix-Rouge est perçue et sollicitée au sein des communautés.","sta sección presenta los resultados sobre las experiencias de los miembros de la comunidad con la Cruz Roja y sus comportamientos hacia ella. Estas preguntas exploran las interacciones, las percepciones y los patrones de participación, con el fin de comprender mejor cómo la Cruz Roja es percibida y utilizada dentro de las comunidades.",,
 report.exp_questions,report,Experiences,Expériences,Experiencias,,
 report.behaviours_questions,report,Behaviours,Comportements,Comportamientos,,
 report.intention_questions,report,Intention,Intentions,Intenciones,,
+,,,,,,
 report.channel_questions,report,Channels,Canaux,Canales,,
 report.knowledge_questions,report,Awareness of communities,Sensibilisation des communautés,Conocimiento de las comunidades,,
 report.score,report,Scores,Scores,Puntuaciones,,
@@ -71,7 +73,11 @@ score.score_variation,score,Score variation,Variation du score,Variación de la 
 score.group,score,Group,Groupe,Grupo,charts_advanced.R; charts.R,Axis label
 score.mean,score,Mean,Moyenne,Promedio,charts_score.R,Legend/data label
 drivers.responses_by_subdimension,drivers,Survey responses by subdimension,Réponses à l’enquête par sous-dimension,Respuestas de la encuesta por subdimensión,charts_score.R,Data label
-drivers.opinions_subtitle,drivers,Respondents' opinions and perceptions about %s,Opinions et perceptions des répondants concernant %s,Opiniones y percepciones de las personas encuestadas sobre %s,charts_drivers.R,Chart title
+drivers.opinions_subtitle,drivers,Respondents' opinions and perceptions about ,Opinions et perceptions des répondants concernant %s,Opiniones y percepciones de las personas encuestadas sobre %s,charts_drivers.R,Chart title
+drivers.exp_title,drivers,Past experiences with the Red Cross,Expériences passées avec la Croix-Rouge,Experiencias previas con la Cruz Roja,,
+drivers.behaviours_title,drivers,Interactions with the Red Cross,Interactions avec la Croix-Rouge,Interacciones con la Cruz Roja,,
+drivers.intention_title,drivers,Intentions toward the Red Cross,Intentions envers la Croix-Rouge,Intenciones hacia la Cruz Roja,,
+drivers.intention_subtitle,drivers,In the next 12 months,Au cours des 12 prochains mois,Durante los próximos 12 meses,,
 response.yes,responses,Yes,Oui,Sí,charts_drivers.R,Dynamic subtitle; driver name
 response.no,responses,No,Non,No,charts_drivers.R,Response category/order
 response.dont_know,responses,Don't know,Ne sait pas,No sabe,charts_drivers.R,Response category
