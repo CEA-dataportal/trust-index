@@ -347,12 +347,12 @@ survey_exp <- data %>%
 experience_labels <- question_code %>%
   filter(category == "experience") %>%
   select(short_label, long_label) %>%
-  mutate(long_label = stringr::str_wrap(long_label, width = 40)) %>%
+  mutate(long_label = stringr::str_wrap(long_label, width = 20)) %>%
   deframe()
 
 exp_data <- survey_exp %>%
   pivot_longer(everything(), names_to = "Question", values_to = "Response")
-exp_data$Question <- str_wrap(experience_labels[exp_data$Question], width = 40)
+exp_data$Question <- str_wrap(experience_labels[exp_data$Question], width = 20)
 
 
 
