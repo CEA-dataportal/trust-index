@@ -11,6 +11,7 @@ common.percentage,common,Percentage (%),Pourcentage (%),Porcentaje (%),charts.R;
 common.female,common,Female,Femme,Mujer,charts.R; tables.R; export.R,Gender category
 common.male,common,Male,Homme,Hombre,charts.R; tables.R; export.R,Gender category
 common.other_or_no_answer,common,Other or did not answer,Autre ou sans réponse,Otro o sin respuesta,charts.R; tables.R,Gender category
+report.insights,report,Key insights,Points clés,Puntos clave,,
 report.sampling,report,Sampling,Échantillonnage,Muestreo,,
 report.geographic_distribution,report,Geographic distribution,Distribution géographique,Muestreo,,
 report.coverage,report,Coverage,Couverture,Cobertura,,
@@ -69,9 +70,9 @@ score.drivers,score,Drivers,Facteurs,Factores,charts_advanced.R; charts.R; expor
 score.score_variation,score,Score variation,Variation du score,Variación de la puntuación,charts_advanced.R; charts.R; export.R,Axis/export label
 score.group,score,Group,Groupe,Grupo,charts_advanced.R; charts.R,Axis label
 score.mean,score,Mean,Moyenne,Promedio,charts_score.R,Legend/data label
-drivers.responses_by_subdimension,score,Survey responses by subdimension,Réponses à l’enquête par sous-dimension,Respuestas de la encuesta por subdimensión,charts_score.R,Data label
+drivers.responses_by_subdimension,drivers,Survey responses by subdimension,Réponses à l’enquête par sous-dimension,Respuestas de la encuesta por subdimensión,charts_score.R,Data label
 drivers.opinions_subtitle,drivers,Respondents' opinions and perceptions about %s,Opinions et perceptions des répondants concernant %s,Opiniones y percepciones de las personas encuestadas sobre %s,charts_drivers.R,Chart title
-response.yes,drivers,Yes,Oui,Sí,charts_drivers.R,Dynamic subtitle; driver name
+response.yes,responses,Yes,Oui,Sí,charts_drivers.R,Dynamic subtitle; driver name
 response.no,responses,No,Non,No,charts_drivers.R,Response category/order
 response.dont_know,responses,Don't know,Ne sait pas,No sabe,charts_drivers.R,Response category
 response.prefer_not_answer,responses,Prefer not to answer,Préfère ne pas répondre,Prefiere no responder,charts_advanced.R; charts_sampling.R; charts_drivers.R,Response category
@@ -82,7 +83,7 @@ response.strongly_disagree,responses,Strongly disagree,Pas du tout d’accord,To
 response.very_positively,responses,Very positively,Très positivement,Muy positivamente,charts_drivers.R,Response category/order
 response.somewhat_positively,responses,Somewhat positively,Plutôt positivement,Algo positivamente,charts_drivers.R,Experience response category
 response.yes_mostly,responses,"Yes, mostly","Oui, dans l’ensemble","Sí, en su mayoría",charts_drivers.R,Experience response category
-table.gender,responses,Gender,Genre,Género,charts_drivers.R,Experience response category
+table.gender,tables,Gender,Genre,Género,charts_drivers.R,Experience response category
 table.geo,tables,Geographic,Géographique,Geográfico,charts.R; tables.R; export.R,Table/export label
 table.age_group,tables,Age group,Groupe d’âge,Grupo de edad,charts.R; tables.R; export.R,Table/export label
 table.profile,tables,Profile,Profil,Perfil,charts.R; tables.R; export.R,Table/export label
