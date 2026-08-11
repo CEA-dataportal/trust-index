@@ -408,10 +408,7 @@ experience_plot <- ggplot(summary_exp, aes(x = Question, y = percent, fill = Res
     y = NULL
   ) +
   coord_flip() +
-  custom_theme()+
-  theme(
-    axis.text.y = element_text(size=12)
-  )
+  custom_theme()
         
 }
 
