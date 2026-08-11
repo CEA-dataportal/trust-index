@@ -403,7 +403,7 @@ experience_plot <- ggplot(summary_exp, aes(x = Question, y = percent, fill = Res
   scale_fill_manual(values = pal_exp, name = NULL) +
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(
-    title = "",
+    title = tr("drivers.exp_title"),
     x = NULL,
     y = NULL
   ) +
@@ -486,7 +486,7 @@ behaviours_plot <- ggplot(summary_behaviours, aes(x = Question, y = percent, fil
   ) +
   guides(fill = guide_legend(reverse = TRUE))+
   labs(
-    title = "",
+    title = tr("drivers.behaviours_title"),
     x = NULL,
     y = NULL
   ) +
@@ -716,4 +716,5 @@ walk(plots_by_driver, print)
 
 
 
-message("✓ Charts and visual outputs loaded")
+message(tr("runtime.charts_loaded"))
+        
