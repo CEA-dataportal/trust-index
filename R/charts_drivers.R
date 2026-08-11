@@ -179,7 +179,7 @@ drivers_comp_plot <- ggplot(summary_comp, aes(x = Question, y = percent, fill = 
     show.legend = FALSE
   ) +
   labs(
-    title = "Survey Responses by subdimensions",
+    title = tr("drivers.responses_by_subdimension"), 
     x = NULL,
     y = NULL
   ) +
