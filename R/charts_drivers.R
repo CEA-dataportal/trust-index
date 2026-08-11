@@ -217,7 +217,7 @@ drivers_val_plot <- ggplot(summary_val, aes(x = Question, y = percent, fill = Re
   ) +
   guides(fill = guide_legend(reverse = TRUE))+
   labs(
-    title = "Survey Responses by subdimensions",
+    title = tr("drivers.responses_by_subdimension"), 
     x = NULL,
     y = NULL
   ) +
@@ -312,7 +312,7 @@ make_barchart <- function(df_driver) {
     scale_y_continuous(labels = function(x) paste0(x, "%"), expand = expansion(mult = c(0, 0.02))) +
     labs(
       title = unique(df_driver$Drivers),
-      subtitle = paste0("Respondent's opinions and perceptions about ",tolower(unique(df_driver$Drivers))),
+      subtitle = paste0(tr("drivers.opinions_subtitle"), tolower(unique(df_driver$Drivers))),
       x = NULL,
       y = NULL
     ) +
