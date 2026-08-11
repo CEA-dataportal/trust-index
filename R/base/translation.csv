@@ -83,6 +83,7 @@ response.very_positively,responses,Very positively,Très positivement,Muy positi
 response.somewhat_positively,responses,Somewhat positively,Plutôt positivement,Algo positivamente,charts_drivers.R,Experience response category
 response.yes_mostly,responses,"Yes, mostly","Oui, dans l’ensemble","Sí, en su mayoría",charts_drivers.R,Experience response category
 table.gender,responses,Gender,Genre,Género,charts_drivers.R,Experience response category
+table.geo,tables,Geographic,Géographique,Geográfico,charts.R; tables.R; export.R,Table/export label
 table.age_group,tables,Age group,Groupe d’âge,Grupo de edad,charts.R; tables.R; export.R,Table/export label
 table.profile,tables,Profile,Profil,Perfil,charts.R; tables.R; export.R,Table/export label
 table.respondents_by_gender,tables,Respondents by gender,Répondants par genre,Personas encuestadas por género,charts.R; tables.R,Table header
@@ -100,9 +101,8 @@ export.sampling_profile,export,Sampling - profile,Échantillonnage - profil,Mues
 export.geographic,export,Geographic,Géographique,Geográfico,export.R,Worksheet label
 export.factor,export,Factor,Facteur,Factor,export.R,Export group/name
 export.series,export,Series,Série,Serie,export.R,Export group
-runtime.loading_charts,export,Loading charts and visual outputs...,Chargement des graphiques et des éléments visuels...,Cargando gráficos y elementos visuales...,export.R,Export column label
+runtime.loading_charts,runtime,Loading charts and visual outputs...,Chargement des graphiques et des éléments visuels...,Cargando gráficos y elementos visuales...,export.R,Export column label
 runtime.charts_loaded,runtime,Charts and visual outputs loaded,Graphiques et éléments visuels chargés,Gráficos y elementos visuales cargados,charts_advanced.R; charts.R; charts_score.R; charts_sampling.R; charts_drivers.R,Console message
 runtime.sampling_charts_loaded,runtime,Sampling charts and visual outputs loaded,Graphiques d’échantillonnage et éléments visuels chargés,Gráficos de muestreo y elementos visuales cargados,charts_advanced.R; charts.R; charts_score.R; charts_drivers.R,Console message
 runtime.exporting_data,runtime,Exporting report data...,Exportation des données du rapport...,Exportando los datos del informe...,charts_sampling.R,Console message
 runtime.data_exported,runtime,Report data exported,Données du rapport exportées,Datos del informe exportados,export.R,Console message
-,runtime,,,,export.R,Console message
