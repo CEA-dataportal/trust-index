@@ -9,7 +9,7 @@
 # Extracted from Data-Report-INST.Rmd
 # ============================================================
 
-message("Loading charts and visual outputs...")
+message(tr("runtime.loading_charts"))
 
 # This script assumes the following scripts have already run:
 # source('R/setup.R')
@@ -122,8 +122,12 @@ comp_plot <- ggplot(comp_df,aes(x=question,y=weighted)) +
   geom_bar(stat="identity", fill = color_competencies) +
   geom_text(aes(label=round(weighted,2),y=round(weighted,2)-1),color="white",size=6) +
   coord_flip() +
-  custom_theme() + labs(y=NULL,x=NULL, title = "Competencies") + 
-  scale_y_continuous(limits=c(0,10))
+  custom_theme() +
+  scale_x_discrete(
+    labels = function(x) tr_variable(x)
+  ) +
+  labs(y = NULL, x = NULL, title = tr("score.competencies")) + 
+  scale_y_continuous(limits = c(0, 10))
 
 
 
@@ -131,8 +135,12 @@ values_plot <- ggplot(values_df,aes(x=question,y=weighted)) +
   geom_bar(stat="identity", fill = color_values) +
   geom_text(aes(label=round(weighted,2),y=round(weighted,2)-1),color="white",size=6) +
   coord_flip() +
-  custom_theme() + labs(y=NULL,x=NULL, title = "Values") +
-  scale_y_continuous(limits=c(0,10))
+  custom_theme() +
+  scale_x_discrete(
+    labels = function(x) tr_variable(x)
+  ) +
+  labs(y = NULL, x = NULL, title = tr("score.values")) +
+  scale_y_continuous(limits = c(0, 10))
 
 
 
@@ -155,7 +163,7 @@ strip <- ggplot(
   data = factor_data,
   aes(
     x = mean,
-    y = stringr::str_wrap(variable_value, 20)
+    y = stringr::str_wrap(tr_data(variable_value), 20)
   )
 ) +
   geom_bar(stat = "identity", fill = color_bg) +
@@ -164,7 +172,12 @@ strip <- ggplot(
     color = color_bg,
     size = 7
   ) +
-  facet_grid(variable ~ ., scales = "free", space = "free") +
+  facet_grid(
+    variable ~ .,
+    scales = "free",
+    space = "free",
+    labeller = labeller(variable = function(x) tr_variable(x))
+  ) +
   custom_theme() +
   theme(
     legend.position = "none",
@@ -183,7 +196,10 @@ strip <- ggplot(
   labs(x = NULL, y = NULL, title = " ")
 
 # Competencies
-co<-ggplot(data= factor_data %>% filter(dimension == "comp"), aes(x=mean, y= stringr::str_wrap(variable_value, 20))) +
+co <- ggplot(
+  data = factor_data %>% filter(dimension == "comp"),
+  aes(x = mean, y = stringr::str_wrap(tr_data(variable_value), 20))
+) +
   geom_bar(stat = "identity", fill = color_competencies) +  # Set the fill color for bars
   geom_text(aes(label = round(mean, 2), x = mean - 1), color = "white", size = 6) +
   facet_grid(variable ~ ., scales = "free", space = "free") +
@@ -194,10 +210,13 @@ co<-ggplot(data= factor_data %>% filter(dimension == "comp"), aes(x=mean, y= str
         strip.text.y = element_blank(),
         strip.background = element_blank()) +
   scale_x_continuous(limits=c(0,10))+
-  labs(x = NULL, y = NULL, title = "Competencies")  # Add title
+  labs(x = NULL, y = NULL, title = tr("score.competencies"))
 
 # Values
-va<-ggplot(data= factor_data %>% filter(dimension == "values"), aes(x=mean, y=stringr::str_wrap(variable_value, 20))) +
+va <- ggplot(
+  data = factor_data %>% filter(dimension == "values"),
+  aes(x = mean, y = stringr::str_wrap(tr_data(variable_value), 20))
+) +
   geom_bar(stat = "identity", fill = color_values) +  # Set the fill color for bars
   geom_text(aes(label = round(mean, 2), x = mean - 1), color = "white", size = 6) +
   facet_grid(variable ~ ., scales = "free_y", space = "free_y") +
@@ -208,7 +227,7 @@ va<-ggplot(data= factor_data %>% filter(dimension == "values"), aes(x=mean, y=st
         strip.text.y = element_blank() , 
         strip.background = element_blank()) +
   scale_x_continuous(limits=c(0,10))+
-  labs(x = NULL, y = NULL, title = "Values")  # Add title
+  labs(x = NULL, y = NULL, title = tr("score.values"))
 
 
 
@@ -250,10 +269,16 @@ c_plot <- ggplot(comp_plot_data, aes(x = Question, y = Mean, fill = Group)) +
             position = position_dodge(width = 0.9), 
             hjust = -0.3, size = 4, color = "#262626") +
   coord_flip() +
-  scale_fill_manual(values = pal_comp_score) +
+  scale_fill_manual(
+    values = pal_comp_score,
+    labels = function(x) tr_data(x)
+  ) +
+  scale_x_discrete(
+    labels = function(x) tr_variable(x)
+  ) +
   custom_theme() +
   scale_y_continuous(limits = c(0, 10)) +
-  labs(x = NULL, y = NULL, title = "Competencies") +
+  labs(x = NULL, y = NULL, title = tr("score.competencies")) +
   theme(legend.position = "bottom", legend.direction = "vertical", legend.title = element_blank())
 
 # Values chart
@@ -263,10 +288,16 @@ v_plot <- ggplot(val_plot_data, aes(x = Question, y = Mean, fill = Group)) +
             position = position_dodge(width = 0.9), 
             hjust = -0.3, size = 4, color = "#262626") +
   coord_flip() +
-  scale_fill_manual(values = pal_val_score) +
+  scale_fill_manual(
+    values = pal_val_score,
+    labels = function(x) tr_data(x)
+  ) +
+  scale_x_discrete(
+    labels = function(x) tr_variable(x)
+  ) +
   custom_theme() +
   scale_y_continuous(limits = c(0, 10)) +
-  labs(x = NULL, y = NULL, title = "Values") +
+  labs(x = NULL, y = NULL, title = tr("score.values")) +
   theme(legend.position = "bottom", legend.direction = "vertical", legend.title = element_blank())
 
 # Display side-by-side
@@ -274,4 +305,4 @@ v_plot <- ggplot(val_plot_data, aes(x = Question, y = Mean, fill = Group)) +
 
 
 
-message("✓ Charts and visual outputs loaded")
+message("✓ ", tr("runtime.charts_loaded"))
