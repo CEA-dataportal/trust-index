@@ -200,9 +200,10 @@ answer,age_50_59,50-59,50-59,50-59,data / charts / tables,Age category
 answer,age_60_plus,60+,60+,60+,data / charts / tables,Age category
 answer,dont_know,Don't know,Ne sais pas,No sabe,survey / charts / tables,Response/data category
 answer,education.none,None,Aucun,Ninguno,data / charts / tables,Education category
-answer,education.primary,Primary,Primaire,Primaria,data / charts / tables,Education category
+answer,education.noformal,No formal education,Pas d'éducation formelle,Ninguno,data / charts / tables,Education category
+answer,education.primary,Primary school,Primaire,Primaria,data / charts / tables,Education category
 answer,education.professional,Professional,Formation professionnelle,Formación profesional,data / charts / tables,Education category
-answer,education.secondary,Secondary,Secondaire,Secundaria,data / charts / tables,Education category
+answer,education.secondary,Secondary school,Secondaire,Secundaria,data / charts / tables,Education category
 answer,education.university,University,Université,Universidad,data / charts / tables,Education category
 answer,education.vocational,Vocational,Formation professionnelle,Formación profesional,data / charts / tables,Education category
 answer,employment.employee,Employee,Salarié,Empleado,data / charts / tables,Employment category
