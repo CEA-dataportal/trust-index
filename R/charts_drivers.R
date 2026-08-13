@@ -189,6 +189,9 @@ drivers_comp_plot <- ggplot(summary_comp, aes(x = Question, y = percent, fill = 
     name = NULL,
     labels = function(x) tr_data(x)
   ) +
+  scale_x_discrete(
+    labels = function(x) tr_variable(x)
+  ) +
   guides(fill = guide_legend(reverse = TRUE))+
   custom_theme()
 
@@ -216,6 +219,9 @@ drivers_val_plot <- ggplot(summary_val, aes(x = Question, y = percent, fill = Re
     values = pal_score,
     name = NULL,
     labels = function(x) tr_data(x)
+  ) +
+  scale_x_discrete(
+    labels = function(x) tr_variable(x)
   ) +
   guides(fill = guide_legend(reverse = TRUE))+
   labs(
