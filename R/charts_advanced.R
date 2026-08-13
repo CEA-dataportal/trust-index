@@ -23,48 +23,58 @@ message(tr("runtime.loading_charts"))
 
 df_long <- df3 %>%
   reshape2::melt(
-    id.vars      = c("Dimension", "Drivers"),  # keep both as identifiers
+    id.vars       = c("Dimension", "Drivers"),
     variable.name = "variable",
     value.name    = "value"
+  ) %>%
+  mutate(
+    # Keep original values for calculations/grouping
+    Drivers_display = tr_variable(as.character(Drivers)),
+    Dimension_display = tr_variable(as.character(Dimension)),
+    variable_display = tr_variable(as.character(variable))
   )
 
-weighting_plot <- ggplot(df_long, aes(x = Drivers, y = value, group = variable, color = variable)) +
+weighting_plot <- ggplot(
+  df_long,
+  aes(
+    x = Drivers_display,
+    y = value,
+    group = variable_display,
+    color = variable_display
+  )
+) +
   geom_point() +
   geom_line() +
   geom_label(
-    aes(label = round(value, 2), fill = variable),  # same color scale for bg
-    color        = "white",                         # text color
-    label.size   = 0,                               # no border line
-    label.r      = unit(0.2, "lines"),              # rounded corners
-    label.padding = unit(2, "pt"),                  # small padding
-    size         = 4
+    aes(
+      label = round(value, 2),
+      fill = variable_display
+    ),
+    color = "white",
+    label.size = 0,
+    label.r = unit(0.2, "lines"),
+    label.padding = unit(2, "pt"),
+    size = 4
   ) +
   facet_wrap(
-    ~ Dimension,
+    ~ Dimension_display,
     nrow = 1,
-    scales = "free_x",
-    labeller = labeller(Dimension = function(x) tr_variable(x))
-  ) +
-  scale_x_discrete(
-    labels = function(x) tr_variable(x)
-  ) +
-  scale_color_discrete(
-    labels = function(x) tr_variable(x)
-  ) +
-  scale_fill_discrete(
-    labels = function(x) tr_variable(x)
+    scales = "free_x"
   ) +
   theme(
     axis.text.x = element_text(
-      color = "black", size = 12,
-      angle = 90, vjust = 0.5, hjust = 1
+      color = "black",
+      size = 12,
+      angle = 90,
+      vjust = 0.5,
+      hjust = 1
     ),
     axis.title.x = element_text(
-      margin = margin(t = 15),     # top margin
+      margin = margin(t = 15),
       size = 16
     ),
     axis.title.y = element_text(
-      margin = margin(r = 15),     # right margin
+      margin = margin(r = 15),
       size = 16
     ),
     panel.grid.minor = element_blank(),
@@ -101,18 +111,19 @@ driver_rename_map <- question_code %>%
     )
   ) %>%
   select(variable, short_label_display) %>%
-  deframe() 
+  deframe()
+
 
 # Convert response values to numeric scores before correlation/weighting
 score_driver_response <- function(x) {
   
   x_chr <- as.character(x)
   
-  # Map categorical responses using score_map_full
   mapped <- unname(score_map_full[x_chr])
   
-  # Fallback if values are already numeric
-  numeric_value <- suppressWarnings(as.numeric(x_chr))
+  numeric_value <- suppressWarnings(
+    as.numeric(x_chr)
+  )
   
   dplyr::if_else(
     !is.na(mapped),
@@ -120,6 +131,7 @@ score_driver_response <- function(x) {
     numeric_value
   )
 }
+
 
 survey_drivers <- data %>%
   select(all_of(c(driver_columns, "weight"))) %>%
