@@ -9,7 +9,7 @@
 # Extracted from Data-Report-INST.Rmd
 # ============================================================
 
-message("Loading charts and visual outputs...")
+message(tr("runtime.loading_charts"))
 
 # This script assumes the following scripts have already run:
 # source('R/setup.R')
@@ -39,7 +39,21 @@ weighting_plot <- ggplot(df_long, aes(x = Drivers, y = value, group = variable, 
     label.padding = unit(2, "pt"),                  # small padding
     size         = 4
   ) +
-  facet_wrap(~ Dimension, nrow = 1, scales = "free_x") +
+  facet_wrap(
+    ~ Dimension,
+    nrow = 1,
+    scales = "free_x",
+    labeller = labeller(Dimension = function(x) tr_variable(x))
+  ) +
+  scale_x_discrete(
+    labels = function(x) tr_variable(x)
+  ) +
+  scale_color_discrete(
+    labels = function(x) tr_variable(x)
+  ) +
+  scale_fill_discrete(
+    labels = function(x) tr_variable(x)
+  ) +
   theme(
     axis.text.x = element_text(
       color = "black", size = 12,
@@ -59,8 +73,8 @@ weighting_plot <- ggplot(df_long, aes(x = Drivers, y = value, group = variable, 
   ) +
   custom_theme() +
   labs(
-    x = "Drivers",
-    y = "Score variation"
+    x = tr("score.drivers"),
+    y = tr("score.score_variation")
   )
 
 
@@ -79,7 +93,14 @@ score_map_full["Don't know"] <- 5
 
 driver_rename_map <- question_code %>%
   filter(variable %in% driver_columns) %>%
-  select(variable, short_label) %>%
+  mutate(
+    short_label_display = tr_variable(
+      variable,
+      label = "short",
+      fallback = short_label
+    )
+  ) %>%
+  select(variable, short_label_display) %>%
   deframe() 
 
 survey_drivers <- data %>%
@@ -105,4 +126,4 @@ cor_matrix_w <- cor(driver_weighted, use = "pairwise.complete.obs", method = "pe
 
 
 
-message("✓ Charts and visual outputs loaded")
+message("✓ ", tr("runtime.charts_loaded"))
