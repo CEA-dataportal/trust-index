@@ -301,7 +301,7 @@ if ("extra" %in% question_code$category) {
     ggplot(
       df_driver,
       aes(
-        x = stringr::str_wrap(tr_data(as.character(Question)), wrap),
+        x = stringr::str_wrap(tr_variable(as.character(Question)), wrap),
         y = percent,
         fill = Response
       )
@@ -324,10 +324,10 @@ if ("extra" %in% question_code$category) {
       scale_x_discrete(expand = expansion(add = 0.35)) +
       scale_y_continuous(labels = function(x) paste0(x, "%"), expand = expansion(mult = c(0, 0.02))) +
       labs(
-        title = tr_data(unique(df_driver$Drivers)),
+        title = tr_variable(unique(df_driver$Drivers)),
         subtitle = paste0(
           tr("drivers.opinions_subtitle"),
-          tolower(tr_data(unique(df_driver$Drivers)))
+          tolower(tr_variable(unique(df_driver$Drivers)))
         ),
         x = NULL,
         y = NULL
@@ -422,7 +422,7 @@ if ("experience" %in% question_code$category) {
       labels = function(x) tr_data(x)
     ) +
     scale_x_discrete(
-      labels = function(x) stringr::str_wrap(tr_data(x), 20)
+      labels = function(x) stringr::str_wrap(tr_variable(x), 20)
     ) +
     guides(fill = guide_legend(reverse = TRUE)) +
     labs(
@@ -506,7 +506,7 @@ if ("behaviours" %in% question_code$category) {
       labels = function(x) tr_data(x)
     ) +
     scale_x_discrete(
-      labels = function(x) stringr::str_wrap(tr_data(x), 20)
+      labels = function(x) stringr::str_wrap(tr_variable(x), 20)
     ) +
     guides(fill = guide_legend(reverse = TRUE))+
     labs(
@@ -589,7 +589,7 @@ if ("intention" %in% question_code$category) {
       labels = function(x) tr_data(x)
     ) +
     scale_x_discrete(
-      labels = function(x) stringr::str_wrap(tr_data(x), 20)
+      labels = function(x) stringr::str_wrap(tr_variable(x), 20)
     ) +
     guides(fill = guide_legend(reverse = TRUE))+
     labs(title = "", x = NULL, y = NULL) +
@@ -647,7 +647,7 @@ if ("channel" %in% question_code$category) {
           ggplot(
             aes(
               x = forcats::fct_reorder(
-                stringr::str_wrap(tr_data(Question), 40),
+                stringr::str_wrap(tr_variable(Question), 40),
                 percent
               ),
               y = percent,
@@ -670,8 +670,8 @@ if ("channel" %in% question_code$category) {
           scale_y_continuous(labels = function(x) paste0(x, "%"), expand = expansion(mult = c(0, 0.02))) +
           scale_x_discrete(expand = expansion(add = 0.35)) +
           labs(
-            title = tr_data(unique(.x$Drivers)),
-            subtitle = tr_data(unique(.x$long_label)),
+            title = tr_variable(unique(.x$Drivers)),
+            subtitle = tr_variable(unique(.x$long_label)),
             x = NULL,
             y = NULL
           ) +
@@ -734,7 +734,7 @@ if ("knowledge" %in% question_code$category) {
           ggplot(
             aes(
               x = forcats::fct_reorder(
-                stringr::str_wrap(tr_data(Question), 40),
+                stringr::str_wrap(tr_variable(Question), 40),
                 percent
               ),
               y = percent,
@@ -756,8 +756,8 @@ if ("knowledge" %in% question_code$category) {
           scale_y_continuous(labels = function(x) paste0(x, "%"), expand = expansion(mult = c(0, 0.02))) +
           scale_x_discrete(expand = expansion(add = 0.35)) +
           labs(
-            title = tr_data(unique(.x$Drivers)),
-            subtitle = tr_data(unique(.x$long_label)),
+            title = tr_variable(unique(.x$Drivers)),
+            subtitle = tr_variable(unique(.x$long_label)),
             x = NULL,
             y = NULL
           ) +
