@@ -271,7 +271,7 @@ c_plot <- ggplot(comp_plot_data, aes(x = Question, y = Mean, fill = Group)) +
   coord_flip() +
   scale_fill_manual(
     values = pal_comp_score,
-    labels = function(x) tr_data(x)
+    labels = tr_group_label
   ) +
   scale_x_discrete(
     labels = function(x) tr_variable(x)
@@ -290,7 +290,7 @@ v_plot <- ggplot(val_plot_data, aes(x = Question, y = Mean, fill = Group)) +
   coord_flip() +
   scale_fill_manual(
     values = pal_val_score,
-    labels = function(x) tr_data(x)
+    labels = tr_group_label
   ) +
   scale_x_discrete(
     labels = function(x) tr_variable(x)
