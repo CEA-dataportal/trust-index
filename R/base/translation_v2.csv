@@ -101,6 +101,8 @@ template,table.respondents_by_two_levels,Respondents by %s and %s,Répondants pa
 variable,dimension.competencies,Competencies,Compétences,Competencias,charts_sampling.R,Dynamic caption; three source values
 variable,dimension.competency,Competency,Compétence,Competencia,charts_score.R; charts.R; export.R,Chart/export label
 variable,dimension.institutional,Institutional,Institutionnel,Institucional,export.R,Export sheet label
+variable,weighted,Weighted,Pondéré,Ponderado,charts_advanced.R,Weighting legend
+variable,unweighted,Unweighted,Non pondéré,No ponderado,charts_advanced.R,Weighting legend
 variable,dimension.overall_only,Overall,Globales,Generales,charts_score.R; export.R,Dimension label
 variable,dimension.overall_competencies,Overall competencies,Compétences globales,Competencias generales,charts_score.R; export.R,Dimension label
 variable,dimension.overall_values,Overall values,Valeurs globales,Valores generales,charts_score.R,Generated score row
