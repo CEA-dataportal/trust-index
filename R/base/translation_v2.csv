@@ -1,0 +1,247 @@
+﻿type,key,EN,FR,ES,source_files,usage
+template,common.no_data,no data,données indisponibles,datos no disponibles,charts_sampling.R,Chart annotation
+template,common.note,Note,Note,Nota,charts_sampling.R,Caption label
+template,common.others,Others,Autres,Otros,charts_sampling.R; charts_score.R,Generated category label
+template,common.overall,Overall,Global,General,charts_score.R; export.R,Generic displayed label
+template,common.percentage,Percentage (%),Pourcentage (%),Porcentaje (%),charts.R; tables.R,Table header
+template,common.respondents,Respondents,Répondants,Personas encuestadas,charts_sampling.R,Map popup label
+template,common.source,Source,Source,Fuente,charts_sampling.R,Caption label
+template,common.total,Total,Total,Total,charts.R; tables.R,Table total row
+template,common.total_respondents,Total respondents,Nombre total de répondants,Número total de personas encuestadas,charts_sampling.R; charts.R; tables.R,Legend/table header
+template,drivers.behaviours_title,Interactions with the Red Cross,Interactions avec la Croix-Rouge,Interacciones con la Cruz Roja,,
+template,drivers.exp_title,Past experiences with the Red Cross,Expériences passées avec la Croix-Rouge,Experiencias previas con la Cruz Roja,,
+template,drivers.intention_subtitle,In the next 12 months,Au cours des 12 prochains mois,Durante los próximos 12 meses,,
+template,drivers.intention_title,Intentions toward the Red Cross,Intentions envers la Croix-Rouge,Intenciones hacia la Cruz Roja,,
+template,drivers.opinions_subtitle,Respondents' opinions and perceptions about,Opinions et perceptions des répondants concernant %s,Opiniones y percepciones de las personas encuestadas sobre %s,charts_drivers.R,Chart title
+template,drivers.responses_by_subdimension,Survey responses by subdimension,Réponses à l’enquête par sous-dimension,Respuestas de la encuesta por subdimensión,charts_score.R,Data label
+template,export.extra_questions,Extra questions,Questions supplémentaires,Preguntas adicionales,tables.R,Error message
+template,export.factor,Factor,Facteur,Factor,export.R,Export group/name
+template,export.geographic,Geographic,Géographique,Geográfico,export.R,Worksheet label
+template,export.sampling_age,Sampling - age,Échantillonnage - âge,Muestreo - edad,export.R,Worksheet/export label
+template,export.sampling_gender,Sampling - gender,Échantillonnage - genre,Muestreo - género,export.R,Worksheet label
+template,export.sampling_geographic,Sampling - geographic,Échantillonnage - géographie,Muestreo - geografía,export.R,Worksheet label
+template,export.sampling_profile,Sampling - profile,Échantillonnage - profil,Muestreo - perfil,export.R,Worksheet label
+template,export.series,Series,Série,Serie,export.R,Export group
+template,report.behaviours_questions,Behaviours,Comportements,Comportamientos,,
+template,report.channel_questions,Channels,Canaux,Canales,,
+template,report.competencies,Competencies,Compétences,Competencias,,
+template,report.contextual_questions,Contextual questions,Questions contextuelles,Preguntas contextuales,,
+template,report.contextual_questions.text,"This section presents findings on community members’ experiences with and behaviors toward the Red Cross. These questions explore interactions, perceptions, and engagement patterns, offering insights into how the Red Cross is viewed and utilized within the community.","Cette section présente les résultats relatifs aux expériences des membres de la communauté avec la Croix-Rouge ainsi qu'à leurs comportements à son égard. Ces questions explorent les interactions, les perceptions et les modes d'engagement, afin de mieux comprendre comment la Croix-Rouge est perçue et sollicitée au sein des communautés.","sta sección presenta los resultados sobre las experiencias de los miembros de la comunidad con la Cruz Roja y sus comportamientos hacia ella. Estas preguntas exploran las interacciones, las percepciones y los patrones de participación, con el fin de comprender mejor cómo la Cruz Roja es percibida y utilizada dentro de las comunidades.",,
+template,report.correlation,Correlation,Corrélation,Correlación,,
+template,report.coverage,Coverage,Couverture,Cobertura,,
+template,report.download,Download,Télécharger,Descargar,,
+template,report.download_button,Download Summary Excel File,Télécharger le fichier Excel de synthèse,Descargar el archivo Excel de resumen,,
+template,report.drivers,Perception of trust,Perception de la confiance,Percepción de la confianza,,
+template,report.exp_questions,Experiences,Expériences,Experiencias,,
+template,report.gender,Gender and Age,Genre et âge,Género y edad,,
+template,report.geographic_distribution,Geographic distribution,Distribution géographique,Muestreo,,
+template,report.insights,Key insights,Points clés,Puntos clave,,
+template,report.intention_questions,Intention,Intentions,Intenciones,,
+template,report.knowledge_questions,Awareness of communities,Sensibilisation des communautés,Conocimiento de las comunidades,,
+template,report.methods,Methods,Méthodes,Métodos,,
+template,report.methods_metrics,Methods and Metrics,Méthodes et indicateurs,Métodos e indicadores,,
+template,report.metrics,Metrics,Indicateurs,Indicadores,,
+template,report.results,Survey Results,Résultats de l'enquête,Resultados de la encuesta,,
+template,report.sampling,Sampling,Échantillonnage,Muestreo,,
+template,report.score,Scores,Scores,Puntuaciones,,
+template,report.score_factors,Score by factors,Score par facteurs,Puntuación por factores,,
+template,report.score_overall,Overall Score,Score global,Puntuación general,,
+template,report.score_profile,Score by respondent profile,Score par profil des répondants,Puntuación por perfil de los encuestados,,
+template,report.scoring_methods,Scoring methodology,Méthodologie de calcul des scores,Metodología de puntuación,,
+template,report.significance_testing,Significance testing,Tests de significativité,Pruebas de significancia,,
+template,report.values,Values,Valeurs,Valores,,
+template,report.weighting,Weighting,Pondération,Ponderación,,
+template,report.weighting_comparison,Weighting vs. unweighting,Pondération vs. données non pondérées,Ponderación vs. datos no ponderados,,
+template,runtime.charts_loaded,Charts and visual outputs loaded,Graphiques et éléments visuels chargés,Gráficos y elementos visuales cargados,charts_advanced.R; charts.R; charts_score.R; charts_sampling.R; charts_drivers.R,Console message
+template,runtime.data_exported,Report data exported,Données du rapport exportées,Datos del informe exportados,export.R,Console message
+template,runtime.exporting_data,Exporting report data...,Exportation des données du rapport...,Exportando los datos del informe...,charts_sampling.R,Console message
+template,runtime.loading_charts,Loading charts and visual outputs...,Chargement des graphiques et des éléments visuels...,Cargando gráficos y elementos visuales...,export.R,Export column label
+template,runtime.sampling_charts_loaded,Sampling charts and visual outputs loaded,Graphiques d’échantillonnage et éléments visuels chargés,Gráficos de muestreo y elementos visuales cargados,charts_advanced.R; charts.R; charts_score.R; charts_drivers.R,Console message
+template,sampling.admin_levels_available,All administrative levels are available. Proceeding...,Tous les niveaux administratifs sont disponibles. Poursuite du traitement...,Todos los niveles administrativos están disponibles. Continuando...,charts_sampling.R,Error message
+template,sampling.category_data_missing,Data not available,Les données pour %s ne sont pas disponibles,Los datos de %s no están disponibles,charts_sampling.R,Placeholder message
+template,sampling.excluded_custom_note,Note: %s responses total %s%%.\nSource: %s,Note : les réponses %s représentent %s %%.\nSource : %s,Nota: las respuestas %s representan el %s%%.\nFuente: %s,charts_sampling.R,"Dynamic caption; percentage, source"
+template,sampling.excluded_standard_note,Note: 'Prefer not to answer' and 'Don't know' responses total %s%%.\nSource: %s,Note : les réponses « Préfère ne pas répondre » et « Ne sait pas » représentent %s %%.\nSource : %s,Nota: las respuestas «Prefiere no responder» y «No sabe» representan el %s%%.\nFuente: %s,charts_sampling.R,Runtime message
+template,sampling.from_survey,From survey,Données de l’enquête,Datos de la encuesta,charts_sampling.R,Chart title
+template,sampling.gender_excluded_note,Note: Other or unanswered responses total %s%%.\nSource:\nSurvey: %s - Population data: %s (%s),Note : les réponses « Autre » ou sans réponse représentent %s %%.\nSource :\nEnquête : %s - Données de population : %s (%s),Nota: las respuestas «Otro» o sin respuesta representan el %s%%.\nFuente:\nEncuesta: %s - Datos de población: %s (%s),charts_sampling.R,Dynamic caption; source
+template,sampling.gender_source_note,Source:\nSurvey: %s - Population data: %s (%s),Source :\nEnquête : %s - Données de population : %s (%s),Fuente:\nEncuesta: %s - Datos de población: %s (%s),charts_sampling.R,Dynamic caption; percentage and three sources
+template,sampling.geo_population_missing,Geographic population data not available,Les données géographiques de population ne sont pas disponibles,Los datos geográficos de población no están disponibles,charts_sampling.R,Placeholder message
+template,sampling.no_data_note,Note: 'no data' indicates unreported or unavailable values.\nSource: %s.,Note : « données indisponibles » indique des valeurs non déclarées ou non disponibles.\nSource : %s.,Nota: «datos no disponibles» indica valores no declarados o no disponibles.\nFuente: %s.,charts_sampling.R,"Dynamic caption; response list, percentage, source"
+template,sampling.no_matching_geographies,No matching geographies after join. Check join keys or spelling.,Aucune correspondance géographique après la jointure. Vérifiez les clés de jointure ou l’orthographe.,No hay geografías coincidentes después de la unión. Verifique las claves de unión o la ortografía.,charts_sampling.R,Dynamic placeholder; one %s argument
+template,sampling.other_regions,Other regions,Autres régions,Otras regiones,charts_sampling.R,Population pyramid title
+template,sampling.population,Population,Population,Población,charts_sampling.R,Chart subtitle
+template,sampling.region_column_missing,Region column missing from survey data,La variable région est absente des données de l’enquête,La variable de región no está disponible en los datos de la encuesta,charts_sampling.R,Map legend title
+template,sampling.survey,Survey,Enquête,Encuesta,charts_sampling.R,Chart title/series label
+template,sampling.survey_vs_population,Survey vs. population data,Comparaison entre les données de l’enquête et de la population,Comparación entre los datos de la encuesta y de la población,charts_sampling.R,Series/caption label
+template,sampling.title,Sampling,Échantillonnage,Muestreo,,
+template,sampling.total_respondents_map,Total respondents,Nombre total de répondants,Número total de personas encuestadas,charts_sampling.R,Generated geographic category/comment label
+template,score.competencies,Competencies,Compétences,Competencias,charts_sampling.R,Dynamic caption; three source values
+template,score.competency,Competency,Compétence,Competencia,charts_score.R; charts.R; export.R,Chart/export label
+template,score.dimension,Dimension,Dimension,Dimensión,export.R,Module/export label
+template,score.drivers,Drivers,Facteurs,Factores,charts_advanced.R; charts.R; export.R,Facet/export label
+template,score.group,Group,Groupe,Grupo,charts_advanced.R; charts.R,Axis label
+template,score.institutional,Institutional,Institutionnel,Institucional,export.R,Export sheet label
+template,score.mean,Mean,Moyenne,Promedio,charts_score.R,Legend/data label
+template,score.overall_competencies,Overall competencies,Compétences globales,Competencias generales,charts_score.R; export.R,Dimension label
+template,score.overall_values,Overall values,Valeurs globales,Valores generales,charts_score.R,Generated score row
+template,score.score_variation,Score variation,Variation du score,Variación de la puntuación,charts_advanced.R; charts.R; export.R,Axis/export label
+template,score.trust_index,Trust Index,Indice de confiance,Índice de confianza,charts_score.R,Generated score row
+template,score.value,Value,Valeur,Valor,charts_score.R; export.R,Dimension label
+template,score.values,Values,Valeurs,Valores,charts_score.R; charts.R; export.R,Chart/export label
+template,table.adm1_missing,"The adm1 variable is missing, empty, or does not correspond to a column in the dataset.","La variable adm1 est absente, vide ou ne correspond à aucune colonne du jeu de données.","La variable adm1 falta, está vacía o no corresponde a ninguna columna del conjunto de datos.",charts.R; tables.R,Dynamic geographic caption; three levels
+template,table.age_group,Age group,Groupe d’âge,Grupo de edad,charts.R; tables.R; export.R,Table/export label
+template,table.gender,Gender,Genre,Género,charts_drivers.R,Experience response category
+template,table.geo,Geographic,Géographique,Geográfico,charts.R; tables.R; export.R,Table/export label
+template,table.profile,Profile,Profil,Perfil,charts.R; tables.R; export.R,Table/export label
+template,table.respondents_by_age_group,Respondents by age group,Répondants par groupe d’âge,Personas encuestadas por grupo de edad,charts.R,Table caption
+template,table.respondents_by_gender,Respondents by gender,Répondants par genre,Personas encuestadas por género,charts.R; tables.R,Table header
+template,table.respondents_by_one_level,Respondents by %s,Répondants par %s,Personas encuestadas por %s,charts.R,Table caption
+template,table.respondents_by_rc_relationship,Respondents by relationship with the Red Cross,Répondants selon leur relation avec la Croix-Rouge,Personas encuestadas según su relación con la Cruz Roja,charts.R,Table caption
+template,table.respondents_by_three_levels,"Respondents by %s, %s and %s","Répondants par %s, %s et %s","Personas encuestadas por %s, %s y %s",charts.R; tables.R,Dynamic geographic caption; two levels
+template,table.respondents_by_two_levels,Respondents by %s and %s,Répondants par %s et %s,Personas encuestadas por %s y %s,charts.R; tables.R,Dynamic geographic caption; one level
+variable,admin1.long,Department,Département,Departamento,question_code,Question long label
+variable,admin1.short,Province,Province,Provincia,question_code,Question short label
+variable,admin2.long,Municipality,Commune,Municipio,question_code,Question long label
+variable,admin2.short,Municipality,Commune,Municipio,question_code,Question short label
+variable,age.long,How old are you?,Quel âge avez-vous ?,¿Qué edad tiene?,question_code,Question long label
+variable,age.short,Age,Âge,Edad,question_code,Question short label
+variable,BEFORE_beneficiary.long,Have you received aid or support from the Red Cross?,Avez-vous déjà reçu une aide ou un soutien de la Croix-Rouge ?,¿Ha recibido alguna vez ayuda o apoyo de la Cruz Roja?,question_code,Question long label
+variable,BEFORE_beneficiary.short,Once beneficiary,A déjà reçu un soutien,Recibió apoyo anteriormente,question_code,Question short label
+variable,BEFORE_donation.long,Have you ever made a donation to the Red Cross?,Avez-vous déjà fait un don à la Croix-Rouge ?,¿Ha hecho alguna vez una donación a la Cruz Roja?,question_code,Question long label
+variable,BEFORE_donation.short,Donated to the Red Cross,A fait un don à la Croix-Rouge,Hizo una donación a la Cruz Roja,question_code,Question short label
+variable,BEFORE_follow_advice.long,Have you ever followed the advice you received from the Red Cross in a crisis situation?,Avez-vous déjà suivi les conseils reçus de la Croix-Rouge en situation de crise ?,¿Ha seguido alguna vez los consejos recibidos de la Cruz Roja en una situación de crisis?,question_code,Question long label
+variable,BEFORE_follow_advice.short,Followed the Red Cross recommendations,A suivi les recommandations de la Croix-Rouge,Siguió las recomendaciones de la Cruz Roja,question_code,Question short label
+variable,BEFORE_recommend.long,Have you ever recommended the Red Cross to people who need support?,Avez-vous déjà recommandé la Croix-Rouge à des personnes ayant besoin de soutien ?,¿Ha recomendado alguna vez la Cruz Roja a personas que necesitan apoyo?,question_code,Question long label
+variable,BEFORE_recommend.short,Recommended the Red Cross,A recommandé la Croix-Rouge,Recomendó la Cruz Roja,question_code,Question short label
+variable,BEFORE_request_support.long,Have you ever requested support from the Red Cross?,Avez-vous déjà demandé du soutien à la Croix-Rouge ?,¿Ha solicitado alguna vez apoyo de la Cruz Roja?,question_code,Question long label
+variable,BEFORE_request_support.short,Requested Red Cross services,A demandé le soutien de la Croix-Rouge,Solicitó apoyo de la Cruz Roja,question_code,Question short label
+variable,BEFORE_shared_feedback.long,Have you ever shared feedback to the Red Cross?,Avez-vous déjà donné votre avis à la Croix-Rouge ?,¿Ha dado alguna vez su opinión a la Cruz Roja?,question_code,Question long label
+variable,BEFORE_shared_feedback.short,Shared feedback,A donné son avis,Dio retroalimentación,question_code,Question short label
+variable,BEFORE_shared_information.long,Have you ever shared information from the Red Cross with others?,Avez-vous déjà partagé avec d’autres des informations de la Croix-Rouge ?,¿Ha compartido alguna vez con otras personas información de la Cruz Roja?,question_code,Question long label
+variable,BEFORE_shared_information.short,Shared information,A partagé des informations,Compartió información,question_code,Question short label
+variable,BEFORE_volunteer.long,Have you ever volunteered at the Red Cross?,Avez-vous déjà été volontaire à la Croix-Rouge ?,¿Ha sido alguna vez voluntario en la Cruz Roja?,question_code,Question long label
+variable,BEFORE_volunteer.short,Volunteered at the Red Cross,A été volontaire à la Croix-Rouge,Fue voluntario en la Cruz Roja,question_code,Question short label
+variable,COMP_accessible.long,Do you think it is easy to talk to a staff or volunteer from the Red Cross?,Pensez-vous qu’il est facile de parler à un membre du personnel ou à un volontaire de la Croix-Rouge ?,¿Cree que es fácil hablar con un miembro del personal o un voluntario de la Cruz Roja?,question_code,Question long label
+variable,COMP_accessible.short,Accessible,Accessibilité,Accesibilidad,question_code,Question short label
+variable,COMP_awareness.long,Do you think the Red Cross understands the needs of the people it supports?,Pensez-vous que la Croix-Rouge comprend les besoins des personnes qu’elle soutient ?,¿Cree que la Cruz Roja comprende las necesidades de las personas a las que apoya?,question_code,Question long label
+variable,COMP_awareness.short,Awareness,Compréhension,Conocimiento,question_code,Question short label
+variable,COMP_capability.long,Do you think the Red Cross is capable of helping people?,Pensez-vous que la Croix-Rouge est capable d’aider les personnes ?,¿Cree que la Cruz Roja es capaz de ayudar a las personas?,question_code,Question long label
+variable,COMP_capability.short,Capability,Capacité,Capacidad,question_code,Question short label
+variable,COMP_effectiveness.long,Do you think the Red Cross provides the right kinds of assistance to the people it supports?,Pensez-vous que la Croix-Rouge fournit les types d’aide appropriés aux personnes qu’elle soutient ?,¿Cree que la Cruz Roja proporciona los tipos de ayuda adecuados a las personas a las que apoya?,question_code,Question long label
+variable,COMP_effectiveness.short,Effectiveness,Efficacité,Eficacia,question_code,Question short label
+variable,COMP_feedback.long,Do you feel comfortable submitting a complaint to the Red Cross?,Vous sentez-vous à l’aise pour déposer une plainte auprès de la Croix-Rouge ?,¿Se siente cómodo presentando una queja a la Cruz Roja?,question_code,Question long label
+variable,COMP_feedback.short,Openness,Ouverture,Apertura,question_code,Question short label
+variable,COMP_relevance.long,Do you think the Red Cross provides useful information on what they do?,Pensez-vous que la Croix-Rouge fournit des informations utiles sur ses activités ?,¿Cree que la Cruz Roja proporciona información útil sobre lo que hace?,question_code,Question long label
+variable,COMP_relevance.short,Relevance,Pertinence,Pertinencia,question_code,Question short label
+variable,COMP_responsiveness.long,Do you think the Red Cross provides support to people in a timely manner?,Pensez-vous que la Croix-Rouge apporte son soutien aux personnes en temps utile ?,¿Cree que la Cruz Roja brinda apoyo a las personas de manera oportuna?,question_code,Question long label
+variable,COMP_responsiveness.short,Responsiveness,Réactivité,Capacidad de respuesta,question_code,Question short label
+variable,Date.long,Date,Date,Fecha,question_code,Question long label
+variable,Date.short,Date,Date,Fecha,question_code,Question short label
+variable,dimension.competencies,Competencies,Compétences,Competencias,charts_sampling.R,Dynamic caption; three source values
+variable,dimension.competency,Competency,Compétence,Competencia,charts_score.R; charts.R; export.R,Chart/export label
+variable,dimension.institutional,Institutional,Institutionnel,Institucional,export.R,Export sheet label
+variable,dimension.overall_competencies,Overall competencies,Compétences globales,Competencias generales,charts_score.R; export.R,Dimension label
+variable,dimension.overall_values,Overall values,Valeurs globales,Valores generales,charts_score.R,Generated score row
+variable,dimension.trust_index,Trust Index,Indice de confiance,Índice de confianza,charts_score.R,Generated score row
+variable,dimension.value,Value,Valeur,Valor,charts_score.R; export.R,Dimension label
+variable,dimension.values,Values,Valeurs,Valores,charts_score.R; charts.R; export.R,Chart/export label
+variable,disabilities.long,People living with disabilities,Personnes vivant avec un handicap,Personas con discapacidad,question_code,Question long label
+variable,disabilities.short,Disabilities,Handicap,Discapacidad,question_code,Question short label
+variable,education.long,What is the highest level of education you have completed?,Quel est le niveau d’études le plus élevé que vous avez terminé ?,¿Cuál es el nivel educativo más alto que ha completado?,question_code,Question long label
+variable,education.short,Education,Éducation,Educación,question_code,Question short label
+variable,eligible.long,Are you at least 18 years old?,Avez-vous au moins 18 ans ?,¿Tiene al menos 18 años?,question_code,Question long label
+variable,eligible.short,Eligibility,Éligibilité,Elegibilidad,question_code,Question short label
+variable,employment.long,What is your professional situation?,Quelle est votre situation professionnelle ?,¿Cuál es su situación profesional?,question_code,Question long label
+variable,employment.short,Employment,Emploi,Empleo,question_code,Question short label
+variable,gender.long,How would you describe your gender?,Comment décririez-vous votre genre ?,¿Cómo describiría su género?,question_code,Question long label
+variable,gender.short,Gender,Genre,Género,question_code,Question short label
+variable,INTENTION_donation.long,How likely are you to make a donation to the Red Cross?,Quelle est la probabilité que vous fassiez un don à la Croix-Rouge ?,¿Qué probabilidad hay de que haga una donación a la Cruz Roja?,question_code,Question long label
+variable,INTENTION_donation.short,Intention to donate to the Red Cross,Intention de faire un don à la Croix-Rouge,Intención de donar a la Cruz Roja,question_code,Question short label
+variable,INTENTION_follow_advice.long,How likely are you to follow the advice you receive from the Red Cross in a crisis situation?,Quelle est la probabilité que vous suiviez les conseils reçus de la Croix-Rouge en situation de crise ?,¿Qué probabilidad hay de que siga los consejos que recibe de la Cruz Roja en una situación de crisis?,question_code,Question long label
+variable,INTENTION_follow_advice.short,Intention to follow the Red Cross advice,Intention de suivre les conseils de la Croix-Rouge,Intención de seguir los consejos de la Cruz Roja,question_code,Question short label
+variable,INTENTION_recommend.long,How likely are you to recommend the Red Cross to the people who need support?,Quelle est la probabilité que vous recommandiez la Croix-Rouge aux personnes ayant besoin de soutien ?,¿Qué probabilidad hay de que recomiende la Cruz Roja a personas que necesitan apoyo?,question_code,Question long label
+variable,INTENTION_recommend.short,Intention to recommend the Red Cross,Intention de recommander la Croix-Rouge,Intención de recomendar la Cruz Roja,question_code,Question short label
+variable,INTENTION_request_support.long,How likely are you to request support from the Red Cross?,Quelle est la probabilité que vous demandiez du soutien à la Croix-Rouge ?,¿Qué probabilidad hay de que solicite apoyo a la Cruz Roja?,question_code,Question long label
+variable,INTENTION_request_support.short,Intention to request Red Cross support,Intention de demander le soutien de la Croix-Rouge,Intención de solicitar apoyo de la Cruz Roja,question_code,Question short label
+variable,INTENTION_shared_feedback.long,How likely are you to provide your feedback to the Red Cross?,Quelle est la probabilité que vous donniez votre avis à la Croix-Rouge ?,¿Qué probabilidad hay de que dé su opinión a la Cruz Roja?,question_code,Question long label
+variable,INTENTION_shared_feedback.short,Intention to provide feedback to Red Cross,Intention de donner un retour à la Croix-Rouge,Intención de dar retroalimentación a la Cruz Roja,question_code,Question short label
+variable,INTENTION_shared_information.long,How likely are you to share the information that you receive from the Red Cross with others?,Quelle est la probabilité que vous partagiez avec d’autres les informations reçues de la Croix-Rouge ?,¿Qué probabilidad hay de que comparta con otras personas la información que recibe de la Cruz Roja?,question_code,Question long label
+variable,INTENTION_shared_information.short,Intention to share Red Cross information,Intention de partager les informations de la Croix-Rouge,Intención de compartir información de la Cruz Roja,question_code,Question short label
+variable,INTENTION_volunteer.long,How likely are you to volunteer at the Red Cross?,Quelle est la probabilité que vous deveniez volontaire à la Croix-Rouge ?,¿Qué probabilidad hay de que sea voluntario en la Cruz Roja?,question_code,Question long label
+variable,INTENTION_volunteer.short,Intention to volunteer at the Red Cross,Intention de devenir volontaire à la Croix-Rouge,Intención de ser voluntario en la Cruz Roja,question_code,Question short label
+variable,know_RC.long,Have you heard of the Burundian Red Cross?,Avez-vous entendu parler de la Croix-Rouge du Burundi ?,¿Ha oído hablar de la Cruz Roja de Burundi?,question_code,Question long label
+variable,know_RC.short,Heard of RC,Connaissance de la Croix-Rouge,Conocimiento de la Cruz Roja,question_code,Question short label
+variable,language.long,What is your main language?,Quelle est votre langue principale ?,¿Cuál es su idioma principal?,question_code,Question long label
+variable,language.short,Language,Langue,Idioma,question_code,Question short label
+variable,localities.long,Zone,Zone,Zona,question_code,Question long label
+variable,localities.short,Zone,Zone,Zona,question_code,Question short label
+variable,native.long,Are you currently living in the country where you were born?,Vivez-vous actuellement dans le pays où vous êtes né(e) ?,¿Vive actualmente en el país donde nació?,question_code,Question long label
+variable,native.short,Born in Burundi,Né au Burundi,Nacido en Burundi,question_code,Question short label
+variable,VALUES_Engagement.long,Do you think the Red Cross asks local communities what support they need?,Pensez-vous que la Croix-Rouge demande aux communautés locales de quel soutien elles ont besoin ?,¿Cree que la Cruz Roja pregunta a las comunidades locales qué apoyo necesitan?,question_code,Question long label
+variable,VALUES_Engagement.short,Engagement,Engagement,Participación,question_code,Question short label
+variable,VALUES_fairness.long,Do you think the Red Cross provides support to the people who need it the most?,Pensez-vous que la Croix-Rouge apporte son soutien aux personnes qui en ont le plus besoin ?,¿Cree que la Cruz Roja brinda apoyo a las personas que más lo necesitan?,question_code,Question long label
+variable,VALUES_fairness.short,Fairness,Équité,Equidad,question_code,Question short label
+variable,VALUES_inclusiveness.long,Do you think the Red Cross provides support to all people without discrimination?,Pensez-vous que la Croix-Rouge apporte son soutien à toutes les personnes sans discrimination ?,¿Cree que la Cruz Roja brinda apoyo a todas las personas sin discriminación?,question_code,Question long label
+variable,VALUES_inclusiveness.short,Inclusiveness,Inclusivité,Inclusión,question_code,Question short label
+variable,VALUES_Integrity.long,Do you think the Red Cross is responsible in how its funds are spent?,Pensez-vous que la Croix-Rouge gère ses fonds de manière responsable ?,¿Cree que la Cruz Roja gestiona sus fondos de manera responsable?,question_code,Question long label
+variable,VALUES_Integrity.short,Integrity,Intégrité,Integridad,question_code,Question short label
+variable,VALUES_kindness.long,"Do you think the Red Cross puts the people it supports and their needs first, above anything else?",Pensez-vous que la Croix-Rouge place les personnes qu’elle soutient et leurs besoins avant toute autre considération ?,¿Cree que la Cruz Roja pone a las personas a las que apoya y sus necesidades por encima de todo lo demás?,question_code,Question long label
+variable,VALUES_kindness.short,Kindness,Bienveillance,Amabilidad,question_code,Question short label
+variable,VALUES_Neutrality.long,Do you think the Red Cross is independent of the government?,Pensez-vous que la Croix-Rouge est indépendante du gouvernement ?,¿Cree que la Cruz Roja es independiente del gobierno?,question_code,Question long label
+variable,VALUES_Neutrality.short,Neutrality,Neutralité,Neutralidad,question_code,Question short label
+variable,VALUES_Respectfulness.long,Do you think the Red Cross respects people’s cultures and personal beliefs?,Pensez-vous que la Croix-Rouge respecte les cultures et les croyances personnelles des personnes ?,¿Cree que la Cruz Roja respeta las culturas y creencias personales de las personas?,question_code,Question long label
+variable,VALUES_Respectfulness.short,Respectfulness,Respect,Respeto,question_code,Question short label
+variable,VALUES_Transparency.long,"If the Red Cross made a big mistake in how they provide support to people, do you think it will share it publicly?","Si la Croix-Rouge commettait une erreur importante dans la manière dont elle apporte son soutien, pensez-vous qu’elle la rendrait publique ?","Si la Cruz Roja cometiera un error importante en la forma de brindar apoyo, ¿cree que lo haría público?",question_code,Question long label
+variable,VALUES_Transparency.short,Transparency,Transparence,Transparencia,question_code,Question short label
+answer,age_18_29,18-29,18-29,18-29,data / charts / tables,Age category
+answer,age_20_29,20-29,20-29,20-29,data / charts / tables,Age category
+answer,age_30_39,30-39,30-39,30-39,data / charts / tables,Age category
+answer,age_40_49,40-49,40-49,40-49,data / charts / tables,Age category
+answer,age_50_59,50-59,50-59,50-59,data / charts / tables,Age category
+answer,age_60_plus,60+,60+,60+,data / charts / tables,Age category
+answer,dont_know,Don't know,Ne sais pas,No sabe,survey / charts / tables,Response/data category
+answer,education.none,None,Aucun,Ninguno,data / charts / tables,Education category
+answer,education.primary,Primary,Primaire,Primaria,data / charts / tables,Education category
+answer,education.professional,Professional,Formation professionnelle,Formación profesional,data / charts / tables,Education category
+answer,education.secondary,Secondary,Secondaire,Secundaria,data / charts / tables,Education category
+answer,education.university,University,Université,Universidad,data / charts / tables,Education category
+answer,education.vocational,Vocational,Formation professionnelle,Formación profesional,data / charts / tables,Education category
+answer,employment.employee,Employee,Salarié,Empleado,data / charts / tables,Employment category
+answer,employment.farming,Farming,Agriculture,Agricultura,data / charts / tables,Employment category
+answer,employment.informal,Informal employment,Emploi informel,Empleo informal,data / charts / tables,Employment category
+answer,employment.irregular_informal,Irregular/Informal Employment,Emploi irrégulier/informel,Empleo irregular/informal,data / charts / tables,Employment category
+answer,employment.not_active,Not active,Inactif,Inactivo,data / charts / tables,Employment category
+answer,employment.regular_partial,Regular/Partial Employment,Emploi régulier/partiel,Empleo regular/parcial,data / charts / tables,Employment category
+answer,employment.self_employment,Self-employment,Travail indépendant,Trabajo por cuenta propia,data / charts / tables,Employment category
+answer,employment.student,Student,Étudiant,Estudiante,data / charts / tables,Employment category
+answer,employment.unemployed,Unemployed,Sans emploi,Desempleado,data / charts / tables,Employment category
+answer,gender.female,Female,Femme,Mujer,survey / charts / tables,Response/data category
+answer,gender.male,Male,Homme,Hombre,survey / charts / tables,Response/data category
+answer,gender.other_or_no_answer,Other or did not answer,Autre ou sans réponse,Otro o sin respuesta,charts.R; tables.R,Gender category
+answer,likely,Likely,Probable,Probable,survey / charts / tables,Response/data category
+answer,mostly_agree,Mostly agree,Plutôt d’accord,Mayormente de acuerdo,charts_drivers.R,Response category/order
+answer,mostly_disagree,Mostly disagree,Plutôt pas d’accord,Mayormente en desacuerdo,charts_drivers.R,Response category/order
+answer,mostly_yes,Mostly yes,Plutôt oui,Mayormente sí,survey / charts / tables,Response/data category
+answer,na,N/A,N/A,N/A,data / charts / tables,Generic response category
+answer,no,No,Non,No,survey / charts / tables,Response/data category
+answer,no_answer,No answer,Sans réponse,Sin respuesta,survey / charts / tables,Response/data category
+answer,no_data,No data,Données indisponibles,Datos no disponibles,survey / charts / tables,Response/data category
+answer,not_applicable,Not applicable,Non applicable,No aplica,data / charts / tables,Generic response category
+answer,not_at_all,Not at all,Pas du tout,Para nada,survey / charts / tables,Response/data category
+answer,not_so_much,Not so much,Plutôt non,No mucho,survey / charts / tables,Response/data category
+answer,other,Other,Autre,Otro,survey / charts / tables,Response/data category
+answer,prefer_not_answer,Prefer not to answer,Préfère ne pas répondre,Prefiere no responder,survey / charts / tables,Response/data category
+answer,profile.receiving_support,People receiving support,Personnes recevant un soutien,Personas que reciben apoyo,data / charts / tables,Respondent profile
+answer,profile.recipient,Recipient,Bénéficiaire,Beneficiario,data / charts / tables,Respondent profile
+answer,profile.recipients,Recipients,Bénéficiaires,Beneficiarios,data / charts / tables,Respondent profile
+answer,profile.volunteer,Volunteer,Volontaire,Voluntario,data / charts / tables,Respondent profile
+answer,profile.volunteers,Volunteers,Volontaires,Voluntarios,data / charts / tables,Respondent profile
+answer,somewhat_positively,Somewhat positively,Plutôt positivement,Algo positivamente,charts_drivers.R,Experience response category
+answer,strongly_agree,Strongly agree,Tout à fait d’accord,Totalmente de acuerdo,charts_sampling.R,Response category in notes
+answer,strongly_disagree,Strongly disagree,Pas du tout d’accord,Totalmente en desacuerdo,charts_drivers.R,Response category/order
+answer,unlikely,Unlikely,Peu probable,Poco probable,survey / charts / tables,Response/data category
+answer,very_likely,Very likely,Très probable,Muy probable,survey / charts / tables,Response/data category
+answer,very_positively,Very positively,Très positivement,Muy positivamente,charts_drivers.R,Response category/order
+answer,very_unlikely,Very unlikely,Très peu probable,Muy poco probable,survey / charts / tables,Response/data category
+answer,yes,Yes,Oui,Sí,survey / charts / tables,Response/data category
+answer,yes_completely,Yes completely,"Oui, complètement","Sí, completamente",survey / charts / tables,Response/data category
+answer,yes_mostly,"Yes, mostly","Oui, dans l’ensemble","Sí, en su mayoría",charts_drivers.R,Experience response category
