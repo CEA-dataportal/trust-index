@@ -98,12 +98,40 @@ template,table.respondents_by_one_level,Respondents by %s,Répondants par %s,Per
 template,table.respondents_by_rc_relationship,Respondents by relationship with the Red Cross,Répondants selon leur relation avec la Croix-Rouge,Personas encuestadas según su relación con la Cruz Roja,charts.R,Table caption
 template,table.respondents_by_three_levels,"Respondents by %s, %s and %s","Répondants par %s, %s et %s","Personas encuestadas por %s, %s y %s",charts.R; tables.R,Dynamic geographic caption; two levels
 template,table.respondents_by_two_levels,Respondents by %s and %s,Répondants par %s et %s,Personas encuestadas por %s y %s,charts.R; tables.R,Dynamic geographic caption; one level
+variable,dimension.competencies,Competencies,Compétences,Competencias,charts_sampling.R,Dynamic caption; three source values
+variable,dimension.competency,Competency,Compétence,Competencia,charts_score.R; charts.R; export.R,Chart/export label
+variable,dimension.institutional,Institutional,Institutionnel,Institucional,export.R,Export sheet label
+variable,dimension.overall_competencies,Overall competencies,Compétences globales,Competencias generales,charts_score.R; export.R,Dimension label
+variable,dimension.overall_values,Overall values,Valeurs globales,Valores generales,charts_score.R,Generated score row
+variable,dimension.trust_index,Trust Index,Indice de confiance,Índice de confianza,charts_score.R,Generated score row
+variable,dimension.value,Value,Valeur,Valor,charts_score.R; export.R,Dimension label
+variable,dimension.values,Values,Valeurs,Valores,charts_score.R; charts.R; export.R,Chart/export label
 variable,admin1.long,Department,Département,Departamento,question_code,Question long label
 variable,admin1.short,Province,Province,Provincia,question_code,Question short label
 variable,admin2.long,Municipality,Commune,Municipio,question_code,Question long label
 variable,admin2.short,Municipality,Commune,Municipio,question_code,Question short label
 variable,age.long,How old are you?,Quel âge avez-vous ?,¿Qué edad tiene?,question_code,Question long label
 variable,age.short,Age,Âge,Edad,question_code,Question short label
+variable,Date.long,Date,Date,Fecha,question_code,Question long label
+variable,Date.short,Date,Date,Fecha,question_code,Question short label
+variable,know_RC.long,Have you heard of the Burundian Red Cross?,Avez-vous entendu parler de la Croix-Rouge du Burundi ?,¿Ha oído hablar de la Cruz Roja de Burundi?,question_code,Question long label
+variable,know_RC.short,Heard of RC,Connaissance de la Croix-Rouge,Conocimiento de la Cruz Roja,question_code,Question short label
+variable,language.long,What is your main language?,Quelle est votre langue principale ?,¿Cuál es su idioma principal?,question_code,Question long label
+variable,language.short,Language,Langue,Idioma,question_code,Question short label
+variable,localities.long,Zone,Zone,Zona,question_code,Question long label
+variable,localities.short,Zone,Zone,Zona,question_code,Question short label
+variable,native.long,Are you currently living in the country where you were born?,Vivez-vous actuellement dans le pays où vous êtes né(e) ?,¿Vive actualmente en el país donde nació?,question_code,Question long label
+variable,native.short,Born in Burundi,Né au Burundi,Nacido en Burundi,question_code,Question short label
+variable,disabilities.long,People living with disabilities,Personnes vivant avec un handicap,Personas con discapacidad,question_code,Question long label
+variable,disabilities.short,Disabilities,Handicap,Discapacidad,question_code,Question short label
+variable,education.long,What is the highest level of education you have completed?,Quel est le niveau d’études le plus élevé que vous avez terminé ?,¿Cuál es el nivel educativo más alto que ha completado?,question_code,Question long label
+variable,education.short,Education,Éducation,Educación,question_code,Question short label
+variable,eligible.long,Are you at least 18 years old?,Avez-vous au moins 18 ans ?,¿Tiene al menos 18 años?,question_code,Question long label
+variable,eligible.short,Eligibility,Éligibilité,Elegibilidad,question_code,Question short label
+variable,employment.long,What is your professional situation?,Quelle est votre situation professionnelle ?,¿Cuál es su situación profesional?,question_code,Question long label
+variable,employment.short,Employment,Emploi,Empleo,question_code,Question short label
+variable,gender.long,How would you describe your gender?,Comment décririez-vous votre genre ?,¿Cómo describiría su género?,question_code,Question long label
+variable,gender.short,Gender,Genre,Género,question_code,Question short label
 variable,BEFORE_beneficiary.long,Have you received aid or support from the Red Cross?,Avez-vous déjà reçu une aide ou un soutien de la Croix-Rouge ?,¿Ha recibido alguna vez ayuda o apoyo de la Cruz Roja?,question_code,Question long label
 variable,BEFORE_beneficiary.short,Once beneficiary,A déjà reçu un soutien,Recibió apoyo anteriormente,question_code,Question short label
 variable,BEFORE_donation.long,Have you ever made a donation to the Red Cross?,Avez-vous déjà fait un don à la Croix-Rouge ?,¿Ha hecho alguna vez una donación a la Cruz Roja?,question_code,Question long label
@@ -120,40 +148,6 @@ variable,BEFORE_shared_information.long,Have you ever shared information from th
 variable,BEFORE_shared_information.short,Shared information,A partagé des informations,Compartió información,question_code,Question short label
 variable,BEFORE_volunteer.long,Have you ever volunteered at the Red Cross?,Avez-vous déjà été volontaire à la Croix-Rouge ?,¿Ha sido alguna vez voluntario en la Cruz Roja?,question_code,Question long label
 variable,BEFORE_volunteer.short,Volunteered at the Red Cross,A été volontaire à la Croix-Rouge,Fue voluntario en la Cruz Roja,question_code,Question short label
-variable,COMP_accessible.long,Do you think it is easy to talk to a staff or volunteer from the Red Cross?,Pensez-vous qu’il est facile de parler à un membre du personnel ou à un volontaire de la Croix-Rouge ?,¿Cree que es fácil hablar con un miembro del personal o un voluntario de la Cruz Roja?,question_code,Question long label
-variable,COMP_accessible.short,Accessible,Accessibilité,Accesibilidad,question_code,Question short label
-variable,COMP_awareness.long,Do you think the Red Cross understands the needs of the people it supports?,Pensez-vous que la Croix-Rouge comprend les besoins des personnes qu’elle soutient ?,¿Cree que la Cruz Roja comprende las necesidades de las personas a las que apoya?,question_code,Question long label
-variable,COMP_awareness.short,Awareness,Compréhension,Conocimiento,question_code,Question short label
-variable,COMP_capability.long,Do you think the Red Cross is capable of helping people?,Pensez-vous que la Croix-Rouge est capable d’aider les personnes ?,¿Cree que la Cruz Roja es capaz de ayudar a las personas?,question_code,Question long label
-variable,COMP_capability.short,Capability,Capacité,Capacidad,question_code,Question short label
-variable,COMP_effectiveness.long,Do you think the Red Cross provides the right kinds of assistance to the people it supports?,Pensez-vous que la Croix-Rouge fournit les types d’aide appropriés aux personnes qu’elle soutient ?,¿Cree que la Cruz Roja proporciona los tipos de ayuda adecuados a las personas a las que apoya?,question_code,Question long label
-variable,COMP_effectiveness.short,Effectiveness,Efficacité,Eficacia,question_code,Question short label
-variable,COMP_feedback.long,Do you feel comfortable submitting a complaint to the Red Cross?,Vous sentez-vous à l’aise pour déposer une plainte auprès de la Croix-Rouge ?,¿Se siente cómodo presentando una queja a la Cruz Roja?,question_code,Question long label
-variable,COMP_feedback.short,Openness,Ouverture,Apertura,question_code,Question short label
-variable,COMP_relevance.long,Do you think the Red Cross provides useful information on what they do?,Pensez-vous que la Croix-Rouge fournit des informations utiles sur ses activités ?,¿Cree que la Cruz Roja proporciona información útil sobre lo que hace?,question_code,Question long label
-variable,COMP_relevance.short,Relevance,Pertinence,Pertinencia,question_code,Question short label
-variable,COMP_responsiveness.long,Do you think the Red Cross provides support to people in a timely manner?,Pensez-vous que la Croix-Rouge apporte son soutien aux personnes en temps utile ?,¿Cree que la Cruz Roja brinda apoyo a las personas de manera oportuna?,question_code,Question long label
-variable,COMP_responsiveness.short,Responsiveness,Réactivité,Capacidad de respuesta,question_code,Question short label
-variable,Date.long,Date,Date,Fecha,question_code,Question long label
-variable,Date.short,Date,Date,Fecha,question_code,Question short label
-variable,dimension.competencies,Competencies,Compétences,Competencias,charts_sampling.R,Dynamic caption; three source values
-variable,dimension.competency,Competency,Compétence,Competencia,charts_score.R; charts.R; export.R,Chart/export label
-variable,dimension.institutional,Institutional,Institutionnel,Institucional,export.R,Export sheet label
-variable,dimension.overall_competencies,Overall competencies,Compétences globales,Competencias generales,charts_score.R; export.R,Dimension label
-variable,dimension.overall_values,Overall values,Valeurs globales,Valores generales,charts_score.R,Generated score row
-variable,dimension.trust_index,Trust Index,Indice de confiance,Índice de confianza,charts_score.R,Generated score row
-variable,dimension.value,Value,Valeur,Valor,charts_score.R; export.R,Dimension label
-variable,dimension.values,Values,Valeurs,Valores,charts_score.R; charts.R; export.R,Chart/export label
-variable,disabilities.long,People living with disabilities,Personnes vivant avec un handicap,Personas con discapacidad,question_code,Question long label
-variable,disabilities.short,Disabilities,Handicap,Discapacidad,question_code,Question short label
-variable,education.long,What is the highest level of education you have completed?,Quel est le niveau d’études le plus élevé que vous avez terminé ?,¿Cuál es el nivel educativo más alto que ha completado?,question_code,Question long label
-variable,education.short,Education,Éducation,Educación,question_code,Question short label
-variable,eligible.long,Are you at least 18 years old?,Avez-vous au moins 18 ans ?,¿Tiene al menos 18 años?,question_code,Question long label
-variable,eligible.short,Eligibility,Éligibilité,Elegibilidad,question_code,Question short label
-variable,employment.long,What is your professional situation?,Quelle est votre situation professionnelle ?,¿Cuál es su situación profesional?,question_code,Question long label
-variable,employment.short,Employment,Emploi,Empleo,question_code,Question short label
-variable,gender.long,How would you describe your gender?,Comment décririez-vous votre genre ?,¿Cómo describiría su género?,question_code,Question long label
-variable,gender.short,Gender,Genre,Género,question_code,Question short label
 variable,INTENTION_donation.long,How likely are you to make a donation to the Red Cross?,Quelle est la probabilité que vous fassiez un don à la Croix-Rouge ?,¿Qué probabilidad hay de que haga una donación a la Cruz Roja?,question_code,Question long label
 variable,INTENTION_donation.short,Intention to donate to the Red Cross,Intention de faire un don à la Croix-Rouge,Intención de donar a la Cruz Roja,question_code,Question short label
 variable,INTENTION_follow_advice.long,How likely are you to follow the advice you receive from the Red Cross in a crisis situation?,Quelle est la probabilité que vous suiviez les conseils reçus de la Croix-Rouge en situation de crise ?,¿Qué probabilidad hay de que siga los consejos que recibe de la Cruz Roja en una situación de crisis?,question_code,Question long label
@@ -168,14 +162,20 @@ variable,INTENTION_shared_information.long,How likely are you to share the infor
 variable,INTENTION_shared_information.short,Intention to share Red Cross information,Intention de partager les informations de la Croix-Rouge,Intención de compartir información de la Cruz Roja,question_code,Question short label
 variable,INTENTION_volunteer.long,How likely are you to volunteer at the Red Cross?,Quelle est la probabilité que vous deveniez volontaire à la Croix-Rouge ?,¿Qué probabilidad hay de que sea voluntario en la Cruz Roja?,question_code,Question long label
 variable,INTENTION_volunteer.short,Intention to volunteer at the Red Cross,Intention de devenir volontaire à la Croix-Rouge,Intención de ser voluntario en la Cruz Roja,question_code,Question short label
-variable,know_RC.long,Have you heard of the Burundian Red Cross?,Avez-vous entendu parler de la Croix-Rouge du Burundi ?,¿Ha oído hablar de la Cruz Roja de Burundi?,question_code,Question long label
-variable,know_RC.short,Heard of RC,Connaissance de la Croix-Rouge,Conocimiento de la Cruz Roja,question_code,Question short label
-variable,language.long,What is your main language?,Quelle est votre langue principale ?,¿Cuál es su idioma principal?,question_code,Question long label
-variable,language.short,Language,Langue,Idioma,question_code,Question short label
-variable,localities.long,Zone,Zone,Zona,question_code,Question long label
-variable,localities.short,Zone,Zone,Zona,question_code,Question short label
-variable,native.long,Are you currently living in the country where you were born?,Vivez-vous actuellement dans le pays où vous êtes né(e) ?,¿Vive actualmente en el país donde nació?,question_code,Question long label
-variable,native.short,Born in Burundi,Né au Burundi,Nacido en Burundi,question_code,Question short label
+variable,COMP_accessible.long,Do you think it is easy to talk to a staff or volunteer from the Red Cross?,Pensez-vous qu’il est facile de parler à un membre du personnel ou à un volontaire de la Croix-Rouge ?,¿Cree que es fácil hablar con un miembro del personal o un voluntario de la Cruz Roja?,question_code,Question long label
+variable,COMP_accessible.short,Accessible,Accessibilité,Accesibilidad,question_code,Question short label
+variable,COMP_awareness.long,Do you think the Red Cross understands the needs of the people it supports?,Pensez-vous que la Croix-Rouge comprend les besoins des personnes qu’elle soutient ?,¿Cree que la Cruz Roja comprende las necesidades de las personas a las que apoya?,question_code,Question long label
+variable,COMP_awareness.short,Awareness,Compréhension,Conocimiento,question_code,Question short label
+variable,COMP_capability.long,Do you think the Red Cross is capable of helping people?,Pensez-vous que la Croix-Rouge est capable d’aider les personnes ?,¿Cree que la Cruz Roja es capaz de ayudar a las personas?,question_code,Question long label
+variable,COMP_capability.short,Capability,Capacité,Capacidad,question_code,Question short label
+variable,COMP_effectiveness.long,Do you think the Red Cross provides the right kinds of assistance to the people it supports?,Pensez-vous que la Croix-Rouge fournit les types d’aide appropriés aux personnes qu’elle soutient ?,¿Cree que la Cruz Roja proporciona los tipos de ayuda adecuados a las personas a las que apoya?,question_code,Question long label
+variable,COMP_effectiveness.short,Effectiveness,Efficacité,Eficacia,question_code,Question short label
+variable,COMP_feedback.long,Do you feel comfortable submitting a complaint to the Red Cross?,Vous sentez-vous à l’aise pour déposer une plainte auprès de la Croix-Rouge ?,¿Se siente cómodo presentando una queja a la Cruz Roja?,question_code,Question long label
+variable,COMP_feedback.short,Openness,Ouverture,Apertura,question_code,Question short label
+variable,COMP_relevance.long,Do you think the Red Cross provides useful information on what they do?,Pensez-vous que la Croix-Rouge fournit des informations utiles sur ses activités ?,¿Cree que la Cruz Roja proporciona información útil sobre lo que hace?,question_code,Question long label
+variable,COMP_relevance.short,Relevance,Pertinence,Pertinencia,question_code,Question short label
+variable,COMP_responsiveness.long,Do you think the Red Cross provides support to people in a timely manner?,Pensez-vous que la Croix-Rouge apporte son soutien aux personnes en temps utile ?,¿Cree que la Cruz Roja brinda apoyo a las personas de manera oportuna?,question_code,Question long label
+variable,COMP_responsiveness.short,Responsiveness,Réactivité,Capacidad de respuesta,question_code,Question short label
 variable,VALUES_Engagement.long,Do you think the Red Cross asks local communities what support they need?,Pensez-vous que la Croix-Rouge demande aux communautés locales de quel soutien elles ont besoin ?,¿Cree que la Cruz Roja pregunta a las comunidades locales qué apoyo necesitan?,question_code,Question long label
 variable,VALUES_Engagement.short,Engagement,Engagement,Participación,question_code,Question short label
 variable,VALUES_fairness.long,Do you think the Red Cross provides support to the people who need it the most?,Pensez-vous que la Croix-Rouge apporte son soutien aux personnes qui en ont le plus besoin ?,¿Cree que la Cruz Roja brinda apoyo a las personas que más lo necesitan?,question_code,Question long label
