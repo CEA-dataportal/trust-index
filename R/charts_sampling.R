@@ -11,14 +11,6 @@
 
 message(tr("runtime.loading_charts"))
 
-# This script assumes the following scripts have already run:
-# source('R/setup.R')
-# source('R/read_config.R')
-# source('R/translation.R')
-# source('R/load_data.R')
-# source('R/analysis.R')
-
-
 # ------------------------------------------------------------
 # Chart parameters
 # ------------------------------------------------------------
@@ -354,12 +346,18 @@ gender_source_caption <- chart_source(
 
 # Combining Survey and Population dataset
 combined <- rbind(pop_age,ages)
-combined <- combined %>% mutate(Freq = ifelse(Gender == gender_map[1], Freq *-1 , Freq)) %>% mutate(Age=AGEgroup)
+combined <- combined %>%
+  mutate(
+    Freq = ifelse(Gender == gender_map[1], Freq * -1, Freq),
+    Age = AGEgroup,
+    Gender_display = tr_data(Gender),
+    Age_display = tr_data(Age)
+  )
 
-gender_1_survey <- unique(paste0("",gender_map[1]," ",ages$origin,""))
-gender_1_population <-  unique(paste0("",gender_map[1]," ",pop_age$origin,""))
-gender_2_survey <- unique(paste0("",gender_map[2]," ",ages$origin,""))
-gender_2_population <- unique(paste0("",gender_map[2]," ",pop_age$origin,""))
+gender_1_survey <- unique(paste0(tr_data(gender_map[1]), " ", ages$origin))
+gender_1_population <- unique(paste0(tr_data(gender_map[1]), " ", pop_age$origin))
+gender_2_survey <- unique(paste0(tr_data(gender_map[2]), " ", ages$origin))
+gender_2_population <- unique(paste0(tr_data(gender_map[2]), " ", pop_age$origin))
 
 dodge <- position_dodge(width = 0.9)
 
@@ -370,13 +368,39 @@ combined <- combined %>% filter(!Gender %in% gender_no)
 # Plot
 
 pyramid_plot <- ggplot(combined) +
-  geom_col(aes(fill = interaction(Gender, origin, sep = " "),y = Freq, x = Age), position = dodge) +
-  geom_text(aes(label = paste(round(abs(Freq), 1), " %"), 
-                y = ifelse(Freq >= 0, Freq + 1, Freq - 2),     x = Age,group = interaction(origin, Gender)),position = dodge, vjust = 0.5, hjust = 0.5, size = 4) +
+  geom_col(
+    aes(
+      fill = interaction(Gender_display, origin, sep = " "),
+      y = Freq,
+      x = Age_display
+    ),
+    position = dodge
+  ) +
+  geom_text(
+    aes(
+      label = paste(round(abs(Freq), 1), " %"),
+      y = ifelse(Freq >= 0, Freq + 1, Freq - 2),
+      x = Age_display,
+      group = interaction(origin, Gender_display)
+    ),
+    position = dodge,
+    vjust = 0.5,
+    hjust = 0.5,
+    size = 4
+  ) +
   scale_y_continuous(labels = abs) +
-  scale_fill_manual(values = c(color_secondary_100, color_secondary_10, color_primary_100, color_primary_10),name = "",limits = legend_order)+
+  scale_fill_manual(
+    values = c(
+      color_secondary_100,
+      color_secondary_10,
+      color_primary_100,
+      color_primary_10
+    ),
+    name = "",
+    limits = legend_order
+  ) +
   coord_flip() +
-  facet_wrap(.~ Gender, scale = "free_x", strip.position = "bottom") +
+  facet_wrap(. ~ Gender_display, scale = "free_x", strip.position = "bottom") +
   custom_theme() +
   labs(x = NULL, y = NULL, 
        title = tr("sampling.survey_vs_population"),
@@ -527,7 +551,7 @@ if (isTRUE(check_strata1)) {
     scale_x_discrete(
       drop = FALSE,
       labels = function(x) {
-        stringr::str_wrap(x, 30)
+        stringr::str_wrap(tr_data(x), 30)
       }
     ) +
     scale_y_continuous(
@@ -618,7 +642,7 @@ if (isTRUE(check_strata1)) {
       scale_x_discrete(
         drop = FALSE,
         labels = function(x) {
-          stringr::str_wrap(x, 30)
+          stringr::str_wrap(tr_data(x), 30)
         }
       ) +
       scale_y_continuous(
@@ -737,7 +761,7 @@ if (isTRUE(check_strata2)) {
     ) +
     scale_x_discrete(
       labels = function(x) {
-        stringr::str_wrap(x, 30)
+        stringr::str_wrap(tr_data(x), 30)
       }
     ) +
     scale_y_continuous(
@@ -846,7 +870,7 @@ if (isTRUE(check_strata2)) {
       scale_x_discrete(
         drop = FALSE,
         labels = function(x) {
-          stringr::str_wrap(x, 30)
+          stringr::str_wrap(tr_data(x), 30)
         }
       ) +
       scale_y_continuous(
@@ -972,7 +996,7 @@ if (isTRUE(check_strata3)) {
     ) +
     scale_x_discrete(
       labels = function(x) {
-        stringr::str_wrap(x, 30)
+        stringr::str_wrap(tr_data(x), 30)
       }
     ) +
     scale_y_continuous(
@@ -1084,7 +1108,7 @@ if (isTRUE(check_strata3)) {
       scale_x_discrete(
         drop = FALSE,
         labels = function(x) {
-          stringr::str_wrap(x, 30)
+          stringr::str_wrap(tr_data(x), 30)
         }
       ) +
       scale_y_continuous(
