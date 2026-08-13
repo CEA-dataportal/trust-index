@@ -103,16 +103,47 @@ driver_rename_map <- question_code %>%
   select(variable, short_label_display) %>%
   deframe() 
 
+# Convert response values to numeric scores before correlation/weighting
+score_driver_response <- function(x) {
+  
+  x_chr <- as.character(x)
+  
+  # Map categorical responses using score_map_full
+  mapped <- unname(score_map_full[x_chr])
+  
+  # Fallback if values are already numeric
+  numeric_value <- suppressWarnings(as.numeric(x_chr))
+  
+  dplyr::if_else(
+    !is.na(mapped),
+    as.numeric(mapped),
+    numeric_value
+  )
+}
+
 survey_drivers <- data %>%
   select(all_of(c(driver_columns, "weight"))) %>%
-  mutate(`weight` = as.numeric(`weight`)) %>%
-  rename(weight = `weight`) %>%
-  rename_with(~ driver_rename_map[.x], .cols = all_of(driver_columns))
+  mutate(
+    weight = as.numeric(weight),
+    across(
+      all_of(driver_columns),
+      score_driver_response
+    )
+  ) %>%
+  rename_with(
+    ~ driver_rename_map[.x],
+    .cols = all_of(driver_columns)
+  )
 
 survey_unweighted <- survey_drivers
 
 survey_weighted <- survey_drivers %>%
-  mutate(across(-weight, ~ . * weight))
+  mutate(
+    across(
+      -weight,
+      ~ .x * weight
+    )
+  )
 
 driver_unweighted <- survey_unweighted %>%
   select(-weight)
