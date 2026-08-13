@@ -560,6 +560,97 @@ tr_data_labels <- function(
   }
 }
 
+
+# for group label (profile)
+
+tr_group_label <- function(
+    x,
+    lang = translation,
+    dictionary = translation_dictionary
+) {
+  
+  vapply(
+    x,
+    function(label) {
+      
+      if (is.na(label)) {
+        return(NA_character_)
+      }
+      
+      label <- trimws(as.character(label))
+      
+      # Special generic group
+      if (tolower(label) == "others") {
+        return(
+          tr(
+            "common.others",
+            lang = lang,
+            dictionary = dictionary
+          )
+        )
+      }
+      
+      # Group built as "Variable: Answer"
+      if (grepl(":", label, fixed = TRUE)) {
+        
+        parts <- strsplit(
+          label,
+          ":",
+          fixed = TRUE
+        )[[1]]
+        
+        variable_part <- trimws(parts[1])
+        
+        answer_part <- trimws(
+          paste(
+            parts[-1],
+            collapse = ":"
+          )
+        )
+        
+        variable_translated <- tr_variable(
+          variable_part,
+          lang = lang,
+          dictionary = dictionary
+        )
+        
+        answer_translated <- tr_data(
+          answer_part,
+          lang = lang,
+          dictionary = dictionary
+        )
+        
+        return(
+          paste0(
+            variable_translated,
+            ": ",
+            answer_translated
+          )
+        )
+      }
+      
+      # If there is no ":" try variable first
+      variable_translated <- tr_variable(
+        label,
+        lang = lang,
+        dictionary = dictionary
+      )
+      
+      if (!identical(variable_translated, label)) {
+        return(variable_translated)
+      }
+      
+      # Last fallback: try as data value
+      tr_data(
+        label,
+        lang = lang,
+        dictionary = dictionary
+      )
+    },
+    character(1)
+  )
+}
+
 # ------------------------------------------------------------
 # Convenience helpers
 # ------------------------------------------------------------
