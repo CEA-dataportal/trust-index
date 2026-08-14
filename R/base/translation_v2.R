@@ -652,6 +652,42 @@ tr_group_label <- function(
 }
 
 # ------------------------------------------------------------
+# 5. LONG TRANSLATED TEXT
+# ------------------------------------------------------------
+
+include_text <- function(
+    name,
+    lang = translation,
+    text_dir = file.path("R", "text")
+) {
+  
+  file <- file.path(
+    text_dir,
+    paste0(name, "_", lang, ".md")
+  )
+  
+  if (!file.exists(file)) {
+    stop(
+      "Translated text file not found: ",
+      file,
+      call. = FALSE
+    )
+  }
+  
+  cat(
+    readLines(
+      file,
+      encoding = "UTF-8",
+      warn = FALSE
+    ),
+    sep = "\n"
+  )
+  
+  invisible(NULL)
+}
+
+
+# ------------------------------------------------------------
 # Convenience helpers
 # ------------------------------------------------------------
 
