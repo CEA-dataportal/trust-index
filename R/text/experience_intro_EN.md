@@ -1,0 +1,1 @@
+This section presents the results related to community members’ experiences with the Red Cross and their behaviours towards it. These questions explore interactions, perceptions, and forms of engagement to better understand how the Red Cross is perceived and engaged with within communities.

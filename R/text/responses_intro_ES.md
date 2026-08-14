@@ -1,0 +1,1 @@
+Los gráficos que aparecen a continuación presentan las respuestas de la encuesta en forma de porcentajes, ofreciendo una representación visual de los niveles de confianza de las comunidades en las distintas subdimensiones. Muestran la distribución de las percepciones de las comunidades sobre las competencias y los valores.

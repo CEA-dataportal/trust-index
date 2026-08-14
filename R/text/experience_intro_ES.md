@@ -1,0 +1,1 @@
+Esta sección presenta los resultados relacionados con las experiencias de los miembros de la comunidad con la Cruz Roja, así como sus comportamientos hacia ella. Estas preguntas exploran las interacciones, las percepciones y las formas de participación, con el fin de comprender mejor cómo se percibe y se recurre a la Cruz Roja dentro de las comunidades.

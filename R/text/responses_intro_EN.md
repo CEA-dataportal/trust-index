@@ -1,0 +1,1 @@
+The charts below present the survey responses as percentages, providing a visual representation of community trust levels across the different sub-dimensions. They show the distribution of community perceptions regarding competencies and values.

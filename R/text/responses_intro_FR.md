@@ -1,0 +1,1 @@
+Les graphiques ci-dessous présentent les réponses à l’enquête sous forme de pourcentages, offrant une représentation visuelle des niveaux de confiance des communautés pour les différentes sous-dimensions. Ils illustrent la répartition des perceptions des communautés concernant les compétences et les valeurs.

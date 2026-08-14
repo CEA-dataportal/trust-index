@@ -1,0 +1,1 @@
+Cette section présente les résultats relatifs aux expériences des membres de la communauté avec la Croix-Rouge ainsi qu’à leurs comportements à son égard. Ces questions explorent les interactions, les perceptions et les modes d’engagement, afin de mieux comprendre comment la Croix-Rouge est perçue et sollicitée au sein des communautés.
