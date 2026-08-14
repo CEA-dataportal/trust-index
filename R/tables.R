@@ -1,37 +1,77 @@
+##########################################################
+# COMMUNITY TRUST INDEX - TABLES
+# Multilingual version
+#
+# Requires translation_v2.R to be sourced beforehand:
+#   tr()             -> template/common labels
+#   tr_variable()    -> variable/question/dimension labels
+#   tr_data()        -> categorical values / answers
+#   tr_group_label() -> profile labels
+##########################################################
 
 
+# ------------------------------------------------------------
+# Small table helpers
+# ------------------------------------------------------------
+
+# Translate a template key, but keep a readable fallback if the key
+# has not yet been added to translation_v2.csv.
+tr_table <- function(key, fallback) {
+  value <- tr(key, warn_missing = FALSE)
+  if (identical(value, key)) fallback else value
+}
+
+# Normalise categorical values to English for calculations.
+# This allows source data to be EN / FR / ES while keeping the
+# calculation logic independent from the report language.
+to_canonical <- function(x) {
+  tr_data(x, lang = "EN")
+}
 
 
+# ============================================================
+# Gender table
+# ============================================================
 
-## Gender table
+gender_canonical <- to_canonical(data$gender)
 
 tab_gender <- data.frame(
   Gender = c("Female", "Male", "Other or did not answer"),
   Total = c(
-    sum(data$gender == "Female", na.rm = TRUE),
-    sum(data$gender == "Male", na.rm = TRUE),
-    sum(!(data$gender %in% c("Female", "Male")) | is.na(data$gender))
+    sum(gender_canonical == "Female", na.rm = TRUE),
+    sum(gender_canonical == "Male", na.rm = TRUE),
+    sum(
+      !(gender_canonical %in% c("Female", "Male")) |
+        is.na(gender_canonical)
+    )
   )
 )
 
 tab_gender <- tab_gender %>%
   mutate(
-    Percentage = round(Total / sum(Total) * 100, 1)
+    Percentage = round(Total / sum(Total) * 100, 1),
+    Gender = tr_data(Gender)
   )
 
-tab_gender <- rbind(
+tab_gender <- bind_rows(
   tab_gender,
   data.frame(
-    Gender = "Total",
+    Gender = tr_table("common.total", "Total"),
     Total = sum(tab_gender$Total),
     Percentage = 100
   )
 )
 
-colnames(tab_gender) <- c("Gender", "Total Respondents", "Percentage (%)")
+colnames(tab_gender) <- c(
+  tr_variable("gender", "short", fallback = "Gender"),
+  tr_table("common.total_respondents", "Total Respondents"),
+  tr_table("common.percentage", "Percentage (%)")
+)
 
 
-## Age group table
+# ============================================================
+# Age group table
+# ============================================================
 
 tab_age_group <- data %>%
   group_by(Age_group) %>%
@@ -42,35 +82,51 @@ tab_age_group <- data %>%
 tab_age_group <- bind_rows(
   tab_age_group,
   data.frame(
-    Age_group = "Total",
+    Age_group = tr_table("common.total", "Total"),
     Total = sum(tab_age_group$Total),
     Percentage = 100
   )
 )
 
-colnames(tab_age_group) <- c("Age Group", "Total Respondents", "Percentage (%)")
+colnames(tab_age_group) <- c(
+  tr_table("common.age_group", "Age Group"),
+  tr_table("common.total_respondents", "Total Respondents"),
+  tr_table("common.percentage", "Percentage (%)")
+)
 
 
-## Profile table
+# ============================================================
+# Profile table
+# ============================================================
 
 profiles_core <- group_map %>%
-  arrange(group_id) %>%          # optional: enforce order by group_id
-  pull(group_label) 
-
+  arrange(group_id) %>%
+  pull(group_label)
 
 tab_group <- group_map %>%
-  rowwise() %>% 
+  rowwise() %>%
   mutate(
-    `Total Répondants` = sum(data[[group_col]] == group_value, na.rm = TRUE)
+    Total_Respondents = sum(
+      to_canonical(data[[group_col]]) ==
+        to_canonical(group_value),
+      na.rm = TRUE
+    )
   ) %>%
   ungroup() %>%
   transmute(
-    Profile = group_label,
-    `Total Répondants`
+    Profile = tr_group_label(group_label),
+    Total_Respondents
   )
 
-# ---- Original chunk: table_localities ----
-## Geographic table
+colnames(tab_group) <- c(
+  tr_table("common.profile", "Profile"),
+  tr_table("common.total_respondents", "Total Respondents")
+)
+
+
+# ============================================================
+# Geographic table
+# ============================================================
 
 # ------------------------------------------------------------
 # Validate geographic variables
@@ -84,7 +140,6 @@ valid_data_column <- function(column, dataset) {
 }
 
 has_adm1 <- valid_data_column(adm1, data)
-
 has_adm2 <- valid_data_column(adm2, data)
 
 if (has_adm2) {
@@ -103,7 +158,6 @@ if (has_locality) {
   )
 }
 
-# adm1 is required for the geographic table
 if (!has_adm1) {
   stop(
     paste0(
@@ -178,9 +232,7 @@ if (has_adm2 && has_locality) {
 } else {
   
   table_locality <- geo_data %>%
-    group_by(
-      .data[[adm1]]
-    ) %>%
+    group_by(.data[[adm1]]) %>%
     summarise(
       Total = n(),
       .groups = "drop"
@@ -218,6 +270,7 @@ table_locality <- table_locality %>%
 
 # ------------------------------------------------------------
 # Create total row for each adm1
+# Keep a technical marker until sorting is complete.
 # ------------------------------------------------------------
 
 if (has_adm2 && has_locality) {
@@ -309,74 +362,95 @@ if (has_locality) {
 
 
 # ------------------------------------------------------------
-# Format column names
+# Translate TOTAL display values after sorting
 # ------------------------------------------------------------
 
-capitalize_first <- function(x) {
-  if (
-    length(x) != 1 ||
-    is.na(x) ||
-    !nzchar(x)
-  ) {
-    return("")
-  }
-  
-  paste0(
-    toupper(substr(x, 1, 1)),
-    tolower(substr(x, 2, nchar(x)))
+total_label <- tr_table("common.total", "Total")
+
+if (has_adm2) {
+  tab_geo[[adm2]] <- ifelse(
+    tab_geo[[adm2]] == "TOTAL",
+    total_label,
+    as.character(tab_geo[[adm2]])
   )
 }
 
+if (has_locality) {
+  tab_geo[[locality]] <- ifelse(
+    tab_geo[[locality]] == "TOTAL",
+    total_label,
+    as.character(tab_geo[[locality]])
+  )
+}
+
+
+# ------------------------------------------------------------
+# Geographic variable labels
+# ------------------------------------------------------------
+
+geo_label <- function(variable) {
+  translated <- tr_variable(
+    variable,
+    "short",
+    fallback = variable
+  )
+  
+  if (
+    length(translated) == 0L ||
+    is.na(translated) ||
+    !nzchar(trimws(translated))
+  ) {
+    return(variable)
+  }
+  
+  translated
+}
+
+
+# ------------------------------------------------------------
+# Format column names
+# ------------------------------------------------------------
+
 column_names <- c(
-  capitalize_first(adm1),
-  if (has_adm2) capitalize_first(adm2) else NULL,
-  if (has_locality) capitalize_first(locality) else NULL,
-  "Total Respondents",
-  "Percentage (%)"
+  geo_label(adm1),
+  if (has_adm2) geo_label(adm2) else NULL,
+  if (has_locality) geo_label(locality) else NULL,
+  tr_table("common.total_respondents", "Total Respondents"),
+  tr_table("common.percentage", "Percentage (%)")
 )
 
 colnames(tab_geo) <- column_names
 
 
 # ------------------------------------------------------------
-# Create caption
+# Create translated caption
 # ------------------------------------------------------------
 
-caption_text <- if (has_adm2 && has_locality) {
+geo_labels <- c(
+  if (has_locality) geo_label(locality) else NULL,
+  if (has_adm2) geo_label(adm2) else NULL,
+  geo_label(adm1)
+)
+
+if (length(geo_labels) == 1L) {
   
-  paste0(
-    "Respondents by ",
-    capitalize_first(locality),
-    ", ",
-    capitalize_first(adm2),
-    " and ",
-    capitalize_first(adm1)
-  )
-  
-} else if (has_adm2) {
-  
-  paste0(
-    "Respondents by ",
-    capitalize_first(adm2),
-    " and ",
-    capitalize_first(adm1)
-  )
-  
-} else if (has_locality) {
-  
-  paste0(
-    "Respondents by ",
-    capitalize_first(locality),
-    " and ",
-    capitalize_first(adm1)
+  caption_text <- paste(
+    tr_table("table.respondents_by", "Respondents by"),
+    geo_labels
   )
   
 } else {
   
-  paste0(
-    "Respondents by ",
-    capitalize_first(adm1)
+  last_label <- tail(geo_labels, 1)
+  first_labels <- head(geo_labels, -1)
+  
+  caption_text <- paste0(
+    tr_table("table.respondents_by", "Respondents by"),
+    " ",
+    paste(first_labels, collapse = ", "),
+    " ",
+    tr_table("common.and", "and"),
+    " ",
+    last_label
   )
 }
-
-
