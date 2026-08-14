@@ -657,24 +657,31 @@ tr_group_label <- function(
 
 include_text <- function(
     name,
-    lang = translation
+    lang = NULL,
+    repo_base = NULL
 ) {
   
+  if (is.null(lang)) {
+    lang <- translation
+  }
+  
+  if (is.null(repo_base)) {
+    repo_base <- repo
+  }
+  
+  lang <- toupper(trimws(as.character(lang)[1]))
+  
   filename <- paste0(
-    name,
-    "_",
-    toupper(lang),
-    ".md"
+    name, "_", lang, ".md"
   )
   
   file <- repo_path(
-    repo,
+    repo_base,
     "R",
     "text",
     filename
   )
   
-  # Remote file
   if (grepl("^https?://", file)) {
     
     con <- url(
@@ -693,7 +700,6 @@ include_text <- function(
     
   } else {
     
-    # Local file
     if (!file.exists(file)) {
       stop(
         "Translated text file not found: ",
@@ -709,13 +715,12 @@ include_text <- function(
     )
   }
   
-  cat(
-    lines,
-    sep = "\n"
-  )
+  cat(lines, sep = "\n")
   
   invisible(NULL)
 }
+
+
 # ------------------------------------------------------------
 # Convenience helpers
 # ------------------------------------------------------------
