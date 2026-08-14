@@ -658,34 +658,72 @@ tr_group_label <- function(
 include_text <- function(
     name,
     lang = translation,
-    text_dir = file.path("R", "text")
+    repo = repo
 ) {
   
-  file <- file.path(
-    text_dir,
+  relative_path <- file.path(
+    "R",
+    "text",
     paste0(name, "_", lang, ".md")
   )
   
-  if (!file.exists(file)) {
-    stop(
-      "Translated text file not found: ",
+  # Local repository
+  if (!grepl("^https?://", repo)) {
+    
+    file <- file.path(
+      repo,
+      relative_path
+    )
+    
+    if (!file.exists(file)) {
+      stop(
+        "Translated text file not found: ",
+        file,
+        call. = FALSE
+      )
+    }
+    
+    lines <- readLines(
       file,
-      call. = FALSE
+      encoding = "UTF-8",
+      warn = FALSE
+    )
+    
+  } else {
+    
+    # GitHub / remote repository
+    file <- repo_path(
+      repo,
+      "R",
+      "text",
+      paste0(name, "_", lang, ".md")
+    )
+    
+    con <- url(
+      file,
+      open = "r",
+      encoding = "UTF-8"
+    )
+    
+    on.exit(
+      close(con),
+      add = TRUE
+    )
+    
+    lines <- readLines(
+      con,
+      encoding = "UTF-8",
+      warn = FALSE
     )
   }
   
   cat(
-    readLines(
-      file,
-      encoding = "UTF-8",
-      warn = FALSE
-    ),
+    lines,
     sep = "\n"
   )
   
   invisible(NULL)
 }
-
 
 # ------------------------------------------------------------
 # Convenience helpers
