@@ -43,6 +43,7 @@ template,report.methods_metrics,Methods and Metrics,Méthodes et indicateurs,Mé
 template,report.metrics,Metrics,Indicateurs,Indicadores,,
 template,report.results,Survey Results,Résultats de l'enquête,Resultados de la encuesta,,
 template,report.sampling,Sampling,Échantillonnage,Muestreo,,
+template,report.limitations,Limitations,Limitations,Limitaciones,,
 template,report.score,Scores,Scores,Puntuaciones,,
 template,report.score_factors,Score by factors,Score par facteurs,Puntuación por factores,,
 template,report.score_overall,Overall Score,Score global,Puntuación general,,
