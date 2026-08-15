@@ -179,7 +179,7 @@ strip <- ggplot(
     labeller = labeller(variable = function(x) {
       stringr::str_wrap(
         tr_variable(x),
-        width = 20
+        width = 15
       )
     })
   ) +
