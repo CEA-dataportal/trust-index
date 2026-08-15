@@ -103,10 +103,11 @@ profiles_core <- group_map %>%
   arrange(group_id) %>%
   pull(group_label)
 
+# Technical object: keep stable names for downstream calculations.
 tab_group <- group_map %>%
   rowwise() %>%
   mutate(
-    Total_Respondents = sum(
+    `Total Respondents` = sum(
       to_canonical(data[[group_col]]) ==
         to_canonical(group_value),
       na.rm = TRUE
@@ -114,11 +115,17 @@ tab_group <- group_map %>%
   ) %>%
   ungroup() %>%
   transmute(
-    Profile = tr_group_label(group_label),
-    Total_Respondents
+    Profile = group_label,
+    `Total Respondents`
   )
 
-colnames(tab_group) <- c(
+# Display-only translated object.
+tab_group_display <- tab_group %>%
+  mutate(
+    Profile = vapply(Profile, tr_group_label, character(1))
+  )
+
+colnames(tab_group_display) <- c(
   tr_table("common.profile", "Profile"),
   tr_table("common.total_respondents", "Total Respondents")
 )
