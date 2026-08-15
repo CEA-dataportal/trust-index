@@ -93,6 +93,7 @@ template,table.age_group,Age group,Groupe d’âge,Grupo de edad,charts.R; table
 template,table.gender,Gender,Genre,Género,charts_drivers.R,Experience response category
 template,table.geo,Geographic,Géographique,Geográfico,charts.R; tables.R; export.R,Table/export label
 template,table.profile,Profile,Profil,Perfil,charts.R; tables.R; export.R,Table/export label
+template,common.age_group,Age group,Groupe d’âge,Grupo de edad,charts.R; tables.R; export.R,Table/export label
 template,table.respondents_by_age_group,Respondents by age group,Répondants par groupe d’âge,Personas encuestadas por grupo de edad,charts.R,Table caption
 template,table.respondents_by_gender,Respondents by gender,Répondants par genre,Personas encuestadas por género,charts.R; tables.R,Table header
 template,table.respondents_by_one_level,Respondents by %s,Répondants par %s,Personas encuestadas por %s,charts.R,Table caption
