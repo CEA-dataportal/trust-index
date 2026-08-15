@@ -176,7 +176,12 @@ strip <- ggplot(
     variable ~ .,
     scales = "free",
     space = "free",
-    labeller = labeller(variable = function(x) tr_variable(x))
+    labeller = labeller(variable = function(x) {
+      stringr::str_wrap(
+        tr_variable(x),
+        width = 22
+      )
+    })
   ) +
   custom_theme() +
   theme(
