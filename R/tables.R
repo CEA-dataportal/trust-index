@@ -35,34 +35,44 @@ to_canonical <- function(x) {
 
 gender_canonical <- to_canonical(data$gender)
 
+# Technical object: stable column names for downstream code
 tab_gender <- data.frame(
   Gender = c("Female", "Male", "Other or did not answer"),
-  Total = c(
+  `Total Respondents` = c(
     sum(gender_canonical == "Female", na.rm = TRUE),
     sum(gender_canonical == "Male", na.rm = TRUE),
-    sum(
-      !(gender_canonical %in% c("Female", "Male")) |
-        is.na(gender_canonical)
-    )
-  )
-)
-
-tab_gender <- tab_gender %>%
+    sum(!(gender_canonical %in% c("Female", "Male")) | is.na(gender_canonical))
+  ),
+  check.names = FALSE
+) %>%
   mutate(
-    Percentage = round(Total / sum(Total) * 100, 1),
-    Gender = tr_data(Gender)
+    `Percentage (%)` = round(
+      `Total Respondents` / sum(`Total Respondents`) * 100,
+      1
+    )
   )
 
 tab_gender <- bind_rows(
   tab_gender,
   data.frame(
-    Gender = tr_table("common.total", "Total"),
-    Total = sum(tab_gender$Total),
-    Percentage = 100
+    Gender = "Total",
+    `Total Respondents` = sum(tab_gender$`Total Respondents`),
+    `Percentage (%)` = 100,
+    check.names = FALSE
   )
 )
 
-colnames(tab_gender) <- c(
+# Display-only translated object
+tab_gender_display <- tab_gender %>%
+  mutate(
+    Gender = ifelse(
+      Gender == "Total",
+      tr_table("common.total", "Total"),
+      tr_data(Gender)
+    )
+  )
+
+colnames(tab_gender_display) <- c(
   tr_variable("gender", "short", fallback = "Gender"),
   tr_table("common.total_respondents", "Total Respondents"),
   tr_table("common.percentage", "Percentage (%)")
@@ -73,22 +83,42 @@ colnames(tab_gender) <- c(
 # Age group table
 # ============================================================
 
+# Technical object: stable column names for downstream code
 tab_age_group <- data %>%
   group_by(Age_group) %>%
-  summarise(Total = n(), .groups = "drop") %>%
-  mutate(Percentage = round(Total / sum(Total) * 100, 1)) %>%
+  summarise(
+    `Total Respondents` = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    `Percentage (%)` = round(
+      `Total Respondents` / sum(`Total Respondents`) * 100,
+      1
+    )
+  ) %>%
   arrange(Age_group)
 
 tab_age_group <- bind_rows(
   tab_age_group,
   data.frame(
-    Age_group = tr_table("common.total", "Total"),
-    Total = sum(tab_age_group$Total),
-    Percentage = 100
+    Age_group = "Total",
+    `Total Respondents` = sum(tab_age_group$`Total Respondents`),
+    `Percentage (%)` = 100,
+    check.names = FALSE
   )
 )
 
-colnames(tab_age_group) <- c(
+# Display-only translated object
+tab_age_group_display <- tab_age_group %>%
+  mutate(
+    Age_group = ifelse(
+      Age_group == "Total",
+      tr_table("common.total", "Total"),
+      tr_data(as.character(Age_group))
+    )
+  )
+
+colnames(tab_age_group_display) <- c(
   tr_table("common.age_group", "Age Group"),
   tr_table("common.total_respondents", "Total Respondents"),
   tr_table("common.percentage", "Percentage (%)")
@@ -369,32 +399,31 @@ if (has_locality) {
 
 
 # ------------------------------------------------------------
-# Translate TOTAL display values after sorting
+# Create translated geographic display object
 # ------------------------------------------------------------
+
+# Keep tab_geo untouched for downstream calculations.
+tab_geo_display <- tab_geo
 
 total_label <- tr_table("common.total", "Total")
 
 if (has_adm2) {
-  tab_geo[[adm2]] <- ifelse(
-    tab_geo[[adm2]] == "TOTAL",
+  tab_geo_display[[adm2]] <- ifelse(
+    tab_geo_display[[adm2]] == "TOTAL",
     total_label,
-    as.character(tab_geo[[adm2]])
+    as.character(tab_geo_display[[adm2]])
   )
 }
 
 if (has_locality) {
-  tab_geo[[locality]] <- ifelse(
-    tab_geo[[locality]] == "TOTAL",
+  tab_geo_display[[locality]] <- ifelse(
+    tab_geo_display[[locality]] == "TOTAL",
     total_label,
-    as.character(tab_geo[[locality]])
+    as.character(tab_geo_display[[locality]])
   )
 }
 
-
-# ------------------------------------------------------------
 # Geographic variable labels
-# ------------------------------------------------------------
-
 geo_label <- function(variable) {
   translated <- tr_variable(
     variable,
@@ -413,12 +442,8 @@ geo_label <- function(variable) {
   translated
 }
 
-
-# ------------------------------------------------------------
-# Format column names
-# ------------------------------------------------------------
-
-column_names <- c(
+# Format display column names only
+column_names_display <- c(
   geo_label(adm1),
   if (has_adm2) geo_label(adm2) else NULL,
   if (has_locality) geo_label(locality) else NULL,
@@ -426,7 +451,7 @@ column_names <- c(
   tr_table("common.percentage", "Percentage (%)")
 )
 
-colnames(tab_geo) <- column_names
+colnames(tab_geo_display) <- column_names_display
 
 
 # ------------------------------------------------------------
