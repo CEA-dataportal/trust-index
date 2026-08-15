@@ -100,6 +100,7 @@ template,table.respondents_by_one_level,Respondents by %s,Répondants par %s,Per
 template,table.respondents_by_rc_relationship,Respondents by relationship with the Red Cross,Répondants selon leur relation avec la Croix-Rouge,Personas encuestadas según su relación con la Cruz Roja,charts.R,Table caption
 template,table.respondents_by_three_levels,"Respondents by %s, %s and %s","Répondants par %s, %s et %s","Personas encuestadas por %s, %s y %s",charts.R; tables.R,Dynamic geographic caption; two levels
 template,table.respondents_by_two_levels,Respondents by %s and %s,Répondants par %s et %s,Personas encuestadas por %s y %s,charts.R; tables.R,Dynamic geographic caption; one level
+template,common.andgroup,and,et,y,charts.R; tables.R; export.R,Dynamic geographic caption;
 variable,dimension.competencies,Competencies,Compétences,Competencias,charts_sampling.R,Dynamic caption; three source values
 variable,dimension.competency,Competency,Compétence,Competencia,charts_score.R; charts.R; export.R,Chart/export label
 variable,dimension.institutional,Institutional,Institutionnel,Institucional,export.R,Export sheet label
