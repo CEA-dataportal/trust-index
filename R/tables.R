@@ -35,31 +35,38 @@ to_canonical <- function(x) {
 
 gender_canonical <- to_canonical(data$gender)
 
-# Technical object: stable column names for downstream code
 tab_gender <- data.frame(
   Gender = c("Female", "Male", "Other or did not answer"),
-  `Total Respondents` = c(
+  Total = c(
     sum(gender_canonical == "Female", na.rm = TRUE),
     sum(gender_canonical == "Male", na.rm = TRUE),
-    sum(!(gender_canonical %in% c("Female", "Male")) | is.na(gender_canonical))
-  ),
-  check.names = FALSE
-) %>%
-  mutate(
-    `Percentage (%)` = round(
-      `Total Respondents` / sum(`Total Respondents`) * 100,
-      1
+    sum(
+      !(gender_canonical %in% c("Female", "Male")) |
+        is.na(gender_canonical)
     )
+  )
+)
+
+tab_gender <- tab_gender %>%
+  mutate(
+    Percentage = round(Total / sum(Total) * 100, 1)
   )
 
 tab_gender <- bind_rows(
   tab_gender,
   data.frame(
     Gender = "Total",
-    `Total Respondents` = sum(tab_gender$`Total Respondents`),
-    `Percentage (%)` = 100,
-    check.names = FALSE
+    Total = sum(tab_gender$Total),
+    Percentage = 100
   )
+)
+
+# IMPORTANT:
+# Keep these technical names exactly as expected by downstream Rmd code.
+colnames(tab_gender) <- c(
+  "Gender",
+  "Total Respondents",
+  "Percentage (%)"
 )
 
 # Display-only translated object
@@ -83,18 +90,11 @@ colnames(tab_gender_display) <- c(
 # Age group table
 # ============================================================
 
-# Technical object: stable column names for downstream code
 tab_age_group <- data %>%
   group_by(Age_group) %>%
-  summarise(
-    `Total Respondents` = n(),
-    .groups = "drop"
-  ) %>%
+  summarise(Total = n(), .groups = "drop") %>%
   mutate(
-    `Percentage (%)` = round(
-      `Total Respondents` / sum(`Total Respondents`) * 100,
-      1
-    )
+    Percentage = round(Total / sum(Total) * 100, 1)
   ) %>%
   arrange(Age_group)
 
@@ -102,19 +102,26 @@ tab_age_group <- bind_rows(
   tab_age_group,
   data.frame(
     Age_group = "Total",
-    `Total Respondents` = sum(tab_age_group$`Total Respondents`),
-    `Percentage (%)` = 100,
-    check.names = FALSE
+    Total = sum(tab_age_group$Total),
+    Percentage = 100
   )
+)
+
+# IMPORTANT:
+# Downstream code explicitly uses `Age Group` and `Total Respondents`.
+colnames(tab_age_group) <- c(
+  "Age Group",
+  "Total Respondents",
+  "Percentage (%)"
 )
 
 # Display-only translated object
 tab_age_group_display <- tab_age_group %>%
   mutate(
-    Age_group = ifelse(
-      Age_group == "Total",
+    `Age Group` = ifelse(
+      `Age Group` == "Total",
       tr_table("common.total", "Total"),
-      tr_data(as.character(Age_group))
+      tr_data(as.character(`Age Group`))
     )
   )
 
@@ -133,7 +140,6 @@ profiles_core <- group_map %>%
   arrange(group_id) %>%
   pull(group_label)
 
-# Technical object: keep stable names for downstream calculations.
 tab_group <- group_map %>%
   rowwise() %>%
   mutate(
@@ -149,10 +155,14 @@ tab_group <- group_map %>%
     `Total Respondents`
   )
 
-# Display-only translated object.
+# Display-only translated object
 tab_group_display <- tab_group %>%
   mutate(
-    Profile = vapply(Profile, tr_group_label, character(1))
+    Profile = vapply(
+      Profile,
+      tr_group_label,
+      character(1)
+    )
   )
 
 colnames(tab_group_display) <- c(
@@ -399,31 +409,67 @@ if (has_locality) {
 
 
 # ------------------------------------------------------------
-# Create translated geographic display object
+# Technical and translated geographic tables
 # ------------------------------------------------------------
 
-# Keep tab_geo untouched for downstream calculations.
+# Keep tab_geo as the technical object.
+# Its values remain unchanged until all calculations are finished.
+
+capitalize_first <- function(x) {
+  if (
+    length(x) != 1 ||
+    is.na(x) ||
+    !nzchar(x)
+  ) {
+    return("")
+  }
+  
+  paste0(
+    toupper(substr(x, 1, 1)),
+    tolower(substr(x, 2, nchar(x)))
+  )
+}
+
+# Technical column names: same convention as the original script.
+column_names <- c(
+  capitalize_first(adm1),
+  if (has_adm2) capitalize_first(adm2) else NULL,
+  if (has_locality) capitalize_first(locality) else NULL,
+  "Total Respondents",
+  "Percentage (%)"
+)
+
+colnames(tab_geo) <- column_names
+
+
+# Display-only translated object
 tab_geo_display <- tab_geo
 
 total_label <- tr_table("common.total", "Total")
 
-if (has_adm2) {
-  tab_geo_display[[adm2]] <- ifelse(
-    tab_geo_display[[adm2]] == "TOTAL",
+# At this point columns have already been renamed, so use positions /
+# translated technical names rather than the original raw column names.
+geo_col_count <- length(column_names) - 2
+
+if (has_adm2 && has_locality) {
+  tab_geo_display[[2]] <- ifelse(
+    tab_geo_display[[2]] == "TOTAL",
     total_label,
-    as.character(tab_geo_display[[adm2]])
+    as.character(tab_geo_display[[2]])
+  )
+  tab_geo_display[[3]] <- ifelse(
+    tab_geo_display[[3]] == "TOTAL",
+    total_label,
+    as.character(tab_geo_display[[3]])
+  )
+} else if (has_adm2 || has_locality) {
+  tab_geo_display[[2]] <- ifelse(
+    tab_geo_display[[2]] == "TOTAL",
+    total_label,
+    as.character(tab_geo_display[[2]])
   )
 }
 
-if (has_locality) {
-  tab_geo_display[[locality]] <- ifelse(
-    tab_geo_display[[locality]] == "TOTAL",
-    total_label,
-    as.character(tab_geo_display[[locality]])
-  )
-}
-
-# Geographic variable labels
 geo_label <- function(variable) {
   translated <- tr_variable(
     variable,
@@ -442,7 +488,6 @@ geo_label <- function(variable) {
   translated
 }
 
-# Format display column names only
 column_names_display <- c(
   geo_label(adm1),
   if (has_adm2) geo_label(adm2) else NULL,
