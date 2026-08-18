@@ -29,10 +29,15 @@ message(tr("runtime.loading_charts"))
 # flags. These flags are later used to decide which charts, maps and sections
 # should be displayed in the report based on the data that actually exists.
 
+#Reinitiate calculated plot height
+height_exp_plot <- 1
+height_behaviours_plot <- 1
+height_impact_plot <- 1
+height_intention_plot <-1
+height_knowledge_plot <-1
+height_extra_plot <-1
+
 #Sampling tabs
-
-
-
 
 if ("extra" %in% question_code$category){
   check_extra <- TRUE
