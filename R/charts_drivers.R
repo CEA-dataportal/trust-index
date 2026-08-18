@@ -41,7 +41,7 @@ if ("extra" %in% question_code$category){
 }
 
 #Contextual questions
-check_rc <- any(question_code$category %in% c("experience", "behaviours", "intention", "knowledge","channel"))
+check_rc <- any(question_code$category %in% c("experience", "behaviours", "impact", "intention", "knowledge","channel"))
 
 if ("experience" %in% question_code$category){
   check_experience <- TRUE } else {
@@ -57,7 +57,11 @@ if ("intention" %in% question_code$category){
   check_intention <- TRUE } else {
     check_intention <- FALSE
   }
-
+if ("impact" %in% question_code$category){
+  check_impact <- TRUE
+} else {
+  check_impact <- FALSE
+}
 if ("knowledge" %in% question_code$category){
   check_knowledge <- TRUE
 } else {
@@ -599,6 +603,91 @@ if ("intention" %in% question_code$category) {
     ) +
     guides(fill = guide_legend(reverse = TRUE))+
     labs(title = "", x = NULL, y = NULL) +
+    coord_flip() +
+    custom_theme()
+  
+}
+
+
+# ---- Original chunk: impact_question ----
+if ("impact" %in% question_code$category) {
+  # Data preparation
+  select_impact <- question_code %>%
+    filter(category == "impact") %>%
+    select(variable, short_label)
+  
+  questions_impact <- deframe(select_impact)
+  
+  survey_impact <- data %>%
+    select(all_of(names(questions_impact))) %>%
+    rename_with(~ questions_impact[.x], .cols = names(questions_impact))
+  
+  impact_labels <- question_code %>%
+    filter(category == "impact") %>%
+    select(short_label, long_label) %>%
+    mutate(long_label = stringr::str_wrap(long_label, width = 20)) %>%
+    deframe()
+  
+  impact_data <- survey_impact %>%
+    pivot_longer(everything(), names_to = "Question", values_to = "Response")
+  impact_data$Question <- str_wrap(impact_labels[impact_data$Question], width = 20)
+  
+  summary_impact <- impact_data %>%
+    filter(!(is.na(impact_data$Response))) %>%
+    mutate(
+      Response = recode(as.character(Response), !!!answer_impact)
+    ) %>%
+    group_by(Question, Response) %>%
+    summarise(n = n(), .groups = "drop") %>%
+    group_by(Question) %>%
+    mutate(percent = n / sum(n) * 100) %>%
+    ungroup() %>%
+    mutate(Response = factor(Response, levels = unique(answer_impact)))
+  
+  
+  # Palette
+  n_impact_levels <- nlevels(summary_impact$Response)
+  pal_impact <- grDevices::colorRampPalette(color_scale)(n_impact_levels)
+  
+  n_questions_impact <- length(unique(summary_impact$Question))
+  height_impact_plot <- max(
+    6,
+    min(12, n_questions_impact * 1.25 + 2)
+  )
+  
+  # Plot
+  impact_plot <- ggplot(summary_impact, aes(x = Question, y = percent, fill = Response)) +
+    geom_bar(
+      position = "stack",
+      stat = "identity",
+      lwd = 0.35,
+      color = "white",
+      width = 0.50,
+      show.legend = TRUE
+    ) +
+    geom_text(
+      aes(
+        label = ifelse(percent > 2, paste0(round(percent, 1), "%"), "")),
+      color = color_label_White,
+      position = position_stack(vjust = 0.5),
+      size = 4,
+      vjust = 0.5,
+      show.legend = FALSE
+    ) +
+    scale_fill_manual(
+      values = pal_impact,
+      name = NULL,
+      labels = function(x) tr_data(x)
+    ) +
+    scale_x_discrete(
+      labels = function(x) stringr::str_wrap(tr_variable(x), 20)
+    ) +
+    guides(fill = guide_legend(reverse = TRUE)) +
+    labs(
+      title = tr("drivers.impact_title"),
+      x = NULL,
+      y = NULL
+    ) +
     coord_flip() +
     custom_theme()
   

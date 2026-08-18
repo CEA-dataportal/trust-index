@@ -131,6 +131,7 @@ read_cti_config <- function(config_file, country_name) {
   answer_exp          <- make_mapping(mapping_df, "answer_exp")
   answer_behaviours   <- make_mapping(mapping_df, "answer_behaviours")
   answer_intention    <- make_mapping(mapping_df, "answer_intention")
+  answer_impact       <- make_mapping(mapping_df, "answer_impact")
   answer_yn_map       <- make_mapping(mapping_df, "answer_yn_map")
   gender_map          <- make_mapping(mapping_df, "gender_map")
   
@@ -171,6 +172,7 @@ read_cti_config <- function(config_file, country_name) {
     answer_extra = answer_extra,
     answer_exp = answer_exp,
     answer_behaviours = answer_behaviours,
+    answer_impact = answer_impact,
     answer_intention = answer_intention,
     answer_yn_map = answer_yn_map,
     gender_map = gender_map,
