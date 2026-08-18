@@ -114,22 +114,22 @@ variable,dimension.overall_values,Overall values,Valeurs globales,Valores genera
 variable,dimension.trust_index,Trust Index,Indice de confiance,Índice de confianza,charts_score.R,Generated score row
 variable,dimension.value,Value,Valeur,Valor,charts_score.R; export.R,Dimension label
 variable,dimension.values,Values,Valeurs,Valores,charts_score.R; charts.R; export.R,Chart/export label
-variable,admin1.long,Department,Département,Departamento,question_code,Question long label
-variable,admin1.short,Province,Province,Provincia,question_code,Question short label
-variable,admin2.long,Municipality,Commune,Municipio,question_code,Question long label
-variable,admin2.short,Municipality,Commune,Municipio,question_code,Question short label
+variable,admin1.long,Oblast,Oblast,Oblast,question_code,Question long label
+variable,admin1.short,Oblast,Oblast,Oblast,question_code,Question short label
+variable,admin2.long,Kraj,Kraj,Kraj,question_code,Question long label
+variable,admin2.short,Kraj,Kraj,Kraj,question_code,Question short label
 variable,age.long,How old are you?,Quel âge avez-vous ?,¿Qué edad tiene?,question_code,Question long label
 variable,age.short,Age,Âge,Edad,question_code,Question short label
 variable,Date.long,Date,Date,Fecha,question_code,Question long label
 variable,Date.short,Date,Date,Fecha,question_code,Question short label
-variable,know_RC.long,Have you heard of the Burundian Red Cross?,Avez-vous entendu parler de la Croix-Rouge du Burundi ?,¿Ha oído hablar de la Cruz Roja de Burundi?,question_code,Question long label
+variable,know_RC.long,Have you heard of the Red Cross?,Avez-vous entendu parler de la Croix-Rouge ?,¿Ha oído hablar de la Cruz Roja?,question_code,Question long label
 variable,know_RC.short,Heard of RC,Connaissance de la Croix-Rouge,Conocimiento de la Cruz Roja,question_code,Question short label
-variable,language.long,What is your main language?,Quelle est votre langue principale ?,¿Cuál es su idioma principal?,question_code,Question long label
-variable,language.short,Language,Langue,Idioma,question_code,Question short label
+variable,language.long,What main language do you speak at home?,Quelle langue parlez-vous principalement à la maison ?,¿Qué idioma habla principalmente en casa?,question_code,Question long label
+variable,language.short,Main language,Langue principale,Idioma principal,question_code,Question short label
 variable,localities.long,Zone,Zone,Zona,question_code,Question long label
 variable,localities.short,Zone,Zone,Zona,question_code,Question short label
 variable,native.long,Are you currently living in the country where you were born?,Vivez-vous actuellement dans le pays où vous êtes né(e) ?,¿Vive actualmente en el país donde nació?,question_code,Question long label
-variable,native.short,Born in Burundi,Né au Burundi,Nacido en Burundi,question_code,Question short label
+variable,native.short,Native-born,Né(e) dans le pays,Nacido/a en el país,question_code,Question short label
 variable,disabilities.long,People living with disabilities,Personnes vivant avec un handicap,Personas con discapacidad,question_code,Question long label
 variable,disabilities.short,Disabilities,Handicap,Discapacidad,question_code,Question short label
 variable,education.long,What is the highest level of education you have completed?,Quel est le niveau d’études le plus élevé que vous avez terminé ?,¿Cuál es el nivel educativo más alto que ha completado?,question_code,Question long label
@@ -140,8 +140,8 @@ variable,employment.long,What is your professional situation?,Quelle est votre s
 variable,employment.short,Employment,Emploi,Empleo,question_code,Question short label
 variable,gender.long,How would you describe your gender?,Comment décririez-vous votre genre ?,¿Cómo describiría su género?,question_code,Question long label
 variable,gender.short,Gender,Genre,Género,question_code,Question short label
-variable,BEFORE_beneficiary.long,Have you received aid or support from the Red Cross?,Avez-vous déjà reçu une aide ou un soutien de la Croix-Rouge ?,¿Ha recibido alguna vez ayuda o apoyo de la Cruz Roja?,question_code,Question long label
-variable,BEFORE_beneficiary.short,Once beneficiary,A déjà reçu un soutien,Recibió apoyo anteriormente,question_code,Question short label
+variable,BEFORE_beneficiary.long,Have you received aid or support from the Red Cross?,Avez-vous reçu une aide ou un soutien de la Croix-Rouge ?,¿Ha recibido ayuda o apoyo de la Cruz Roja?,question_code,Question long label
+variable,BEFORE_beneficiary.short,Received Support,A reçu un soutien,Ha recibido apoyo,question_code,Question short label
 variable,BEFORE_donation.long,Have you ever made a donation to the Red Cross?,Avez-vous déjà fait un don à la Croix-Rouge ?,¿Ha hecho alguna vez una donación a la Cruz Roja?,question_code,Question long label
 variable,BEFORE_donation.short,Donated to the Red Cross,A fait un don à la Croix-Rouge,Hizo una donación a la Cruz Roja,question_code,Question short label
 variable,BEFORE_follow_advice.long,Have you ever followed the advice you received from the Red Cross in a crisis situation?,Avez-vous déjà suivi les conseils reçus de la Croix-Rouge en situation de crise ?,¿Ha seguido alguna vez los consejos recibidos de la Cruz Roja en una situación de crisis?,question_code,Question long label
@@ -178,7 +178,7 @@ variable,COMP_capability.long,Do you think the Red Cross is capable of helping p
 variable,COMP_capability.short,Capability,Capacité,Capacidad,question_code,Question short label
 variable,COMP_effectiveness.long,Do you think the Red Cross provides the right kinds of assistance to the people it supports?,Pensez-vous que la Croix-Rouge fournit les types d’aide appropriés aux personnes qu’elle soutient ?,¿Cree que la Cruz Roja proporciona los tipos de ayuda adecuados a las personas a las que apoya?,question_code,Question long label
 variable,COMP_effectiveness.short,Effectiveness,Efficacité,Eficacia,question_code,Question short label
-variable,COMP_feedback.long,Do you feel comfortable submitting a complaint to the Red Cross?,Vous sentez-vous à l’aise pour déposer une plainte auprès de la Croix-Rouge ?,¿Se siente cómodo presentando una queja a la Cruz Roja?,question_code,Question long label
+variable,COMP_feedback.long,Do you think the feedback received by the Red Cross influences the way they work and is used by them to improve their services?,Pensez-vous que les retours reçus par la Croix-Rouge influencent sa manière de travailler et sont utilisés pour améliorer ses services ?,¿Cree que los comentarios recibidos por la Cruz Roja influyen en su forma de trabajar y se utilizan para mejorar sus servicios?,question_code,Question long label
 variable,COMP_feedback.short,Openness,Ouverture,Apertura,question_code,Question short label
 variable,COMP_relevance.long,Do you think the Red Cross provides useful information on what they do?,Pensez-vous que la Croix-Rouge fournit des informations utiles sur ses activités ?,¿Cree que la Cruz Roja proporciona información útil sobre lo que hace?,question_code,Question long label
 variable,COMP_relevance.short,Relevance,Pertinence,Pertinencia,question_code,Question short label
@@ -260,3 +260,99 @@ answer,age_40_59,40-59,40-59,40-59,data / charts / tables,Age category
 answer,no_mostly,"No, mostly",Plutôt non,Mayormente no,charts_drivers.R,Experience response category
 answer,somewhat_negatively,Somewhat negatively,Plutôt négativement,Algo negativamente,charts_drivers.R,Perceived impact response category
 answer,very_negatively,Very negatively,Très négativement,Muy negativamente,charts_drivers.R,Perceived impact response category
+variable,consent.short,Consent,Consentement,Consentimiento,question_code,Question short label
+variable,consent.long,Do you agree to participate in this survey?,Acceptez-vous de participer à cette enquête ?,¿Acepta participar en esta encuesta?,question_code,Question long label
+variable,branch.short,Branch,Branche,Filial,question_code,Question short label
+variable,branch.long,Branch,Branche,Filial,question_code,Question long label
+variable,migrant.short,Country of Origin,Pays d’origine,País de origen,question_code,Question short label
+variable,migrant.long,What is your country of origin?,Quel est votre pays d’origine ?,¿Cuál es su país de origen?,question_code,Question long label
+variable,disabilities_vision.short,Vision Difficulty,Difficulté à voir,Dificultad para ver,question_code,Question short label
+variable,disabilities_vision.long,"Do you have difficulty seeing, even when wearing glasses?","Avez-vous des difficultés à voir, même lorsque vous portez des lunettes ?","¿Tiene dificultad para ver, incluso cuando usa gafas?",question_code,Question long label
+variable,disabilities_hearing.short,Hearing Difficulty,Difficulté à entendre,Dificultad para oír,question_code,Question short label
+variable,disabilities_hearing.long,"Do you have difficulty hearing, even if using a hearing aid?","Avez-vous des difficultés à entendre, même lorsque vous utilisez un appareil auditif ?","¿Tiene dificultad para oír, incluso utilizando un audífono?",question_code,Question long label
+variable,disabilities_mobility.short,Mobility Difficulty,Difficulté de mobilité,Dificultad de movilidad,question_code,Question short label
+variable,disabilities_mobility.long,Do you have difficulty walking or climbing stairs?,Avez-vous des difficultés à marcher ou à monter des escaliers ?,¿Tiene dificultad para caminar o subir escaleras?,question_code,Question long label
+variable,disabilities_cognitive.short,Cognitive Difficulty,Difficulté cognitive,Dificultad cognitiva,question_code,Question short label
+variable,disabilities_cognitive.long,Do you have difficulty remembering or concentrating?,Avez-vous des difficultés à vous souvenir ou à vous concentrer ?,¿Tiene dificultad para recordar o concentrarse?,question_code,Question long label
+variable,disabilities_selfcare.short,Self-Care Difficulty,Difficulté à prendre soin de soi,Dificultad para el autocuidado,question_code,Question short label
+variable,disabilities_selfcare.long,"Do you have difficulty with self-care, such as washing all over or dressing?","Avez-vous des difficultés à prendre soin de vous, par exemple à vous laver entièrement ou à vous habiller ?","¿Tiene dificultad para el autocuidado, como lavarse completamente o vestirse?",question_code,Question long label
+variable,disabilities_communication.short,Communication Difficulty,Difficulté de communication,Dificultad de comunicación,question_code,Question short label
+variable,disabilities_communication.long,"Do you have difficulty communicating, for example, understanding or being understood [this is not related to a language barrier]?","Avez-vous des difficultés à communiquer, par exemple à comprendre ou à vous faire comprendre [sans lien avec une barrière linguistique] ?","¿Tiene dificultad para comunicarse, por ejemplo, para comprender o hacerse entender [sin relación con una barrera lingüística]?",question_code,Question long label
+variable,EXTRA_KNOWLEDGE_migration.short,Work with migrants (first aid and humanitarian aid),Soutien aux migrants (premiers secours et aide humanitaire),Apoyo a migrantes (primeros auxilios y ayuda humanitaria),question_code,Question short label
+variable,EXTRA_KNOWLEDGE_migration.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_KNOWLEDGE_blood.short,Blood Donation,Don de sang,Donación de sangre,question_code,Question short label
+variable,EXTRA_KNOWLEDGE_blood.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_KNOWLEDGE_first_aid.short,First Aid,Premiers secours,Primeros auxilios,question_code,Question short label
+variable,EXTRA_KNOWLEDGE_first_aid.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_KNOWLEDGE_social.short,Social Services,Services sociaux,Servicios sociales,question_code,Question short label
+variable,EXTRA_KNOWLEDGE_social.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_KNOWLEDGE_family_reunification.short,Restoring Family Links,Rétablissement des liens familiaux,Restablecimiento del contacto entre familiares,question_code,Question short label
+variable,EXTRA_KNOWLEDGE_family_reunification.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_KNOWLEDGE_crisis_management.short,Crisis Management,Gestion de crise,Gestión de crisis,question_code,Question short label
+variable,EXTRA_KNOWLEDGE_crisis_management.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_KNOWLEDGE_water.short,Water Rescue Service,Service de sauvetage aquatique,Servicio de rescate acuático,question_code,Question short label
+variable,EXTRA_KNOWLEDGE_water.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_KNOWLEDGE_food_aid.short,Provision of Food and Material Aid,Fourniture d’aide alimentaire et matérielle,Provisión de ayuda alimentaria y material,question_code,Question short label
+variable,EXTRA_KNOWLEDGE_food_aid.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_KNOWLEDGE_other.short,Other Activities,Autres activités,Otras actividades,question_code,Question short label
+variable,EXTRA_KNOWLEDGE_other.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_KNOWLEDGE_none.short,Don't know,Ne sais pas,No sabe,question_code,Question short label
+variable,EXTRA_KNOWLEDGE_none.long,Do you know what the Red Cross does in this country?,Savez-vous ce que fait la Croix-Rouge dans ce pays ?,¿Sabe qué hace la Cruz Roja en este país?,question_code,Question long label
+variable,EXTRA_CHANNEL_Phone.short,Over the phone,Par téléphone,Por teléfono,question_code,Question short label
+variable,EXTRA_CHANNEL_Phone.long,Through which channels did you receive the information?,Par quels canaux avez-vous reçu les informations ?,¿A través de qué canales recibió la información?,question_code,Question long label
+variable,EXTRA_CHANNEL_SMS.short,SMS,SMS,SMS,question_code,Question short label
+variable,EXTRA_CHANNEL_SMS.long,Through which channels did you receive the information?,Par quels canaux avez-vous reçu les informations ?,¿A través de qué canales recibió la información?,question_code,Question long label
+variable,EXTRA_CHANNEL_email.short,E-mail,E-mail,Correo electrónico,question_code,Question short label
+variable,EXTRA_CHANNEL_email.long,Through which channels did you receive the information?,Par quels canaux avez-vous reçu les informations ?,¿A través de qué canales recibió la información?,question_code,Question long label
+variable,EXTRA_CHANNEL_social_media.short,Social Media,Réseaux sociaux,Redes sociales,question_code,Question short label
+variable,EXTRA_CHANNEL_social_media.long,Through which channels did you receive the information?,Par quels canaux avez-vous reçu les informations ?,¿A través de qué canales recibió la información?,question_code,Question long label
+variable,EXTRA_CHANNEL_meeting.short,Community Meeting,Réunion communautaire,Reunión comunitaria,question_code,Question short label
+variable,EXTRA_CHANNEL_meeting.long,Through which channels did you receive the information?,Par quels canaux avez-vous reçu les informations ?,¿A través de qué canales recibió la información?,question_code,Question long label
+variable,EXTRA_CHANNEL_in_person.short,In-person from NS,En personne par la Société nationale,En persona por la Sociedad Nacional,question_code,Question short label
+variable,EXTRA_CHANNEL_in_person.long,Through which channels did you receive the information?,Par quels canaux avez-vous reçu les informations ?,¿A través de qué canales recibió la información?,question_code,Question long label
+variable,EXTRA_CHANNEL_family_friends.short,Word of mouth,Bouche-à-oreille,Boca a boca,question_code,Question short label
+variable,EXTRA_CHANNEL_family_friends.long,Through which channels did you receive the information?,Par quels canaux avez-vous reçu les informations ?,¿A través de qué canales recibió la información?,question_code,Question long label
+variable,EXTRA_CHANNEL_poster.short,Poster / Flyer,Affiche / dépliant,Cartel / folleto,question_code,Question short label
+variable,EXTRA_CHANNEL_poster.long,Through which channels did you receive the information?,Par quels canaux avez-vous reçu les informations ?,¿A través de qué canales recibió la información?,question_code,Question long label
+variable,EXTRA_CHANNEL_other.short,Other Channels,Autres canaux,Otros canales,question_code,Question short label
+variable,EXTRA_CHANNEL_other.long,Through which channels did you receive the information?,Par quels canaux avez-vous reçu les informations ?,¿A través de qué canales recibió la información?,question_code,Question long label
+variable,EXTRA_FEEDBACK_knowledge.short,Know How to Submit a Complaint,Sait comment soumettre une plainte,Sabe cómo presentar una queja,question_code,Question short label
+variable,EXTRA_FEEDBACK_knowledge.long,Do you know how to provide feedback or make a complaint to the Red Cross?,Savez-vous comment donner votre avis ou déposer une plainte auprès de la Croix-Rouge ?,¿Sabe cómo dar su opinión o presentar una queja a la Cruz Roja?,question_code,Question long label
+variable,EXTRA_FEEDBACK_comfortable.short,Comfortable to Submit a Complaint,À l’aise pour soumettre une plainte,Se siente cómodo presentando una queja,question_code,Question short label
+variable,EXTRA_FEEDBACK_comfortable.long,Would you feel comfortable providing feedback or making a complaint to the Red Cross staff or volunteer?,Vous sentiriez-vous à l’aise pour donner votre avis ou déposer une plainte auprès du personnel ou d’un volontaire de la Croix-Rouge ?,¿Se sentiría cómodo dando su opinión o presentando una queja al personal o a un voluntario de la Cruz Roja?,question_code,Question long label
+variable,EXTRA_FEEDBACK_Use.short,Submitted a Complaint,A déjà soumis une plainte,Ha presentado una queja,question_code,Question short label
+variable,EXTRA_FEEDBACK_Use.long,Have you ever submitted feedback or a complaint to the Red Cross?,Avez-vous déjà donné votre avis ou déposé une plainte auprès de la Croix-Rouge ?,¿Ha dado alguna vez su opinión o presentado una queja a la Cruz Roja?,question_code,Question long label
+variable,EXTRA_FEEDBACK_Response.short,Response Received,Réponse reçue,Respuesta recibida,question_code,Question short label
+variable,EXTRA_FEEDBACK_Response.long,Did you receive a response?,Avez-vous reçu une réponse ?,¿Recibió una respuesta?,question_code,Question long label
+variable,EXTRA_FEEDBACK_Confidence.short,Confidence in Fairness,Confiance dans l’équité,Confianza en la equidad,question_code,Question short label
+variable,EXTRA_FEEDBACK_Confidence.long,"If many people complained about a service offered by the Red Cross that is working badly, do you think that it would be improved?","Si de nombreuses personnes se plaignaient d’un service de la Croix-Rouge qui fonctionne mal, pensez-vous qu’il serait amélioré ?","Si muchas personas se quejaran de un servicio de la Cruz Roja que funciona mal, ¿cree que se mejoraría?",question_code,Question long label
+variable,EXTRA_ENGAGEMENT_voice_view.short,Opportunity to Voice Views,Possibilité d’exprimer son opinion,Oportunidad de expresar su opinión,question_code,Question short label
+variable,EXTRA_ENGAGEMENT_voice_view.long,"If a decision affecting your community is to be made by the Red Cross, do you think that you would have an opportunity to voice your views?","Si la Croix-Rouge devait prendre une décision concernant votre communauté, pensez-vous que vous auriez la possibilité d’exprimer votre opinion ?","Si la Cruz Roja tuviera que tomar una decisión que afectara a su comunidad, ¿cree que tendría la oportunidad de expresar su opinión?",question_code,Question long label
+variable,EXTRA_ENGAGEMENT_community_discussions.short,Participation in Community Discussions,Participation aux discussions communautaires,Participación en discusiones comunitarias,question_code,Question short label
+variable,EXTRA_ENGAGEMENT_community_discussions.long,Have you had opportunities to participate in discussions about the support available in your community?,Avez-vous eu l’occasion de participer à des discussions sur le soutien disponible dans votre communauté ?,¿Ha tenido oportunidades de participar en discusiones sobre el apoyo disponible en su comunidad?,question_code,Question long label
+variable,EXTRA_ENGAGEMENT_dialogue_activities.short,Participation in Dialogue Activities,Participation aux activités de dialogue,Participación en actividades de diálogo,question_code,Question short label
+variable,EXTRA_ENGAGEMENT_dialogue_activities.long,Have you had opportunities to participate in any activities organised by the Red Cross aiming to strengthen dialogue and understanding between different groups and communities (e.g. migrants and host community members)?,"Avez-vous eu l’occasion de participer à des activités organisées par la Croix-Rouge visant à renforcer le dialogue et la compréhension entre différents groupes et communautés (par exemple, migrants et membres de la communauté d’accueil) ?","¿Ha tenido oportunidades de participar en actividades organizadas por la Cruz Roja destinadas a fortalecer el diálogo y la comprensión entre diferentes grupos y comunidades (por ejemplo, migrantes y miembros de la comunidad de acogida)?",question_code,Question long label
+variable,EXTRA_ENGAGEMENT_connected_community.short,More  Connected to Community,Davantage connecté à la communauté,Más conectado con la comunidad,question_code,Question short label
+variable,EXTRA_ENGAGEMENT_connected_community.long,Have the engagement activities or discussions facilitated by the Red Cross helped you feel more connected to the community you consider yourself a part of?,Les activités d’engagement ou les discussions facilitées par la Croix-Rouge vous ont-elles aidé à vous sentir davantage connecté(e) à la communauté dont vous vous considérez membre ?,¿Las actividades de participación o discusiones facilitadas por la Cruz Roja le han ayudado a sentirse más conectado con la comunidad de la que se considera parte?,question_code,Question long label
+variable,EXTRA_ENGAGEMENT_connected_other.short,More Connected to Other Groups,Davantage connecté à d’autres groupes,Más conectado con otros grupos,question_code,Question short label
+variable,EXTRA_ENGAGEMENT_connected_other.long,Have the engagement activities or discussions facilitated by the Red Cross helped you feel more connected to other groups of people?,Les activités d’engagement ou les discussions facilitées par la Croix-Rouge vous ont-elles aidé à vous sentir davantage connecté(e) à d’autres groupes de personnes ?,¿Las actividades de participación o discusiones facilitadas por la Cruz Roja le han ayudado a sentirse más conectado con otros grupos de personas?,question_code,Question long label
+variable,EXTRA_ENGAGEMENT_participation_impact.short,Impact of Participation,Impact de la participation,Impacto de la participación,question_code,Question short label
+variable,EXTRA_ENGAGEMENT_participation_impact.long,Do you feel that being involved in discussions about services and support has helped improve the services?,Pensez-vous que votre participation aux discussions sur les services et le soutien a contribué à améliorer les services ?,¿Considera que participar en discusiones sobre servicios y apoyo ha contribuido a mejorar los servicios?,question_code,Question long label
+variable,EXTRA_ENGAGEMENT_feeling_valued.short,Opinions and Needs Valued,Opinions et besoins pris en compte,Opiniones y necesidades valoradas,question_code,Question short label
+variable,EXTRA_ENGAGEMENT_feeling_valued.long,Do you feel that your opinions and needs were valued during these activities or discussions?,Avez-vous le sentiment que vos opinions et vos besoins ont été pris en compte lors de ces activités ou discussions ?,¿Considera que sus opiniones y necesidades fueron valoradas durante estas actividades o discusiones?,question_code,Question long label
+variable,EXTRA_RELEVANCE_enough_information.short,Enough Information,Informations suffisantes,Información suficiente,question_code,Question short label
+variable,EXTRA_RELEVANCE_enough_information.long,"Do you feel the Red Cross provided you with enough information to navigate essential aspects of life (e.g., housing, work, services, legal matters)?","Pensez-vous que la Croix-Rouge vous a fourni suffisamment d’informations pour vous orienter dans les aspects essentiels de la vie (par exemple, logement, travail, services, questions juridiques) ?","¿Considera que la Cruz Roja le proporcionó suficiente información para desenvolverse en aspectos esenciales de la vida (por ejemplo, vivienda, trabajo, servicios y asuntos legales)?",question_code,Question long label
+variable,EXTRA_RELEVANCE_information_impact.short,Useful Information,Informations utiles,Información útil,question_code,Question short label
+variable,EXTRA_RELEVANCE_information_impact.long,Has the way information was shared been useful for improving your situation?,La manière dont les informations ont été partagées vous a-t-elle été utile pour améliorer votre situation ?,¿La forma en que se compartió la información ha sido útil para mejorar su situación?,question_code,Question long label
+variable,EXTRA_RELEVANCE_information_decision.short,Information for Better Decisions,Informations pour de meilleures décisions,Información para tomar mejores decisiones,question_code,Question short label
+variable,EXTRA_RELEVANCE_information_decision.long,Has the information provided by the Red Cross helped you make better decisions about your daily life?,Les informations fournies par la Croix-Rouge vous ont-elles aidé à prendre de meilleures décisions dans votre vie quotidienne ?,¿La información proporcionada por la Cruz Roja le ha ayudado a tomar mejores decisiones sobre su vida cotidiana?,question_code,Question long label
+variable,EXTRA_RELEVANCE_information_planning.short,Information for Better Planning,Informations pour mieux planifier,Información para una mejor planificación,question_code,Question short label
+variable,EXTRA_RELEVANCE_information_planning.long,"Has access to information, participation, and trust in services contributed to improving your ability to plan for the future?","L’accès à l’information, la participation et la confiance dans les services ont-ils contribué à améliorer votre capacité à planifier l’avenir ?","¿El acceso a la información, la participación y la confianza en los servicios han contribuido a mejorar su capacidad para planificar el futuro?",question_code,Question long label
+variable,BEFORE_information.short,Received Information,Informations reçues,Información recibida,question_code,Question short label
+variable,BEFORE_information.long,"Have you received any information about available support, services, or opportunities from the Red Cross?","Avez-vous reçu des informations sur les aides, services ou opportunités disponibles auprès de la Croix-Rouge ?","¿Ha recibido información sobre el apoyo, los servicios o las oportunidades disponibles de la Cruz Roja?",question_code,Question long label
+variable,BEFORE_engagement.short,Impact of Red Cross engagement,Impact de l’engagement avec la Croix-Rouge,Impacto de la interacción con la Cruz Roja,question_code,Question short label
+variable,BEFORE_engagement.long,Has engagement with the Red Cross helped improve your overall life situation?,Votre engagement avec la Croix-Rouge a-t-il contribué à améliorer votre situation générale ?,¿La interacción con la Cruz Roja ha contribuido a mejorar su situación general?,question_code,Question long label
+variable,BEFORE_trust_improved.short,Impact of Migrant Support on Trust,Impact du soutien aux migrants sur la confiance,Impacto del apoyo a migrantes en la confianza,question_code,Question short label
+variable,BEFORE_trust_improved.long,Have the recent activities related to supporting migrants affected your trust in the Red Cross?,Les activités récentes liées au soutien aux migrants ont-elles influencé votre confiance envers la Croix-Rouge ?,¿Las actividades recientes relacionadas con el apoyo a migrantes han afectado su confianza en la Cruz Roja?,question_code,Question long label
+variable,BEFORE_perception_improved.short,Impact of Migrant Support on Perceptions,Impact du soutien aux migrants sur les perceptions,Impacto del apoyo a migrantes en las percepciones,question_code,Question short label
+variable,BEFORE_perception_improved.long,Have the recent activities related to supporting migrants affected your perception of the Red Cross’ values and competences?,Les activités récentes liées au soutien aux migrants ont-elles influencé votre perception des valeurs et des compétences de la Croix-Rouge ?,¿Las actividades recientes relacionadas con el apoyo a migrantes han afectado su percepción de los valores y competencias de la Cruz Roja?,question_code,Question long label
