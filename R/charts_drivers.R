@@ -150,6 +150,11 @@ val_recode_map <- setNames(
 )
 
 val_data <- val_data %>%
+  mutate(
+    Response = as.character(Response),
+    Response = gsub("[’‘`´]", "'", Response),
+    Response = trimws(Response)
+  ) %>%
   filter(
     !is.na(Response),
     Response != ""
@@ -163,8 +168,12 @@ summary_val <- val_data %>%
   group_by(Question, Response) %>%
   summarise(n = n(), .groups = "drop") %>%
   mutate(
-    Response = factor(Response, levels = unique(answer_likertscale))
+    Response = factor(
+      Response,
+      levels = unique(answer_likertscale)
+    )
   ) %>%
+  filter(!is.na(Response)) %>%
   group_by(Question) %>%
   mutate(percent = n / sum(n) * 100) %>%
   ungroup()
