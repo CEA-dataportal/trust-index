@@ -324,9 +324,9 @@ if ("extra" %in% question_code$category) {
       geom_col(color = "white", width = 0.55) +
       geom_text(
         aes(label = ifelse(percent >= 5, paste0(round(percent, 1), "%"), "")),
-        position = position_stack(vjust = 1),
+        position = position_stack(vjust = 0.5),
         color = "white",
-        size = 3.5,
+        size = 4,
         show.legend = FALSE
       ) +
       scale_fill_manual(
@@ -350,7 +350,7 @@ if ("extra" %in% question_code$category) {
       guides(fill = guide_legend(reverse = TRUE)) +
       custom_theme() +
       theme(
-        axis.text.y = element_text(size=10)
+        axis.text.y = element_text(size=12)
       )
   }
   
