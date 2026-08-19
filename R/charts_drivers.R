@@ -825,7 +825,7 @@ if ("knowledge" %in% question_code$category) {
     mutate(percent = n / sum(n) * 100) %>%
     ungroup()
   
-  plots_by_driver <- summary_knowledge %>%
+  plots_knowledge <- summary_knowledge %>%
     split(.$Drivers) %>%
     map(~ .x %>%
           dplyr::filter(Response == "Yes") %>%
@@ -866,7 +866,7 @@ if ("knowledge" %in% question_code$category) {
           )
     )
   
-  walk(plots_by_driver, print)
+  walk(plots_knowledge, print)
 }
 
 
