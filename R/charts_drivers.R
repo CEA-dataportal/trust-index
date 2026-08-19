@@ -316,7 +316,7 @@ if ("extra" %in% question_code$category) {
     ggplot(
       df_driver,
       aes(
-        x = stringr::str_wrap(tr_variable(as.character(Question)), wrap),
+        x = stringr::str_wrap(tr_variable(as.character(Question)), 20),
         y = percent,
         fill = Response
       )
@@ -358,8 +358,6 @@ if ("extra" %in% question_code$category) {
     group_split(Drivers) %>%
     map(make_barchart)
   
-  
-  walk(extra_plots, print)
 }
 
 # ---- Original chunk: experience_question ----
@@ -782,7 +780,7 @@ if ("channel" %in% question_code$category) {
           )
     )
   
-  walk(plots_by_channel, print)
+
 }
 
 # ---- Original chunk: knowledge_questions ----
