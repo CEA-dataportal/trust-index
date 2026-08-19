@@ -316,7 +316,7 @@ if ("extra" %in% question_code$category) {
     ggplot(
       df_driver,
       aes(
-        x = stringr::str_wrap(tr_variable(as.character(Question)), 20),
+        x = stringr::str_wrap(tr_variable(as.character(Question)), wrap),
         y = percent,
         fill = Response
       )
@@ -324,7 +324,7 @@ if ("extra" %in% question_code$category) {
       geom_col(color = "white", width = 0.55) +
       geom_text(
         aes(label = ifelse(percent >= 5, paste0(round(percent, 1), "%"), "")),
-        position = position_stack(vjust = 0.5),
+        position = position_stack(vjust = 1),
         color = "white",
         size = 3.5,
         show.legend = FALSE
@@ -780,7 +780,6 @@ if ("channel" %in% question_code$category) {
           )
     )
   
-
 }
 
 # ---- Original chunk: knowledge_questions ----
@@ -832,7 +831,7 @@ if ("knowledge" %in% question_code$category) {
           ggplot(
             aes(
               x = forcats::fct_reorder(
-                stringr::str_wrap(tr_variable(Question), 40),
+                stringr::str_wrap(tr_variable(Question), 20),
                 percent
               ),
               y = percent,
