@@ -113,6 +113,11 @@ comp_recode_map <- setNames(
 )
 
 comp_data <- comp_data %>%
+  mutate(
+    Response = as.character(Response),
+    Response = gsub("[’‘`´]", "'", Response),
+    Response = trimws(Response)
+  ) %>%
   filter(
     !is.na(Response),
     Response != ""
@@ -128,6 +133,7 @@ summary_comp <- comp_data %>%
   mutate(
     Response = factor(Response, levels = unique(answer_likertscale))
   ) %>%
+  filter(!is.na(Response)) %>%
   group_by(Question) %>%
   mutate(percent = n / sum(n) * 100) %>%
   ungroup()
