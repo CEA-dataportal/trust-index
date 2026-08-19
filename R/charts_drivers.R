@@ -113,7 +113,10 @@ comp_recode_map <- setNames(
 )
 
 comp_data <- comp_data %>%
-  filter(!(is.na(Response))) %>%
+  filter(
+    !is.na(Response),
+    Response != ""
+  ) %>%
   mutate(
     Question = recode(Question, !!!comp_recode_map),
     Response = recode(Response, !!!answer_likertscale)
@@ -147,7 +150,10 @@ val_recode_map <- setNames(
 )
 
 val_data <- val_data %>%
-  filter(!(is.na(Response))) %>%
+  filter(
+    !is.na(Response),
+    Response != ""
+  ) %>%
   mutate(
     Question = recode(Question, !!!val_recode_map),
     Response = recode(Response, !!!answer_likertscale)
@@ -270,7 +276,10 @@ if ("extra" %in% question_code$category) {
     left_join(question_map_extra %>% select(Question, Drivers, long_label), by = "Question")
   
   summary_extra <- extra_data %>%
-    filter(!(is.na(extra_data$Response))) %>%
+    filter(
+      !is.na(Response),
+      Response != ""
+    ) %>%
     mutate(
       Response = recode(as.character(Response), !!!answer_extra)
     ) %>%
