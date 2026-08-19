@@ -866,7 +866,6 @@ if ("knowledge" %in% question_code$category) {
           )
     )
   
-  walk(plots_knowledge, print)
 }
 
 
