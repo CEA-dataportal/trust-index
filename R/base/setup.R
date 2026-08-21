@@ -5,16 +5,13 @@
 
 # ============================================================
 # CTI Report - setup.R
-# Generated from Data-Report-INST.Rmd
 #
 # Purpose:
 # - Load required packages
 # - Set global R / knitr options
-# - Define shared colours and ggplot theme
+# - Define the shared ggplot theme
 # - Define small reusable helper functions
-#
-# Keep country-specific parameters, config Excel reading, data loading,
-# score calculation and exports in separate scripts.
+
 # ============================================================
 
 # ---- 1. Global options ----
@@ -114,32 +111,7 @@ if (requireNamespace("conflicted", quietly = TRUE)) {
   conflicted::conflict_prefer("arrange", "dplyr")
 }
 
-# ---- 5. Colour system ----
-
-color_primary_100 <- "#12284c"      # Main colour
-color_primary_10  <- "#cfd4db"      # Main colour variant
-
-color_secondary_100 <- "#F5333F"    # Secondary colour
-color_secondary_10  <- "#fdd6d8"    # Secondary colour variant
-
-color_tertiary_100 <- "#6B7E9E"     # Tertiary colour
-color_tertiary_10  <- "#e1e5eb"     # Tertiary colour variant
-
-color_grey <- "#CFCFCF"
-
-color_scale      <- c(color_primary_100, color_grey, color_secondary_100)
-color_gradient_1 <- c(color_primary_100, color_primary_10)
-color_gradient_2 <- c(color_secondary_100, color_secondary_10)
-
-color_bg          <- "#EFEFEF"
-color_label_bl    <- "#262626"
-color_label_grey  <- "#666666"
-color_label_White <- "#FFFFFF"
-
-color_competencies <- color_secondary_100
-color_values       <- color_primary_100
-
-# ---- 6. Shared ggplot theme ----
+# ---- 5. Shared ggplot theme ----
 
 custom_theme <- function() {
   ggplot2::theme(
@@ -178,17 +150,17 @@ custom_theme <- function() {
     plot.subtitle = ggplot2::element_text(size = 12),
     plot.margin = ggplot2::margin(t = 10, r = 5, b = 10, l = 5),
     plot.caption = ggtext::element_markdown(
-        size = 10, 
-        hjust = 0,
-        lineheight = 1.15,
-        margin = margin(t = 12)
-      ),
+      size = 10, 
+      hjust = 0,
+      lineheight = 1.15,
+      margin = margin(t = 12)
+    ),
     plot.caption.position = "plot",
     plot.background = ggplot2::element_rect(fill = "#F8F8F8")
   )
 }
 
-# ---- 7. Standard exclusions used in charts ----
+# ---- 6. Standard exclusions used in charts ----
 
 # These values are excluded from some sampling and demographic charts.
 display_no <- c(
@@ -209,7 +181,7 @@ excluded_regions <- c(
   "Prefer not to answer"
 )
 
-# ---- 8. Helper functions ----
+# ---- 7. Helper functions ----
 
 make_mapping <- function(df, object_name) {
   x <- df |>
