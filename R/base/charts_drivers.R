@@ -32,6 +32,7 @@ height_intention_plot  <- 1
 height_knowledge_plot  <- 1
 height_extra_plot      <- 1
 height_risk_plot       <- 1
+height_strip_plot      <- 1
 
 # Normalised category list
 chart_categories <- tolower(as.character(question_code$category))
