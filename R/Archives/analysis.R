@@ -11,9 +11,9 @@
 message("Running data preparation and score computation...")
 
 # This script assumes the following scripts have already run:
-# source("R/modules/config_<module>.R")
-# source("R/base/read_config.R")
-# source("R/base/load_data.R")
+# source("R/setup.R")
+# source("R/read_config.R")
+# source("R/load_data.R")
 
 # ============================================================
 # 1. Data preparation
@@ -22,19 +22,10 @@ message("Running data preparation and score computation...")
 # ============================================================
 # CTI Report - prepare_data.R
 # Prepare analysis parameters, groups and drivers mapping
-# Common to Institutional and EWS modules
+# Extracted from Data-Report-INST.Rmd
 # ============================================================
 
 message("Preparing analysis metadata...")
-
-required_analysis_config <- c("score_categories", "score_dimensions", "score_prefixes", "index_name")
-missing_analysis_config <- required_analysis_config[!vapply(required_analysis_config, exists, logical(1), inherits = TRUE)]
-if (length(missing_analysis_config) > 0) {
-  stop(
-    "Missing analysis configuration object(s): ",
-    paste(missing_analysis_config, collapse = ", ")
-  )
-}
 
 #Factors for data analysis
 
@@ -87,7 +78,7 @@ drivers_map <- question_code %>%
     Dimension = str_to_title(Dimension),
     Variables = str_replace(Variables, prefix_pattern, "")  # Remove detected prefix
   ) %>%
-  filter(tolower(Dimension) %in% tolower(score_dimensions)) %>%
+  filter(Dimension %in% c("Competency", "Value")) %>%
   group_by(Dimension) %>%
   summarise(
     mapping = list(setNames(Drivers, Variables)),
@@ -97,7 +88,7 @@ drivers_map <- question_code %>%
 
 
 drivers_lookup <- question_code %>%
-  filter(tolower(category) %in% tolower(score_categories)) %>%
+  filter(category %in% c("competency", "value")) %>%
   mutate(
     Dimension = stringr::str_to_title(category)
   ) %>%
@@ -117,178 +108,137 @@ message("✓ Analysis metadata prepared")
 # ============================================================
 # CTI Report - compute_score.R
 # Compute CTI scores, weighted summaries, profile groups and tests
-# Common to Institutional and EWS modules
+# Extracted from Data-Report-INST.Rmd
 # ============================================================
 
 message("Computing scores...")
 
-# This chunk builds and applies a dynamic 0–10 scoring scale, computes
-# respondent-level means for each configured dimension/pillar, and summarises
-# mean scores by disaggregation groups into means_df.
+# This chunk builds and applies a dynamic 0–10 scoring scale, computes pillar means,
+# and summarises mean scores by disaggregation groups into means_df.
 
-# Score variables are defined by the active module configuration.
-if (!exists("score_prefixes") || length(score_prefixes) == 0 || is.null(names(score_prefixes))) {
-  stop("score_prefixes must be provided by the active module configuration.")
-}
+values <- colnames(data)[grepl(paste0("^", prefix_val),colnames(data))]
+comp <- colnames(data)[grepl(paste0("^", prefix_comp),colnames(data))]
 
-score_columns <- lapply(score_prefixes, function(prefix) {
-  names(data)[grepl(paste0("^", prefix, "_"), names(data)) | names(data) == prefix]
-})
-
-missing_score_dimensions <- names(score_columns)[lengths(score_columns) == 0]
-if (length(missing_score_dimensions) > 0) {
-  warning(
-    "No score columns found for: ",
-    paste(missing_score_dimensions, collapse = ", ")
-  )
-}
-
-score_columns <- score_columns[lengths(score_columns) > 0]
-all_score_columns <- unique(unlist(score_columns, use.names = FALSE))
-
-if (length(all_score_columns) == 0) {
-  stop("No score variables were found in the analysis dataset.")
-}
-
-# Save data with answer options before recoding
-survey_data <- data[, all_score_columns, drop = FALSE]
+# Save data with answer option as survey_data
+survey_data <- data[, c(comp, values)]
 
 # Build the dynamic score scale from answer_likertscale
+
 score_map_0 <- score_map
 score_map <- gsub("’", "'", score_map)
-
-if (exists("Neutral") && identical(as.character(Neutral), "No")) {
-  scoring_levels <- score_map[!score_map %in% c("I don't know", "Don't know", "No answer")]
+if (Neutral == "No") {
+  scoring_levels <- score_map[!score_map %in% c("I don't know","Don't know","No answer")]
 } else {
   scoring_levels <- score_map[!score_map %in% c("No answer")]
 }
-
 ordered_levels <- unique(scoring_levels)
+
 n_levels <- length(ordered_levels)
-
-if (n_levels < 2) {
-  stop("The score mapping must contain at least two scoring levels.")
-}
-
 score_values <- seq(from = 10, to = 0, length.out = n_levels)
 score_map <- setNames(score_values, ordered_levels)
 
-# Convert all module score variables to 0–10 values
-data[, all_score_columns] <- data[, all_score_columns, drop = FALSE] %>%
+
+
+# Convert to score
+data[, c(comp, values)] <- data[, c(comp, values)] %>% 
   dplyr::mutate(
-    across(
+    across( 
       everything(),
-      ~ as.numeric(recode(as.character(.), !!!score_map, .default = NA_real_))
-    )
-  )
+      ~ as.numeric(recode( as.character(.), !!!score_map, .default = NA_real_ # or some other numeric default 
+      )) ))
 
-# Respondent-level mean for each configured dimension / pillar
-score_mean_columns <- character(0)
+data$comp_mean <- data %>% select(comp) %>% rowMeans(na.rm=TRUE)
+data$values_mean <- data %>% select(values) %>% rowMeans(na.rm=TRUE)
 
-for (dimension_key in names(score_columns)) {
-  dimension_vars <- score_columns[[dimension_key]]
-  mean_col <- paste0(dimension_key, "_mean")
-
-  data[[mean_col]] <- rowMeans(
-    data[, dimension_vars, drop = FALSE],
-    na.rm = TRUE
-  )
-  data[[mean_col]][is.nan(data[[mean_col]])] <- NA_real_
-  score_mean_columns[dimension_key] <- mean_col
-}
 
 means_df <- data.frame(
   variable = character(),
   variable_value = character(),
   dimension = character(),
   mean = numeric(),
-  n = integer(),
   stringsAsFactors = FALSE
 )
 
-# Loop through defined disaggregation variables and all configured dimensions
-if (!is.null(disaggregation_levels) && nrow(disaggregation_levels) > 0) {
-  for (i in disaggregation_levels$variable) {
-    col_name <- grep(paste0("^", i), colnames(data), value = TRUE)[1]
-
-    if (is.na(col_name)) {
-      warning(paste("No column found starting with", i))
-      next
-    }
-
-    for (dimension_key in names(score_mean_columns)) {
-      mean_col <- score_mean_columns[[dimension_key]]
-
-      df_dimension <- data %>%
-        select(all_of(c(col_name, mean_col))) %>%
-        group_by(across(all_of(col_name))) %>%
-        summarise(
-          mean = mean(.data[[mean_col]], na.rm = TRUE),
-          n = n(),
-          .groups = "drop"
-        ) %>%
-        mutate(variable = i, dimension = dimension_key) %>%
-        rename(variable_value = 1)
-
-      means_df <- bind_rows(means_df, df_dimension)
-    }
+# Loop through defined variables
+for (i in disaggregation_levels$variable) {
+  
+  # Find matching column name (starts with i)
+  col_name <- grep(paste0("^", i), colnames(data), value = TRUE)[1]
+  
+  if (!is.na(col_name)) {
+    # comp
+    df_comp <- data %>%
+      select(all_of(c(col_name, "comp_mean"))) %>%
+      group_by(across(all_of(col_name))) %>%
+      summarise(mean = mean(comp_mean, na.rm = TRUE), n = n(), .groups = "drop") %>%
+      mutate(variable = i, dimension = "comp") %>%
+      rename(variable_value = 1)
+    
+    means_df <- bind_rows(means_df, df_comp)
+    
+    # VALUES
+    df_values <- data %>%
+      select(all_of(c(col_name, "values_mean"))) %>%
+      group_by(across(all_of(col_name))) %>%
+      summarise(mean = mean(values_mean,na.rm = TRUE), n = n(), .groups = "drop") %>%
+      mutate(variable = i, dimension = "values") %>%
+      rename(variable_value = 1)
+    
+    means_df <- bind_rows(means_df, df_values)
+  } else {
+    warning(paste("No column found starting with", i))
   }
-
-  means_df <- means_df %>%
-    filter(!is.na(mean), !is.nan(mean)) %>%
-    filter(!variable_value %in% c("Prefer not to answer", "Don't know")) %>%
-    left_join(disaggregation_levels, by = "variable") %>%
-    mutate(variable = stringr::str_wrap(short_label, 10)) %>%
-    select(-short_label)
-
-  means_df <- means_df %>%
-    mutate(
-      variable = factor(
-        variable,
-        levels = stringr::str_wrap(disaggregation_levels$short_label, 10)
-      )
-    )
 }
+
+# Clean up
+means_df <- means_df %>%
+  filter(!is.na(mean)) %>%
+  filter(!variable_value %in% c("Prefer not to answer", "Don't know")) %>%
+  # Add labels using your disaggregation_levels
+  left_join(disaggregation_levels, by = c("variable" = "variable")) %>%
+  mutate(variable = stringr::str_wrap(short_label, 10)) %>%
+  select(-short_label)
+
+# Optional: Reorder levels
+means_df <- means_df %>%
+  mutate(variable = factor(variable, levels = stringr::str_wrap(disaggregation_levels$short_label, 10)))
 
 # This chunk standardises the weight variable (or sets it to 1 if missing),
 # then computes unweighted and weighted mean scores per question across pillars.
 
 if ("weight" %in% names(data)) {
   data$weight <- as.numeric(data$weight)
-
+  
 } else if ("_weight" %in% names(data)) {
   data$weight <- as.numeric(data$`_weight`)
-
+  
 } else {
   data$weight <- 1
 }
 
 
-df <- data %>% dplyr::select(all_of(c(all_score_columns, "weight")))
+df<-data %>% dplyr::select(c(values,comp,weight))
 
 
 #NO WEIGHT
 
 df2 <-df %>%
-   pivot_longer(!weight, names_to = "question", values_to = "value")%>%
-   na.omit() %>%
-   dplyr::group_by(question) %>%
-   dplyr::summarise(unweighted=mean(value))
+  pivot_longer(!weight, names_to = "question", values_to = "value")%>%
+  na.omit() %>%
+  dplyr::group_by(question) %>%
+  dplyr::summarise(unweighted=mean(value))
 
 
 #WEIGHT
 
-df3 <- df %>%
-  pivot_longer(!weight, names_to = "question", values_to = "value") %>%
-  tidyr::drop_na(value, weight) %>%
-  dplyr::group_by(question) %>%
-  dplyr::summarise(
-    weighted = stats::weighted.mean(value, weight, na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  left_join(df2, by = "question")
-  
- df3  <- df3 %>%
+df3 <-df%>%
+  pivot_longer(!weight, names_to = "question", values_to = "value")%>%
+  na.omit()%>%
+  dplyr::group_by(question)%>%
+  dplyr::summarise(count=n(),weighted=mean(value*weight/sum(weight))*count)%>%
+  left_join(df2) %>% select(-count)
+
+df3  <- df3 %>%
   left_join(drivers_lookup, by = c("question" = "Variables")) %>%
   select(-question) %>%
   select(Dimension, Drivers, everything())
@@ -300,12 +250,12 @@ df3 <- df %>%
 # Defining groups for scoring
 
 if (!is.null(group_map) && nrow(group_map) > 0) {
-
+  
   group_map_valid <- group_map |>
     dplyr::filter(!is.na(group_col), group_col != "")
-
+  
   if (nrow(group_map_valid) > 0) {
-
+    
     group_cols <- unique(as.character(group_map_valid$group_col)) # Check unique value from group_cols
     group_cols <- group_cols[nzchar(group_cols)] # Check if group_cols is not empty
     group_cols <- intersect(group_cols, names(data))  # Intersection between group_cols and data columns name
@@ -313,20 +263,20 @@ if (!is.null(group_map) && nrow(group_map) > 0) {
     if (length(group_cols) == 0) {
       warning("No valid group_col columns found in data; skipping grouping.")
     } else {
-
+      
       # ALL columns must be non-missing and non-empty
       valid_all <- Reduce(`|`, lapply(group_cols, function(col) {
         !is.na(data[[col]]) & data[[col]] != ""
       }))
-
+      
       in_any_group <- rep(FALSE, nrow(data))
-
+      
       for (i in seq_len(nrow(group_map_valid))) {
         row <- group_map_valid[i, , drop = FALSE]
-
+        
         grp_col <- as.character(row$group_col)
         grp_val <- as.character(row$group_value)
-
+        
         if (!nzchar(grp_col) || !(grp_col %in% names(data))) {
           warning(sprintf(
             "Skipping group_id=%s: column '%s' not in data",
@@ -334,15 +284,15 @@ if (!is.null(group_map) && nrow(group_map) > 0) {
           ))
           next
         }
-
+        
         idx_group <- !is.na(data[[grp_col]]) & (data[[grp_col]] == grp_val)
-
+        
         subset_data <- data[idx_group & valid_all, , drop = FALSE]
         assign(paste0("data_", row$group_id), subset_data, envir = .GlobalEnv)
-
+        
         in_any_group <- in_any_group | idx_group
       }
-
+      
       subset_others <- data[valid_all & !in_any_group, , drop = FALSE]
       assign("data_grp_other", subset_others, envir = .GlobalEnv)
     }
@@ -354,7 +304,7 @@ if (!is.null(group_map) && nrow(group_map) > 0) {
 
 compute_weighted <- function(data, group_label) {
   data %>%
-    select(all_of(c(all_score_columns, "weight"))) %>%
+    select(all_of(c(values, comp, "weight"))) %>%
     pivot_longer(!weight, names_to = "question", values_to = "value") %>%
     na.omit() %>%
     group_by(question) %>%
@@ -366,7 +316,7 @@ compute_weighted <- function(data, group_label) {
 
 compute_unweighted <- function(data, group_label) {
   data %>%
-    select(all_of(all_score_columns)) %>%  # No weight column
+    select(all_of(c(values, comp))) %>%  # No weight column
     pivot_longer(everything(), names_to = "question", values_to = "value") %>%
     na.omit() %>%
     group_by(question) %>%
@@ -429,8 +379,7 @@ df_group <- reduce(df_list, full_join, by = "question")%>%
 
 # Generating the Score summary
 
-profile_score_cols <- if (!is.null(group_map) && nrow(group_map) > 0) group_map$group_label else character(0)
-score_cols <- c("weighted", profile_score_cols, "Others")
+score_cols <- c("weighted", group_map$group_label, "Others")
 summary <- df_group %>% select(Dimension, Drivers, any_of(score_cols))
 
 metric_cols <- setdiff(names(summary), c("Dimension", "Drivers"))
@@ -453,7 +402,7 @@ dimension_scores <- dim_scores %>%
 index_overall <- dim_scores %>%
   summarise(across(all_of(metric_cols), ~ mean(.x, na.rm = TRUE))) %>%
   mutate(
-    Dimension = index_name,
+    Dimension = "INST INDEX",
     Drivers   = "Overall"
   ) %>%
   relocate(Dimension, Drivers)
@@ -468,7 +417,7 @@ index_drivers <- summary %>%
     ),
     .groups = "drop"
   ) %>%
-  mutate(Dimension = index_name) %>%     
+  mutate(Dimension = "INST INDEX") %>%     
   relocate(Dimension, .before = Drivers)   
 
 summary_2 <- bind_rows(
@@ -477,99 +426,194 @@ summary_2 <- bind_rows(
   index_overall 
 )
 summary_2 <- summary_2 %>%
-    rename(Overall = weighted)
+  rename(Overall = weighted)
 
 df4 <- df_group %>%
   select(Dimension, question = Drivers, any_of(score_cols))
 
 ## Significant test
 
-list_dim <- all_score_columns
-  
-p_values_df <- data.frame() 
+list_dim <- c(comp, values)
+
+p_values_df <- data.frame()
 
 for (i in list_dim) {
   
   if (!(exists("data_grp_1") && exists("data_grp_2") && exists("data_grp_other"))) {
     next
   }
-
+  
   group1_data <- data_grp_1[[i]]
   group2_data <- data_grp_2[[i]]
   group3_data <- data_grp_other[[i]]
-
+  
   group1_data <- group1_data[!is.na(group1_data)]
   group2_data <- group2_data[!is.na(group2_data)]
   group3_data <- group3_data[!is.na(group3_data)]
-
+  
   # If any group has fewer than 2 observations, skip this variable
-  if (length(group1_data) < 2 || length(group2_data) < 2 || length(group3_data) < 2) {
+  if (
+    length(group1_data) < 2 ||
+    length(group2_data) < 2 ||
+    length(group3_data) < 2
+  ) {
     next
   }
-
+  
   # Perform t-tests
   t_test_result12 <- t.test(group1_data, group2_data)
   t_test_result13 <- t.test(group1_data, group3_data)
   t_test_result23 <- t.test(group3_data, group2_data)
-
+  
   # Column name
   column1 <- i
-
+  
   # Add results to the data frame
   p_values_df <- rbind(
     p_values_df,
     data.frame(
       Column1 = column1,
-      P12     = t_test_result12$p.value,
-      P13     = t_test_result13$p.value,
-      P23     = t_test_result23$p.value,
-      mean12  = round(abs(t_test_result12$estimate[["mean of x"]] -
-                          t_test_result12$estimate[["mean of y"]]), 2),
-      mean13  = round(abs(t_test_result13$estimate[["mean of x"]] -
-                          t_test_result13$estimate[["mean of y"]]), 2),
-      mean23  = round(abs(t_test_result23$estimate[["mean of x"]] -
-                          t_test_result23$estimate[["mean of y"]]), 2)
+      P12 = t_test_result12$p.value,
+      P13 = t_test_result13$p.value,
+      P23 = t_test_result23$p.value,
+      mean12 = round(
+        abs(
+          t_test_result12$estimate[["mean of x"]] -
+            t_test_result12$estimate[["mean of y"]]
+        ),
+        2
+      ),
+      mean13 = round(
+        abs(
+          t_test_result13$estimate[["mean of x"]] -
+            t_test_result13$estimate[["mean of y"]]
+        ),
+        2
+      ),
+      mean23 = round(
+        abs(
+          t_test_result23$estimate[["mean of x"]] -
+            t_test_result23$estimate[["mean of y"]]
+        ),
+        2
+      )
     )
   )
 }
 
 
-# Reshape significance results only when tests were computed
-sig_reshaped <- data.frame()
+# ------------------------------------------------------------
+# Prepare significance results
+# ------------------------------------------------------------
 
-if (nrow(p_values_df) > 0 && !is.null(group_map) && nrow(group_map) >= 2) {
-  p_values_df <- pivot_longer(p_values_df, !Column1) %>%
-    mutate(number = gsub("\\D", "", name))
+p_values_df <- pivot_longer(
+  p_values_df,
+  !Column1
+)
 
-  meansP <- p_values_df %>%
-    dplyr::filter(grepl("mean", name)) %>%
-    dplyr::rename(mean = value) %>%
-    select(-name)
-
-  labels <- group_map$group_label
-  names(labels) <- group_map$group_id
-
-  pair_labels <- c(
-    paste0(labels["grp_1"], "-", labels["grp_2"]),
-    paste0(labels["grp_1"], "-Others"),
-    paste0(labels["grp_2"], "-Others")
+p_values_df <- p_values_df %>%
+  mutate(
+    number = gsub("\\D", "", name)
   )
-  names(pair_labels) <- c("P12", "P13", "P23")
 
-  sig_reshaped <- p_values_df %>%
-    dplyr::filter(grepl("^P", name)) %>%
-    mutate(name = recode(name, !!!pair_labels)) %>%
-    left_join(meansP, by = c("Column1", "number")) %>%
-    mutate(
-      value = p.adjust(value, method = "BH", n = length(value)),
-      sig   = ifelse(value < 0.05, "Yes", "No"),
-      name  = as.factor(name)
-    ) %>%
-    select(Column1, sig, name) %>%
-    pivot_wider(names_from = name, values_from = sig) %>%
-    left_join(drivers_lookup, by = c("Column1" = "Variables")) %>%
-    select(Pillar = Dimension, Drivers, everything(), -Column1)
-}
+meansP <- p_values_df %>%
+  dplyr::filter(grepl("mean", name)) %>%
+  dplyr::rename(mean = value) %>%
+  select(-name)
+
+
+# ------------------------------------------------------------
+# Translate respondent group labels
+# ------------------------------------------------------------
+
+labels <- group_map$group_label
+names(labels) <- group_map$group_id
+
+labels <- vapply(
+  labels,
+  tr_group_label,
+  character(1)
+)
+
+# "Others" is a data/profile label, not a technical variable
+others_label <- tr_data("Others")
+
+pair_labels <- c(
+  paste0(labels["grp_1"], " - ", labels["grp_2"]),
+  paste0(labels["grp_1"], " - ", others_label),
+  paste0(labels["grp_2"], " - ", others_label)
+)
+
+names(pair_labels) <- c(
+  "P12",
+  "P13",
+  "P23"
+)
+
+
+# ------------------------------------------------------------
+# Reshape and translate significance table
+# ------------------------------------------------------------
+
+sig_reshaped <- p_values_df %>%
+  dplyr::filter(grepl("^P", name)) %>%
+  mutate(
+    name = recode(name, !!!pair_labels)
+  ) %>%
+  left_join(
+    meansP,
+    by = c("Column1", "number")
+  ) %>%
+  mutate(
+    value = p.adjust(
+      value,
+      method = "BH",
+      n = length(value)
+    ),
+    sig = ifelse(
+      value < 0.05,
+      "Yes",
+      "No"
+    ),
+    name = as.factor(name)
+  ) %>%
+  select(
+    Column1,
+    sig,
+    name
+  ) %>%
+  pivot_wider(
+    names_from = name,
+    values_from = sig
+  ) %>%
+  left_join(
+    drivers_lookup,
+    by = c("Column1" = "Variables")
+  ) %>%
+  select(
+    Dimension,
+    Drivers,
+    everything(),
+    -Column1
+  ) %>%
+  mutate(
+    Dimension = tr_variable(Dimension),
+    Drivers = tr_variable(Drivers),
+    across(
+      -c(Dimension, Drivers),
+      ~ tr_data(.x)
+    )
+  )
+
+
+# ------------------------------------------------------------
+# Formatted significance table
+# ------------------------------------------------------------
+
+tab_sig_reshaped <- formattable(
+  sig_reshaped,
+  align = rep("c", ncol(sig_reshaped))
+)
 
 message("✓ Scores computed")
 

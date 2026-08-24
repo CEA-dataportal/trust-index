@@ -2,6 +2,13 @@
 #. COMMUNITY TRUST INDEX - INSTITUTIONAL MODULE CONFIG
 ##########################################################
 
+# ============================================================
+# CTI Report - config_inst.R
+# Module-specific configuration for the Institutional module
+#
+# Load this script before R/base/read_config.R.
+# ============================================================
+
 cti_module_config <- list(
   code       = "INST",
   name       = "Institutional",
@@ -15,12 +22,6 @@ cti_module_config <- list(
   score_dimensions = c(
     "Competency",
     "Value"
-  ),
-
-  # Names kept as comp / values for compatibility with current charts.
-  score_prefixes = c(
-    comp   = "COMP",
-    values = "VALUES"
   ),
 
   prefixes = list(

@@ -47,7 +47,6 @@ message("read_config.R loaded")
     "index_name",
     "score_categories",
     "score_dimensions",
-    "score_prefixes",
     "prefixes"
   )
 
@@ -193,7 +192,6 @@ read_cti_config <- function(
   index_name        <- module_config$index_name
   score_categories  <- module_config$score_categories
   score_dimensions  <- module_config$score_dimensions
-  score_prefixes    <- module_config$score_prefixes
   module_prefixes   <- module_config$prefixes
 
 
@@ -334,7 +332,6 @@ read_cti_config <- function(
     index_name = index_name,
     score_categories = score_categories,
     score_dimensions = score_dimensions,
-    score_prefixes = score_prefixes,
 
     date = date,
     path_data_file = path_data_file,

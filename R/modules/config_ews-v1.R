@@ -2,6 +2,13 @@
 #. COMMUNITY TRUST INDEX - EWS MODULE CONFIG
 ##########################################################
 
+# ============================================================
+# CTI Report - config_ews.R
+# Module-specific configuration for the Early Warning System module
+#
+# Load this script before R/base/read_config.R.
+# ============================================================
+
 cti_module_config <- list(
   code       = "EWS",
   name       = "Early Warning",
@@ -21,15 +28,8 @@ cti_module_config <- list(
     "Response"
   ),
 
-  score_prefixes = c(
-    disaster      = "DISASTER",
-    detection     = "DETECTION",
-    dissemination = "WARNING",
-    response      = "ACTION"
-  ),
-
   prefixes = list(
-    # Compatibility with contextual / legacy EWS code
+    # Kept for compatibility with the current EWS Rmd
     prefix_comp          = "COMP",
     prefix_val           = "VAL",
 
