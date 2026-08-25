@@ -208,106 +208,7 @@ build_dimension_correlation <- function(
     is.nan(survey_dimension$Overall)
   ] <- NA_real_
 
-  # Remove variables with too few finite observations.
-  # cor.test() requires enough finite paired values and otherwise errors.
-  finite_n <- vapply(
-    survey_dimension,
-    function(x) sum(is.finite(x)),
-    integer(1)
-  )
-
-  survey_dimension <- survey_dimension[
-    ,
-    finite_n >= 3L,
-    drop = FALSE
-  ]
-
-  if (ncol(survey_dimension) < 2L) {
-    warning(
-      paste0(
-        "Not enough usable variables for ",
-        dimension_label,
-        " to compute a correlation matrix."
-      ),
-      call. = FALSE
-    )
-    return(NULL)
-  }
-
-  # Safe pairwise significance matrix.
-  # Some pairs may still have fewer than 3 overlapping finite values,
-  # even if each variable individually has enough observations.
-  safe_cor_mtest <- function(mat, conf.level = 0.95) {
-
-    mat <- as.data.frame(mat)
-    n <- ncol(mat)
-
-    p.mat <- matrix(
-      NA_real_,
-      nrow = n,
-      ncol = n,
-      dimnames = list(names(mat), names(mat))
-    )
-
-    lowCI.mat <- p.mat
-    uppCI.mat <- p.mat
-
-    diag(p.mat) <- 0
-    diag(lowCI.mat) <- 1
-    diag(uppCI.mat) <- 1
-
-    if (n < 2L) {
-      return(
-        list(
-          p = p.mat,
-          lowCI = lowCI.mat,
-          uppCI = uppCI.mat
-        )
-      )
-    }
-
-    for (i in seq_len(n - 1L)) {
-      for (j in (i + 1L):n) {
-
-        ok <- is.finite(mat[[i]]) &
-          is.finite(mat[[j]])
-
-        if (sum(ok) < 3L) {
-          next
-        }
-
-        test <- tryCatch(
-          stats::cor.test(
-            mat[[i]][ok],
-            mat[[j]][ok],
-            conf.level = conf.level,
-            method = "pearson"
-          ),
-          error = function(e) NULL
-        )
-
-        if (is.null(test)) {
-          next
-        }
-
-        p.mat[i, j] <- p.mat[j, i] <- test$p.value
-
-        if (!is.null(test$conf.int) &&
-            length(test$conf.int) == 2L) {
-          lowCI.mat[i, j] <- lowCI.mat[j, i] <- test$conf.int[1]
-          uppCI.mat[i, j] <- uppCI.mat[j, i] <- test$conf.int[2]
-        }
-      }
-    }
-
-    list(
-      p = p.mat,
-      lowCI = lowCI.mat,
-      uppCI = uppCI.mat
-    )
-  }
-
-  test_unweighted <- safe_cor_mtest(
+  test_unweighted <- cor.mtest(
     survey_dimension,
     conf.level = 0.95
   )
@@ -505,7 +406,7 @@ if (toupper(module_code) == "INST") {
       method = "pearson"
     )
 
-    testRes <- safe_cor_mtest(
+    testRes <- cor.mtest(
       driver_unweighted,
       conf.level = 0.95
     )
