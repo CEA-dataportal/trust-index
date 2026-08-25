@@ -1,25 +1,27 @@
 ##########################################################
-#.  COMMUNITY TRUST INDEX - CHARTS
+#.  COMMUNITY TRUST INDEX - ADVANCED CHARTS
 ##########################################################
 
-
 # ============================================================
-# CTI Report - charts.R
-# All chart, visual table and chart-preparation chunks
-# Extracted from Data-Report-INST.Rmd
+# CTI Report - charts_advanced.R
+# Weighting comparison and driver correlation preparation
+# Shared by Institutional and EWS modules
 # ============================================================
 
 message(tr("runtime.loading_charts"))
 
 # This script assumes the following scripts have already run:
-# source('R/setup.R')
-# source('R/read_config.R')
-# source('R/load_data.R')
-# source('R/prepare_data.R')
-# source('R/compute_score.R')
+# - module palette and configuration
+# - R/base/setup.R
+# - R/base/read_config.R
+# - R/base/load_data.R
+# - R/base/translation_v2.R
+# - R/analysis.R
 
-# ---- Original chunk: weighting_new ----
-## Weighting comparison chart
+
+# ============================================================
+# 1. Weighting comparison chart
+# ============================================================
 
 df_long <- df3 %>%
   reshape2::melt(
@@ -27,104 +29,89 @@ df_long <- df3 %>%
     variable.name = "variable",
     value.name    = "value"
   ) %>%
-  mutate(
-    # Keep original values for calculations/grouping
-    Drivers_display = tr_variable(as.character(Drivers)),
+  dplyr::mutate(
+    Drivers_display   = tr_variable(as.character(Drivers)),
     Dimension_display = tr_variable(as.character(Dimension)),
-    variable_display = tr_variable(as.character(variable))
+    variable_display  = tr_variable(as.character(variable))
   )
 
-weighting_plot <- ggplot(
+weighting_plot <- ggplot2::ggplot(
   df_long,
-  aes(
+  ggplot2::aes(
     x = Drivers_display,
     y = value,
     group = variable_display,
     color = variable_display
   )
 ) +
-  geom_point() +
-  geom_line() +
-  geom_label(
-    aes(
+  ggplot2::geom_point() +
+  ggplot2::geom_line() +
+  ggplot2::geom_label(
+    ggplot2::aes(
       label = round(value, 2),
       fill = variable_display
     ),
     color = "white",
     label.size = 0,
-    label.r = unit(0.2, "lines"),
-    label.padding = unit(2, "pt"),
+    label.r = grid::unit(0.2, "lines"),
+    label.padding = grid::unit(2, "pt"),
     size = 4
   ) +
-  facet_wrap(
+  ggplot2::facet_wrap(
     ~ Dimension_display,
     nrow = 1,
     scales = "free_x"
   ) +
-  theme(
-    axis.text.x = element_text(
+  ggplot2::theme(
+    axis.text.x = ggplot2::element_text(
       color = "black",
       size = 12,
       angle = 90,
       vjust = 0.5,
       hjust = 1
     ),
-    axis.title.x = element_text(
-      margin = margin(t = 15),
+    axis.title.x = ggplot2::element_text(
+      margin = ggplot2::margin(t = 15),
       size = 16
     ),
-    axis.title.y = element_text(
-      margin = margin(r = 15),
+    axis.title.y = ggplot2::element_text(
+      margin = ggplot2::margin(r = 15),
       size = 16
     ),
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(),
-    legend.title = element_blank()
+    panel.grid.minor = ggplot2::element_blank(),
+    panel.background = ggplot2::element_blank(),
+    legend.title = ggplot2::element_blank()
   ) +
   custom_theme() +
-  labs(
+  ggplot2::labs(
     x = tr("score.drivers"),
     y = tr("score.score_variation")
   )
 
 
-# ------------------------------------------------------------
-# Correlation chart
-# ------------------------------------------------------------
+# ============================================================
+# 2. Driver correlation preparation
+# ============================================================
 
-# ---- Original chunk: correlation ----
-vars_comp  <- paste0("COMP_", names(drivers_map$Competency))
-vars_value <- paste0("VALUES_", names(drivers_map$Value))
-
-driver_columns <- c(vars_comp, vars_value)
+if (
+  !exists("score_prefixes", inherits = TRUE) ||
+  length(score_prefixes) == 0L
+) {
+  stop(
+    "score_prefixes is missing. Load the module configuration before charts_advanced.R.",
+    call. = FALSE
+  )
+}
 
 score_map_full <- score_map
 score_map_full["Don't know"] <- 5
+score_map_full["Don’t know"] <- 5
 
-driver_rename_map <- question_code %>%
-  filter(variable %in% driver_columns) %>%
-  mutate(
-    short_label_display = tr_variable(
-      variable,
-      label = "short",
-      fallback = short_label
-    )
-  ) %>%
-  select(variable, short_label_display) %>%
-  deframe()
-
-
-# Convert response values to numeric scores before correlation/weighting
 score_driver_response <- function(x) {
-  
   x_chr <- as.character(x)
-  
   mapped <- unname(score_map_full[x_chr])
-  
-  numeric_value <- suppressWarnings(
-    as.numeric(x_chr)
-  )
-  
+  numeric_value <- suppressWarnings(as.numeric(x_chr))
+
   dplyr::if_else(
     !is.na(mapped),
     as.numeric(mapped),
@@ -132,41 +119,298 @@ score_driver_response <- function(x) {
   )
 }
 
+move_overall_last <- function(mat) {
+  if (is.null(mat) || !"Overall" %in% colnames(mat)) {
+    return(mat)
+  }
 
-survey_drivers <- data %>%
-  select(all_of(c(driver_columns, "weight"))) %>%
-  mutate(
-    weight = as.numeric(weight),
-    across(
-      all_of(driver_columns),
-      score_driver_response
-    )
-  ) %>%
-  rename_with(
-    ~ driver_rename_map[.x],
-    .cols = all_of(driver_columns)
+  ord <- setdiff(colnames(mat), "Overall")
+
+  mat[
+    c(ord, "Overall"),
+    c(ord, "Overall"),
+    drop = FALSE
+  ]
+}
+
+get_driver_source <- function() {
+  if (exists("survey_data", inherits = TRUE)) {
+    return(get("survey_data", inherits = TRUE))
+  }
+
+  data
+}
+
+build_dimension_correlation <- function(
+    dimension_key,
+    dimension_label,
+    driver_vars
+) {
+
+  source_data <- get_driver_source()
+
+  driver_vars <- intersect(
+    driver_vars,
+    names(source_data)
   )
 
-survey_unweighted <- survey_drivers
-
-survey_weighted <- survey_drivers %>%
-  mutate(
-    across(
-      -weight,
-      ~ .x * weight
+  if (length(driver_vars) < 2L) {
+    warning(
+      paste0(
+        "Not enough driver columns for ",
+        dimension_label,
+        " to compute a correlation matrix."
+      ),
+      call. = FALSE
     )
+    return(NULL)
+  }
+
+  driver_rename_map <- question_code %>%
+    dplyr::filter(variable %in% driver_vars) %>%
+    dplyr::mutate(
+      short_label_display = tr_variable(
+        variable,
+        label = "short",
+        fallback = short_label
+      )
+    ) %>%
+    dplyr::select(
+      variable,
+      short_label_display
+    ) %>%
+    tibble::deframe()
+
+  survey_dimension <- source_data %>%
+    dplyr::select(
+      dplyr::all_of(driver_vars)
+    ) %>%
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::everything(),
+        score_driver_response
+      )
+    ) %>%
+    dplyr::rename_with(
+      ~ driver_rename_map[.x],
+      .cols = dplyr::all_of(driver_vars)
+    ) %>%
+    dplyr::mutate(
+      Overall = rowMeans(
+        dplyr::across(
+          dplyr::everything()
+        ),
+        na.rm = TRUE
+      )
+    )
+
+  survey_dimension$Overall[
+    is.nan(survey_dimension$Overall)
+  ] <- NA_real_
+
+  test_unweighted <- cor.mtest(
+    survey_dimension,
+    conf.level = 0.95
   )
 
-driver_unweighted <- survey_unweighted %>%
-  select(-weight)
-driver_weighted <- survey_weighted %>%
-  select(-weight)
+  cor_unweighted <- stats::cor(
+    survey_dimension,
+    use = "pairwise.complete.obs",
+    method = "pearson"
+  )
 
-testRes = cor.mtest(driver_unweighted, conf.level = 0.95)
-cor_matrix_uw <- cor(driver_unweighted, use = "pairwise.complete.obs", method = "pearson")
+  if ("weight" %in% names(data)) {
+    weight_vector <- as.numeric(data$weight)
+  } else if ("_weight" %in% names(data)) {
+    weight_vector <- as.numeric(data$`_weight`)
+  } else {
+    weight_vector <- rep(1, nrow(survey_dimension))
+  }
 
-cor_matrix_w <- cor(driver_weighted, use = "pairwise.complete.obs", method = "pearson")
+  if (length(weight_vector) != nrow(survey_dimension)) {
+    weight_vector <- rep(1, nrow(survey_dimension))
+  }
+
+  survey_dimension_weighted <- survey_dimension %>%
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::everything(),
+        ~ .x * weight_vector
+      )
+    )
+
+  cor_weighted <- stats::cor(
+    survey_dimension_weighted,
+    use = "pairwise.complete.obs",
+    method = "pearson"
+  )
+
+  cor_unweighted <- move_overall_last(cor_unweighted)
+  cor_weighted <- move_overall_last(cor_weighted)
+  test_unweighted$p <- move_overall_last(test_unweighted$p)
+
+  if (!is.null(test_unweighted$lowCI)) {
+    test_unweighted$lowCI <- move_overall_last(
+      test_unweighted$lowCI
+    )
+  }
+
+  if (!is.null(test_unweighted$uppCI)) {
+    test_unweighted$uppCI <- move_overall_last(
+      test_unweighted$uppCI
+    )
+  }
+
+  list(
+    key = dimension_key,
+    dimension = dimension_label,
+    variables = driver_vars,
+    data = survey_dimension,
+    data_weighted = survey_dimension_weighted,
+    test = test_unweighted,
+    cor_unweighted = cor_unweighted,
+    cor_weighted = cor_weighted
+  )
+}
 
 
+# ============================================================
+# 3. Compute correlations for active dimensions
+# ============================================================
+
+correlation_results <- list()
+
+for (i in seq_along(score_prefixes)) {
+
+  dimension_key <- names(score_prefixes)[i]
+  dimension_label <- score_dimensions[i]
+
+  driver_vars <- if (
+    exists("score_columns", inherits = TRUE) &&
+    dimension_key %in% names(score_columns)
+  ) {
+    score_columns[[dimension_key]]
+  } else {
+    prefix <- score_prefixes[[dimension_key]]
+    names(data)[
+      grepl(
+        paste0("^", prefix, "_"),
+        names(data)
+      )
+    ]
+  }
+
+  result <- build_dimension_correlation(
+    dimension_key = dimension_key,
+    dimension_label = dimension_label,
+    driver_vars = driver_vars
+  )
+
+  correlation_results[[dimension_key]] <- result
+
+  if (is.null(result)) {
+    next
+  }
+
+  assign(
+    paste0("drivers_", dimension_key),
+    result$data,
+    envir = .GlobalEnv
+  )
+
+  assign(
+    paste0("test_", dimension_key),
+    result$test,
+    envir = .GlobalEnv
+  )
+
+  assign(
+    paste0("cor_", dimension_key),
+    result$cor_unweighted,
+    envir = .GlobalEnv
+  )
+
+  assign(
+    paste0("cor_", dimension_key, "_weighted"),
+    result$cor_weighted,
+    envir = .GlobalEnv
+  )
+}
+
+
+# ============================================================
+# 4. Backward compatibility
+# ============================================================
+
+if (toupper(module_code) == "INST") {
+
+  available_inst <- correlation_results[
+    !vapply(
+      correlation_results,
+      is.null,
+      logical(1)
+    )
+  ]
+
+  if (length(available_inst) > 0L) {
+
+    institutional_driver_data <- lapply(
+      available_inst,
+      function(x) {
+        x$data %>%
+          dplyr::select(
+            -dplyr::any_of("Overall")
+          )
+      }
+    )
+
+    driver_unweighted <- dplyr::bind_cols(
+      institutional_driver_data
+    )
+
+    if (anyDuplicated(names(driver_unweighted))) {
+      names(driver_unweighted) <- make.unique(
+        names(driver_unweighted),
+        sep = "_"
+      )
+    }
+
+    cor_matrix_uw <- stats::cor(
+      driver_unweighted,
+      use = "pairwise.complete.obs",
+      method = "pearson"
+    )
+
+    if ("weight" %in% names(data)) {
+      institutional_weight <- as.numeric(data$weight)
+    } else if ("_weight" %in% names(data)) {
+      institutional_weight <- as.numeric(data$`_weight`)
+    } else {
+      institutional_weight <- rep(
+        1,
+        nrow(driver_unweighted)
+      )
+    }
+
+    driver_weighted <- driver_unweighted %>%
+      dplyr::mutate(
+        dplyr::across(
+          dplyr::everything(),
+          ~ .x * institutional_weight
+        )
+      )
+
+    cor_matrix_w <- stats::cor(
+      driver_weighted,
+      use = "pairwise.complete.obs",
+      method = "pearson"
+    )
+
+    testRes <- cor.mtest(
+      driver_unweighted,
+      conf.level = 0.95
+    )
+  }
+}
 
 message("✓ ", tr("runtime.charts_loaded"))
