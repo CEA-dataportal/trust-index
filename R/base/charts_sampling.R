@@ -302,26 +302,40 @@ if (!is.null(population_geo) && length(top9_regions) > 0 && !is.null(all_plot_le
       District = factor(District, levels = all_plot_levels)
     )
   
-  geo_plot_population <- ggplot(region_population, aes(x = District, y = Percentage, fill = District)) +
-    geom_bar(stat = "identity", na.rm = TRUE) +
-    geom_text(
+  geo_plot_population <- ggplot2::ggplot(
+    region_population,
+    ggplot2::aes(
+      x = District,
+      y = Percentage,
+      fill = District
+    )
+  ) +
+    ggplot2::geom_col(na.rm = TRUE) +
+    ggplot2::geom_text(
       data = subset(region_population, Applicable),
-      aes(label = paste0(round(Percentage, 1), "%")),
+      ggplot2::aes(label = paste0(round(Percentage, 1), "%")),
       hjust = -0.3,
       size = 4
     ) +
-    geom_text(
+    ggplot2::geom_text(
       data = subset(region_population, !Applicable),
-      aes(y = 5, label = "no data"),
+      ggplot2::aes(y = 5, label = "no data"),
       color = "red",
       hjust = 0,
       size = 4
     ) +
-    coord_flip() +
+    ggplot2::coord_flip() +
     custom_theme() +
-    scale_fill_manual(values = rep(color_tertiary_100, nrow(region_population))) +
-    scale_y_continuous(limits = c(0, max(region_population$Percentage, na.rm = TRUE) + 10)) +
-    labs(
+    ggplot2::scale_fill_manual(
+      values = rep(color_tertiary_100, nrow(region_population))
+    ) +
+    ggplot2::scale_y_continuous(
+      limits = c(
+        0,
+        max(region_population$Percentage, na.rm = TRUE) + 10
+      )
+    ) +
+    ggplot2::labs(
       title = "Population",
       subtitle = geo_org,
       x = NULL,
@@ -330,7 +344,7 @@ if (!is.null(population_geo) && length(top9_regions) > 0 && !is.null(all_plot_le
         geo_source, "."
       )
     ) +
-    theme(legend.position = "none")
+    ggplot2::theme(legend.position = "none")
   
 } else {
   geo_plot_population <- 
