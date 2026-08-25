@@ -9,7 +9,14 @@
 # Extracted from Data-Report-INST.Rmd
 # ============================================================
 
-message(tr("runtime.loading_charts"))
+message("Loading charts and visual outputs...")
+
+# This script assumes the following scripts have already run:
+# source('R/setup.R')
+# source('R/read_config.R')
+# source('R/load_data.R')
+# source('R/analysis.R')
+
 
 # ------------------------------------------------------------
 # Chart parameters
@@ -37,29 +44,33 @@ check_strata3 <-
   (!is.null(strata3_tab) && strata3_tab %in% names(data))
 
 
+check_strata3 <-
+  (exists("pop_strata3") && !is.null(pop_strata3)) ||
+  (!is.null(strata3_tab) && strata3_tab %in% names(data))
+
+
 
 #geographic questions
 if ((!is.null(adm1) && adm1 != "") ||
     (!is.null(adm2) && adm2 != "") ||
     (!is.null(locality) && locality != "")) {
-  message(tr("sampling.admin_levels_available"))
-  check_adm <- TRUE
+message("All administrative levels are available. Proceeding...")
+check_adm <- TRUE
 } else { check_adm <- FALSE}
 
 
 
-# Helper used to standardise chart source captions
-chart_source <- function(...) {
-  sources <- unlist(list(...), use.names = FALSE)
-  sources <- as.character(sources)
-  sources <- sources[!is.na(sources) & nzchar(trimws(sources))]
-  
+# Caption
+# Preparing a caption with all excluded terms
+caption_no_str <- switch(
+  length(display_no),
+  paste0("'", display_no[1], "'"),
+  paste0("'", display_no[1], "' and '", display_no[2], "'"),
   paste0(
-    "<b>", tr("common.source"), ":</b> ",
-    paste(sources, collapse = ", ")
-  )
-  
-}
+    paste0("'", display_no[-length(display_no)], "'", collapse = ", "),
+    ", and '", display_no[length(display_no)], "'"
+  ) 
+)
 
 
 # ------------------------------------------------------------
@@ -78,7 +89,7 @@ geo_shp2   <- adm2 # shapefile adm2 name
 # admin1
 data_region <- data %>% group_by(.data[[adm1]]) %>% dplyr::summarize(n=n()) %>% ungroup()
 regions_select <- regions_shp %>% 
-  left_join(data_region, by = setNames(adm1, adm1_shp)) %>%  # shp_col = data_col
+left_join(data_region, by = setNames(adm1, adm1_shp)) %>%  # shp_col = data_col
   filter(!is.na(n))
 
 # admin2
@@ -91,10 +102,8 @@ districts_select <- districts_shp %>%
 # Common geographical levels
 
 #Comparison geographic data between survey and population data
-geoname_survey <-  adm1    #  from survey data (e.g. adm1 or adm2 without "")
+geoname_survey <-  adm1    #  from survey data (e.g. adm1 or adm2 without "") (a changer dans EWS)
 geoname_pop    <- "Admin1" # from population (a changer dans EWS)
-
-other_regions_label <- tr("common.others")
 
 
 # Population Data: Get top 9 regions by population
@@ -112,12 +121,12 @@ if (!is.null(population_geo) && geoname_pop %in% names(population_geo)) {
       slice_head(n = 9) %>%
       pull(geoname_pop)
     
-    all_plot_levels <- rev(c(sort(top9_regions), other_regions_label))
+    all_plot_levels <- rev(c(sort(top9_regions), "Others"))
   } else {
     top9_regions <- pop_region_summary[[geoname_pop]]
     all_plot_levels <- rev(sort(top9_regions))  # No "Other regions"
   }
-  
+
 } else {
   top9_regions <- character(0)
   all_plot_levels <- NULL
@@ -127,60 +136,150 @@ if (!is.null(population_geo) && geoname_pop %in% names(population_geo)) {
 # Plot
 
 # Survey Data
+#
+# IMPORTANT:
+# Build the survey chart from survey data itself. The previous version
+# depended on `all_plot_levels`, which is derived from population_geo.
+# If population geography is absent or region labels do not match exactly,
+# valid survey values in `data_region` can be dropped and the chart can
+# appear empty.
 
-if (!is.null(all_plot_levels) && geoname_survey %in% names(data)) {
-  
+if (geoname_survey %in% names(data)) {
+
   geo_survey_counts <- data %>%
-    filter(!.data[[geoname_survey]] %in% excluded_regions) %>%
-    mutate(
-      District = if (length(top9_regions) < total_region_count) {
-        if_else(.data[[geoname_survey]] %in% top9_regions, .data[[geoname_survey]], other_regions_label)
-      } else {
-        .data[[geoname_survey]]
-      }
+    dplyr::filter(
+      !is.na(.data[[geoname_survey]]),
+      trimws(as.character(.data[[geoname_survey]])) != "",
+      !.data[[geoname_survey]] %in% excluded_regions
     ) %>%
-    count(District, name = "Count")
-  
-  region_template <- data.frame(
-    District = all_plot_levels,
-    stringsAsFactors = FALSE
-  )
-  
-  geo_survey_raw <- region_template %>%
-    left_join(geo_survey_counts, by = "District") %>%
-    mutate(
-      Count = replace_na(Count, 0),
-      Percentage = Count / sum(Count) * 100
+    dplyr::count(
+      District = .data[[geoname_survey]],
+      name = "Count"
     )
-  
-  geo_survey <- geo_survey_raw %>%
-    mutate(
-      Applicable = Percentage != 0,
-      District = factor(District, levels = all_plot_levels)
+
+  # If population geography is available, retain the same top-9 / Others
+  # grouping for comparability. Otherwise show all survey regions.
+  if (
+    exists("total_region_count") &&
+    length(top9_regions) > 0 &&
+    total_region_count > 10
+  ) {
+
+    geo_survey_counts <- geo_survey_counts %>%
+      dplyr::mutate(
+        District = dplyr::if_else(
+          District %in% top9_regions,
+          District,
+          "Others"
+        )
+      ) %>%
+      dplyr::group_by(District) %>%
+      dplyr::summarise(
+        Count = sum(Count),
+        .groups = "drop"
+      )
+
+    survey_plot_levels <- rev(
+      c(
+        sort(intersect(top9_regions, geo_survey_counts$District)),
+        if ("Others" %in% geo_survey_counts$District) "Others" else NULL
+      )
     )
-  
-  geo_plot_survey <- ggplot(geo_survey, aes(x = District, y = Percentage, fill = District)) +
-    geom_bar(stat = "identity") +
-    geom_text(aes(label = paste0(round(Percentage, 1), "%")), hjust = -0.3, size = 4) +
-    coord_flip() +
-    custom_theme() +
-    scale_fill_manual(values = rep(color_primary_100, nrow(geo_survey))) +
-    scale_y_continuous(limits = c(0, max(geo_survey$Percentage) + 10)) +
-    labs(
-      title = tr("sampling.title"),
-      subtitle = tr("sampling.from_survey"),
-      x = NULL,
-      y = tr("common.percentage"),
-      caption = chart_source(ns_name)
+
+  } else {
+
+    survey_plot_levels <- rev(
+      sort(unique(geo_survey_counts$District))
+    )
+  }
+
+  geo_survey <- geo_survey_counts %>%
+    dplyr::mutate(
+      Percentage = Count / sum(Count) * 100,
+      Applicable = Count > 0,
+      District = factor(
+        District,
+        levels = survey_plot_levels
+      )
+    )
+
+  perc_noregion <- mean(
+    is.na(data[[geoname_survey]]) |
+      trimws(as.character(data[[geoname_survey]])) == "" |
+      data[[geoname_survey]] %in% excluded_regions,
+    na.rm = TRUE
+  ) * 100
+
+  if (nrow(geo_survey) > 0 && sum(geo_survey$Count, na.rm = TRUE) > 0) {
+
+    geo_plot_survey <- ggplot2::ggplot(
+      geo_survey,
+      ggplot2::aes(
+        x = District,
+        y = Percentage,
+        fill = District
+      )
     ) +
-    theme(legend.position = "none")
-  
-} else {
-  geo_plot_survey <- 
-    textGrob(
-      tr("sampling.region_column_missing"),
-      gp = gpar(fontsize = 16, fontface = "italic", col = "gray30")
+      ggplot2::geom_col() +
+      ggplot2::geom_text(
+        ggplot2::aes(
+          label = paste0(round(Percentage, 1), "%")
+        ),
+        hjust = -0.3,
+        size = 4
+      ) +
+      ggplot2::coord_flip() +
+      custom_theme() +
+      ggplot2::scale_fill_manual(
+        values = rep(
+          color_primary_100,
+          nrow(geo_survey)
+        )
+      ) +
+      ggplot2::scale_y_continuous(
+        limits = c(
+          0,
+          max(geo_survey$Percentage, na.rm = TRUE) + 10
+        )
+      ) +
+      ggplot2::labs(
+        title = "Sampling",
+        subtitle = "From Survey",
+        x = NULL,
+        caption = paste0(
+          "Note: missing, excluded or non-response geographic values total ",
+          round(perc_noregion, 1),
+          "%.
+Source: ",
+          ns_name
+        )
+      ) +
+      ggplot2::theme(
+        legend.position = "none"
+      )
+
+  } else {
+
+    geo_plot_survey <- grid::textGrob(
+      "No valid geographic survey data available",
+      gp = grid::gpar(
+        fontsize = 16,
+        fontface = "italic",
+        col = "gray30"
+      )
     )
+  }
+
+} else {
+
+  geo_plot_survey <- grid::textGrob(
+    "Region column missing from survey data",
+    gp = grid::gpar(
+      fontsize = 16,
+      fontface = "italic",
+      col = "gray30"
+    )
+  )
 }
 
 # Population Data aligned with top9
@@ -189,7 +288,7 @@ if (!is.null(population_geo) && length(top9_regions) > 0 && !is.null(all_plot_le
   region_population <- population_geo %>%
     mutate(
       District = if (length(top9_regions) < total_region_count) {
-        if_else(.data[[geoname_pop]] %in% top9_regions, .data[[geoname_pop]], other_regions_label)
+        if_else(.data[[geoname_pop]] %in% top9_regions, .data[[geoname_pop]], "Others")
       } else {
         .data[[geoname_pop]]
       }
@@ -213,7 +312,7 @@ if (!is.null(population_geo) && length(top9_regions) > 0 && !is.null(all_plot_le
     ) +
     geom_text(
       data = subset(region_population, !Applicable),
-      aes(y = 5, label = tr("common.no_data")),
+      aes(y = 5, label = "no data"),
       color = "red",
       hjust = 0,
       size = 4
@@ -223,18 +322,20 @@ if (!is.null(population_geo) && length(top9_regions) > 0 && !is.null(all_plot_le
     scale_fill_manual(values = rep(color_tertiary_100, nrow(region_population))) +
     scale_y_continuous(limits = c(0, max(region_population$Percentage, na.rm = TRUE) + 10)) +
     labs(
-      title = tr("sampling.population"),
+      title = "Population",
       subtitle = geo_org,
       x = NULL,
-      y = tr("common.percentage"),
-      caption = chart_source(geo_source)
+      caption = paste0(
+        "Note: 'no data' indicates unreported or unavailable values.\nSource: ",
+        geo_source, "."
+      )
     ) +
     theme(legend.position = "none")
   
 } else {
   geo_plot_population <- 
     textGrob(
-      tr("sampling.geo_population_missing"),
+      "Geographic population data not available",
       gp = gpar(fontsize = 14, fontface = "italic", col = "red")
     )
 }
@@ -245,7 +346,7 @@ regions_lbl <- regions_select %>%
   mutate(geometry = sf::st_point_on_surface(geometry))
 
 if (geoname_survey == adm1) {
-  
+
   map_region <- tm_basemap("CartoDB.Positron")  +
     tm_shape(country_shp) +
     tm_polygons(fill = "grey90", fill_alpha = 0.5, col = "grey50", lwd = 0) +
@@ -255,13 +356,13 @@ if (geoname_survey == adm1) {
       fill       = "n",
       fill_alpha = 0.5,
       fill.scale = tm_scale_intervals(values = "matplotlib.blues",  n = 4),
-      fill.legend = tm_legend(title = tr("sampling.total_respondents_map"), direction = "horizontal"),
+      fill.legend = tm_legend(title = "Total of respondents", direction = "horizontal"),
       col        = "white",
       lwd        = 0.8,
       id         = adm1_shp,
       popup.vars = setNames(
         c(adm1_shp, "n"),
-        c(adm1, tr("common.respondents"))
+        c(adm1, "Respondents")
       )
     ) +
     
@@ -275,9 +376,9 @@ if (geoname_survey == adm1) {
     
     tm_shape(country_shp) +
     tm_borders(lwd = 2, col = "grey50")
-  
+
 } else if (geoname_survey == adm2) {
-  
+
   map_region <- tm_basemap("CartoDB.Positron") +
     tm_shape(country_shp) +
     tm_polygons(fill = "grey90", fill_alpha = 0.5, col = "grey50", lwd = 0) +
@@ -287,13 +388,13 @@ if (geoname_survey == adm1) {
       fill       = "n",
       fill_alpha = 0.5,
       fill.scale = tm_scale_intervals(values = "matplotlib.blues", n = 4),
-      fill.legend = tm_legend(title = tr("sampling.total_respondents_map"), direction = "horizontal"),
+      fill.legend = tm_legend(title = "Total of respondents", direction = "horizontal"),
       col        = "white",
       lwd        = 0.8,
       id         = adm2_shp,
       popup.vars = setNames(
         c(adm2_shp, "n"),
-        c(adm2, tr("common.respondents"))
+        c(adm2, "Respondents")
       )
     ) +
     
@@ -309,9 +410,9 @@ if (geoname_survey == adm1) {
     
     tm_shape(country_shp) +
     tm_borders(lwd = 2, col = "grey50")
-  
+
 } else {
-  stop(tr("sampling.no_matching_geographies"))
+  stop("No matching geographies after join. Check join keys / spelling.")
 }
 
 
@@ -336,28 +437,27 @@ ages$Freq <- ages$Freq/sum(ages$Freq)*100
 pop_age$Freq <- pop_age$Freq/sum(pop_age$Freq)*100
 
 
-ages$origin <- tr("sampling.survey")
-pop_age$origin <- tr("sampling.population")
+ages$origin="Sampling"
+pop_age$origin="Population"
 
-gender_source_caption <- chart_source(
-  ns_name,
-  paste0(demo_source, " (", demo_org, ")")
-)
+perc_nogender <- mean(data$gender %in% gender_no, na.rm = TRUE) * 100
+
+# Caption
+if (!is.na(perc_nogender)) {
+   gender_caption_text <- paste0(
+   "Note: Others or did not answer total ", round(perc_nogender, 1), "%.\nSource:\nSurvey: ",ns_name," - Population data: ", demo_org," (",demo_source,")")
+   } else {
+  gender_caption_text <- paste0("Source:\nSurvey: ",ns_name," - Population data: ", demo_org," (",demo_source,")")
+}
 
 # Combining Survey and Population dataset
 combined <- rbind(pop_age,ages)
-combined <- combined %>%
-  mutate(
-    Freq = ifelse(Gender == gender_map[1], Freq * -1, Freq),
-    Age = AGEgroup,
-    Gender_display = tr_data(Gender),
-    Age_display = tr_data(Age)
-  )
+combined <- combined %>% mutate(Freq = ifelse(Gender == gender_map[1], Freq *-1 , Freq)) %>% mutate(Age=AGEgroup)
 
-gender_1_survey <- unique(paste0(tr_data(gender_map[1]), " ", ages$origin))
-gender_1_population <- unique(paste0(tr_data(gender_map[1]), " ", pop_age$origin))
-gender_2_survey <- unique(paste0(tr_data(gender_map[2]), " ", ages$origin))
-gender_2_population <- unique(paste0(tr_data(gender_map[2]), " ", pop_age$origin))
+gender_1_survey <- unique(paste0("",gender_map[1]," ",ages$origin,""))
+gender_1_population <-  unique(paste0("",gender_map[1]," ",pop_age$origin,""))
+gender_2_survey <- unique(paste0("",gender_map[2]," ",ages$origin,""))
+gender_2_population <- unique(paste0("",gender_map[2]," ",pop_age$origin,""))
 
 dodge <- position_dodge(width = 0.9)
 
@@ -368,45 +468,19 @@ combined <- combined %>% filter(!Gender %in% gender_no)
 # Plot
 
 pyramid_plot <- ggplot(combined) +
-  geom_col(
-    aes(
-      fill = interaction(Gender_display, origin, sep = " "),
-      y = Freq,
-      x = Age_display
-    ),
-    position = dodge
-  ) +
-  geom_text(
-    aes(
-      label = paste(round(abs(Freq), 1), " %"),
-      y = ifelse(Freq >= 0, Freq + 1, Freq - 2),
-      x = Age_display,
-      group = interaction(origin, Gender_display)
-    ),
-    position = dodge,
-    vjust = 0.5,
-    hjust = 0.5,
-    size = 4
-  ) +
+  geom_col(aes(fill = interaction(Gender, origin, sep = " "),y = Freq, x = Age), position = dodge) +
+  geom_text(aes(label = paste(round(abs(Freq), 1), " %"), 
+    y = ifelse(Freq >= 0, Freq + 1, Freq - 2),     x = Age,group = interaction(origin, Gender)),position = dodge, vjust = 0.5, hjust = 0.5, size = 4) +
   scale_y_continuous(labels = abs) +
-  scale_fill_manual(
-    values = c(
-      color_secondary_100,
-      color_secondary_10,
-      color_primary_100,
-      color_primary_10
-    ),
-    name = "",
-    limits = legend_order
-  ) +
+  scale_fill_manual(values = c(color_secondary_100, color_secondary_10, color_primary_100, color_primary_10),name = "",limits = legend_order)+
   coord_flip() +
-  facet_wrap(. ~ Gender_display, scale = "free_x", strip.position = "bottom") +
+  facet_wrap(.~ Gender, scale = "free_x", strip.position = "bottom") +
   custom_theme() +
   labs(x = NULL, y = NULL, 
-       title = tr("sampling.survey_vs_population"),
-       caption = gender_source_caption
+       title="Survey vs. Population data",
+       caption = gender_caption_text
   )
-
+  
 
 
 
@@ -444,6 +518,22 @@ if (isTRUE(check_strata1)) {
   strata1_levels_survey <- as.character(
     strata1_survey$lev
   )
+  
+  # Percentage of excluded responses
+  perc_nocategory1 <- mean(
+    data[[strata1_tab]] %in% display_no,
+    na.rm = TRUE
+  ) * 100
+  
+  strata1_caption_text <- paste0(
+    "Note: ",
+    caption_no_str,
+    " responses total ",
+    round(perc_nocategory1, 1),
+    "%.\nSource: ",
+    ns_name
+  )
+  
   
   ## 2. Check population data availability ----
   
@@ -551,7 +641,7 @@ if (isTRUE(check_strata1)) {
     scale_x_discrete(
       drop = FALSE,
       labels = function(x) {
-        stringr::str_wrap(tr_data(x), 30)
+        stringr::str_wrap(x, 30)
       }
     ) +
     scale_y_continuous(
@@ -564,11 +654,11 @@ if (isTRUE(check_strata1)) {
       )
     ) +
     labs(
-      title = tr("sampling.title"),
-      subtitle = tr("sampling.from_survey"),
+      title = "Sampling",
+      subtitle = "From Survey",
       x = NULL,
-      y = tr("common.percentage"),
-      caption = chart_source(ns_name)
+      y = NULL,
+      caption = strata1_caption_text
     ) +
     theme(
       legend.position = "none"
@@ -624,7 +714,7 @@ if (isTRUE(check_strata1)) {
         aes(
           x = Level,
           y = y_max1 * 0.05,
-          label = tr("common.no_data")
+          label = "no data"
         ),
         inherit.aes = FALSE,
         color = color_label_grey,
@@ -642,7 +732,7 @@ if (isTRUE(check_strata1)) {
       scale_x_discrete(
         drop = FALSE,
         labels = function(x) {
-          stringr::str_wrap(tr_data(x), 30)
+          stringr::str_wrap(x, 30)
         }
       ) +
       scale_y_continuous(
@@ -655,11 +745,16 @@ if (isTRUE(check_strata1)) {
         )
       ) +
       labs(
-        title = tr("sampling.population"),
+        title = "Population",
         subtitle = strata1_org,
         x = NULL,
-        y = tr("common.percentage"),
-        caption = chart_source(strata1_source)
+        y = NULL,
+        caption = paste0(
+          "Note: 'no data' indicates unreported or unavailable values.\n",
+          "Source: ",
+          strata1_source,
+          "."
+        )
       ) +
       theme(
         legend.position = "none"
@@ -668,9 +763,9 @@ if (isTRUE(check_strata1)) {
   } else {
     
     placeholder_plot1 <- grid::textGrob(
-      tr(
-        "sampling.category_data_missing",
-        strata1_tab
+      paste0(
+        strata1_tab,
+        " data not available"
       ),
       gp = grid::gpar(
         fontsize = 14,
@@ -681,17 +776,17 @@ if (isTRUE(check_strata1)) {
     )
   }
   
-  
+
   
   # End of Strata 1
 }
 
 # ---- Original chunk: sampling_2 ----
 if (isTRUE(check_strata2)) {
-  
-  ####################################
-  #       Strata 2 Charts           #
-  ####################################
+
+####################################
+#       Strata 2 Charts           #
+####################################
   ## 1. Data preparation ----
   
   # Survey frequencies
@@ -724,6 +819,13 @@ if (isTRUE(check_strata2)) {
         levels = strata2_levels
       )
     )
+  
+  # Percentage of excluded responses
+  perc_nocategory <- mean(
+    data[[strata2_tab]] %in% display_no,
+    na.rm = TRUE
+  ) * 100
+  
   
   ## 2. Survey plot ----
   
@@ -761,7 +863,7 @@ if (isTRUE(check_strata2)) {
     ) +
     scale_x_discrete(
       labels = function(x) {
-        stringr::str_wrap(tr_data(x), 30)
+        stringr::str_wrap(x, 30)
       }
     ) +
     scale_y_continuous(
@@ -771,11 +873,16 @@ if (isTRUE(check_strata2)) {
       )
     ) +
     labs(
-      title = tr("sampling.title"),
-      subtitle = tr("sampling.from_survey"),
+      title = "Sampling",
+      subtitle = "From Survey",
       x = NULL,
-      y = tr("common.percentage"),
-      caption = chart_source(ns_name)
+      y = NULL,
+      caption = paste0(
+        "Note: 'Prefer not to answer' and 'Don't know' responses total ",
+        round(perc_nocategory, 1),
+        "%.\nSource: ",
+        ns_name
+      )
     ) +
     theme(
       legend.position = "none"
@@ -849,12 +956,16 @@ if (isTRUE(check_strata2)) {
           strata2_population,
           !Applicable
         ),
+        aes(
+          y = y_max * 0.05,
+          label = "no data"
+        ),
+        inherit.aes = FALSE,
         mapping = aes(
           x = Level,
           y = y_max * 0.05,
-          label = tr("common.no_data")
+          label = "no data"
         ),
-        inherit.aes = FALSE,
         color = "red",
         hjust = 0,
         size = 4
@@ -870,7 +981,7 @@ if (isTRUE(check_strata2)) {
       scale_x_discrete(
         drop = FALSE,
         labels = function(x) {
-          stringr::str_wrap(tr_data(x), 30)
+          stringr::str_wrap(x, 30)
         }
       ) +
       scale_y_continuous(
@@ -880,25 +991,30 @@ if (isTRUE(check_strata2)) {
         )
       ) +
       labs(
-        title = tr("sampling.population"),
+        title = "Population",
         subtitle = strata2_org,
         x = NULL,
-        y = tr("common.percentage"),
-        caption = chart_source(strata2_source)
+        y = NULL,
+        caption = paste0(
+          "Note: 'no data' indicates unreported or unavailable values.\n",
+          "Source: ",
+          strata2_source,
+          "."
+        )
       ) +
       theme(
         legend.position = "none"
       )
     
-    
+
     
   } else {
     
     placeholder_plot2 <- grid::textGrob(
-      tr(
-        "sampling.category_data_missing",
-        strata2_tab
-      ),
+      paste0(
+      strata2_tab,
+      " data not available"
+    ),
       gp = grid::gpar(
         fontsize = 14,
         fontface = "italic",
@@ -906,7 +1022,7 @@ if (isTRUE(check_strata2)) {
       ),
       just = "center"
     )
-    
+
   }
   
   
@@ -960,6 +1076,13 @@ if (isTRUE(check_strata3)) {
     display_no
   )
   
+  # Percentage of excluded responses
+  perc_nocategory3 <- mean(
+    data[[strata3_tab]] %in% display_no,
+    na.rm = TRUE
+  ) * 100
+  
+  
   ## 2. Survey plot ----
   
   survey_y_max3 <- max(
@@ -996,7 +1119,7 @@ if (isTRUE(check_strata3)) {
     ) +
     scale_x_discrete(
       labels = function(x) {
-        stringr::str_wrap(tr_data(x), 30)
+        stringr::str_wrap(x, 30)
       }
     ) +
     scale_y_continuous(
@@ -1009,11 +1132,16 @@ if (isTRUE(check_strata3)) {
       )
     ) +
     labs(
-      title = tr("sampling.title"),
-      subtitle = tr("sampling.from_survey"),
+      title = "Sampling",
+      subtitle = "From Survey",
       x = NULL,
-      y = tr("common.percentage"),
-      caption = chart_source(ns_name)
+      y = NULL,
+      caption = paste0(
+        "Note: 'Prefer not to answer' and 'Don't know' responses total ",
+        round(perc_nocategory3, 1),
+        "%.\nSource: ",
+        ns_name
+      )
     ) +
     theme(
       legend.position = "none"
@@ -1090,7 +1218,7 @@ if (isTRUE(check_strata3)) {
         aes(
           x = Level,
           y = y_max3 * 0.05,
-          label = tr("common.no_data")
+          label = "no data"
         ),
         inherit.aes = FALSE,
         color = "red",
@@ -1108,7 +1236,7 @@ if (isTRUE(check_strata3)) {
       scale_x_discrete(
         drop = FALSE,
         labels = function(x) {
-          stringr::str_wrap(tr_data(x), 30)
+          stringr::str_wrap(x, 30)
         }
       ) +
       scale_y_continuous(
@@ -1121,11 +1249,16 @@ if (isTRUE(check_strata3)) {
         )
       ) +
       labs(
-        title = tr("sampling.population"),
+        title = "Population",
         subtitle = strata3_org,
         x = NULL,
-        y = tr("common.percentage"),
-        caption = chart_source(strata3_source)
+        y = NULL,
+        caption = paste0(
+          "Note: 'no data' indicates unreported or unavailable values.\n",
+          "Source: ",
+          strata3_source,
+          "."
+        )
       ) +
       theme(
         legend.position = "none"
@@ -1140,9 +1273,9 @@ if (isTRUE(check_strata3)) {
   } else {
     
     placeholder_plot3 <- grid::textGrob(
-      tr(
-        "sampling.category_data_missing",
-        strata3_tab
+      paste0(
+        strata3_tab,
+        " data not available"
       ),
       gp = grid::gpar(
         fontsize = 14,
@@ -1163,4 +1296,4 @@ if (isTRUE(check_strata3)) {
 }
 
 
-message("✓ ", tr("runtime.sampling_charts_loaded"))
+message("✓ Sampling Charts and visual outputs loaded")
