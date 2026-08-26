@@ -38,11 +38,7 @@ safe_read_excel <- function(file, sheet, required_cols = NULL) {
   }
 
   out <- tryCatch(
-    readxl::read_xlsx(
-      file,
-      sheet = sheet,
-      guess_max = 100000
-    ),
+    readxl::read_xlsx(file, sheet = sheet),
     error = function(e) NULL
   )
 
@@ -80,8 +76,7 @@ age_labels <- c("18-29", "30-39", "40-49", "50-59", "60+")
 
 raw_data <- readxl::read_xlsx(
   file.path(path, data_file),
-  sheet = data_tab,
-  guess_max = 100000
+  sheet = data_tab
 )
 
 # Optional subset before analysis
