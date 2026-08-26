@@ -348,22 +348,16 @@ if (!is.null(population_geo) && length(top9_regions) > 0 && !is.null(all_plot_le
   
 } else {
   geo_plot_population <- 
-    grid::textGrob(
+    textGrob(
       "Geographic population data not available",
-      gp = grid::gpar(fontsize = 14, fontface = "italic", col = "red")
+      gp = gpar(fontsize = 14, fontface = "italic", col = "red")
     )
 }
 
 
 # ---- Original chunk: maps ----
-# Compute label points in a projected CRS to avoid longitude/latitude
-# warnings from st_point_on_surface(), then transform them back.
 regions_lbl <- regions_select %>%
-  sf::st_transform(3857) %>%
-  dplyr::mutate(
-    geometry = sf::st_point_on_surface(geometry)
-  ) %>%
-  sf::st_transform(sf::st_crs(regions_select))
+  mutate(geometry = sf::st_point_on_surface(geometry))
 
 if (geoname_survey == adm1) {
 
@@ -379,7 +373,11 @@ if (geoname_survey == adm1) {
       fill.legend = tm_legend(title = "Total of respondents", direction = "horizontal"),
       col        = "white",
       lwd        = 0.8,
-      id         = adm1_shp
+      id         = adm1_shp,
+      popup.vars = setNames(
+        c(adm1_shp, "n"),
+        c(adm1, "Respondents")
+      )
     ) +
     
     tm_shape(regions_lbl) +
@@ -407,7 +405,11 @@ if (geoname_survey == adm1) {
       fill.legend = tm_legend(title = "Total of respondents", direction = "horizontal"),
       col        = "white",
       lwd        = 0.8,
-      id         = adm2_shp
+      id         = adm2_shp,
+      popup.vars = setNames(
+        c(adm2_shp, "n"),
+        c(adm2, "Respondents")
+      )
     ) +
     
     tm_shape(regions_shp) +
@@ -471,7 +473,7 @@ gender_1_population <-  unique(paste0("",gender_map[1]," ",pop_age$origin,""))
 gender_2_survey <- unique(paste0("",gender_map[2]," ",ages$origin,""))
 gender_2_population <- unique(paste0("",gender_map[2]," ",pop_age$origin,""))
 
-dodge <- ggplot2::position_dodge(width = 0.9)
+dodge <- position_dodge(width = 0.9)
 
 legend_order <- c(gender_1_survey, gender_1_population, gender_2_survey, gender_2_population)
 
@@ -479,16 +481,16 @@ combined <- combined %>% filter(!Gender %in% gender_no)
 
 # Plot
 
-pyramid_plot <- ggplot2::ggplot(combined) +
-  ggplot2::geom_col(ggplot2::aes(fill = interaction(Gender, origin, sep = " "),y = Freq, x = Age), position = dodge) +
-  ggplot2::geom_text(ggplot2::aes(label = paste(round(abs(Freq), 1), " %"), 
+pyramid_plot <- ggplot(combined) +
+  geom_col(aes(fill = interaction(Gender, origin, sep = " "),y = Freq, x = Age), position = dodge) +
+  geom_text(aes(label = paste(round(abs(Freq), 1), " %"), 
     y = ifelse(Freq >= 0, Freq + 1, Freq - 2),     x = Age,group = interaction(origin, Gender)),position = dodge, vjust = 0.5, hjust = 0.5, size = 4) +
-  ggplot2::scale_y_continuous(labels = abs) +
-  ggplot2::scale_fill_manual(values = c(color_secondary_100, color_secondary_10, color_primary_100, color_primary_10),name = "",limits = legend_order)+
-  ggplot2::coord_flip() +
-  ggplot2::facet_wrap(~ Gender, scales = "free_x", strip.position = "bottom") +
+  scale_y_continuous(labels = abs) +
+  scale_fill_manual(values = c(color_secondary_100, color_secondary_10, color_primary_100, color_primary_10),name = "",limits = legend_order)+
+  coord_flip() +
+  facet_wrap(.~ Gender, scale = "free_x", strip.position = "bottom") +
   custom_theme() +
-  ggplot2::labs(x = NULL, y = NULL, 
+  labs(x = NULL, y = NULL, 
        title="Survey vs. Population data",
        caption = gender_caption_text
   )
@@ -623,17 +625,17 @@ if (isTRUE(check_strata1)) {
   
   ## 5. Survey plot ----
   
-  strata1_plot_survey <- ggplot2::ggplot(
+  strata1_plot_survey <- ggplot(
     strata1_survey,
-    ggplot2::aes(
+    aes(
       x = lev,
       y = Percentage,
       fill = lev
     )
   ) +
-    ggplot2::geom_col() +
-    ggplot2::geom_text(
-      ggplot2::aes(
+    geom_col() +
+    geom_text(
+      aes(
         label = paste0(
           round(Percentage, 1),
           "%"
@@ -642,21 +644,21 @@ if (isTRUE(check_strata1)) {
       hjust = -0.3,
       size = 4
     ) +
-    ggplot2::coord_flip() +
+    coord_flip() +
     custom_theme() +
-    ggplot2::scale_fill_manual(
+    scale_fill_manual(
       values = rep(
         color_primary_100,
         nlevels(strata1_survey$lev)
       )
     ) +
-    ggplot2::scale_x_discrete(
+    scale_x_discrete(
       drop = FALSE,
       labels = function(x) {
         stringr::str_wrap(x, 30)
       }
     ) +
-    ggplot2::scale_y_continuous(
+    scale_y_continuous(
       limits = c(
         0,
         y_max1
@@ -665,14 +667,14 @@ if (isTRUE(check_strata1)) {
         mult = c(0, 0.02)
       )
     ) +
-    ggplot2::labs(
+    labs(
       title = "Sampling",
       subtitle = "From Survey",
       x = NULL,
       y = NULL,
       caption = strata1_caption_text
     ) +
-    ggplot2::theme(
+    theme(
       legend.position = "none"
     )
   
@@ -693,23 +695,23 @@ if (isTRUE(check_strata1)) {
         )
       )
     
-    strata1_plot_population <- ggplot2::ggplot(
+    strata1_plot_population <- ggplot(
       strata1_population,
-      ggplot2::aes(
+      aes(
         x = Level,
         y = Percentage,
         fill = Level
       )
     ) +
-      ggplot2::geom_col(
+      geom_col(
         na.rm = TRUE
       ) +
-      ggplot2::geom_text(
+      geom_text(
         data = dplyr::filter(
           strata1_population,
           Applicable
         ),
-        ggplot2::aes(
+        aes(
           label = paste0(
             round(Percentage, 1),
             "%"
@@ -718,12 +720,12 @@ if (isTRUE(check_strata1)) {
         hjust = -0.3,
         size = 4
       ) +
-      ggplot2::geom_text(
+      geom_text(
         data = dplyr::filter(
           strata1_population,
           !Applicable
         ),
-        ggplot2::aes(
+        aes(
           x = Level,
           y = y_max1 * 0.05,
           label = "no data"
@@ -733,21 +735,21 @@ if (isTRUE(check_strata1)) {
         hjust = 0,
         size = 4
       ) +
-      ggplot2::coord_flip() +
+      coord_flip() +
       custom_theme() +
-      ggplot2::scale_fill_manual(
+      scale_fill_manual(
         values = rep(
           color_tertiary_100,
           nlevels(strata1_population$Level)
         )
       ) +
-      ggplot2::scale_x_discrete(
+      scale_x_discrete(
         drop = FALSE,
         labels = function(x) {
           stringr::str_wrap(x, 30)
         }
       ) +
-      ggplot2::scale_y_continuous(
+      scale_y_continuous(
         limits = c(
           0,
           y_max1
@@ -756,7 +758,7 @@ if (isTRUE(check_strata1)) {
           mult = c(0, 0.02)
         )
       ) +
-      ggplot2::labs(
+      labs(
         title = "Population",
         subtitle = strata1_org,
         x = NULL,
@@ -768,7 +770,7 @@ if (isTRUE(check_strata1)) {
           "."
         )
       ) +
-      ggplot2::theme(
+      theme(
         legend.position = "none"
       )
     
@@ -846,17 +848,17 @@ if (isTRUE(check_strata2)) {
     na.rm = TRUE
   ) + 10
   
-  strata2_plot_survey <- ggplot2::ggplot(
+  strata2_plot_survey <- ggplot(
     strata2,
-    ggplot2::aes(
+    aes(
       x = Category,
       y = Percentage,
       fill = Category
     )
   ) +
-    ggplot2::geom_col() +
-    ggplot2::geom_text(
-      ggplot2::aes(
+    geom_col() +
+    geom_text(
+      aes(
         label = paste0(
           round(Percentage, 1),
           "%"
@@ -865,26 +867,26 @@ if (isTRUE(check_strata2)) {
       hjust = -0.3,
       size = 4
     ) +
-    ggplot2::coord_flip() +
+    coord_flip() +
     custom_theme() +
-    ggplot2::scale_fill_manual(
+    scale_fill_manual(
       values = rep(
         color_primary_100,
         nlevels(strata2$Category)
       )
     ) +
-    ggplot2::scale_x_discrete(
+    scale_x_discrete(
       labels = function(x) {
         stringr::str_wrap(x, 30)
       }
     ) +
-    ggplot2::scale_y_continuous(
+    scale_y_continuous(
       limits = c(0, survey_y_max),
-      expand = ggplot2::expansion(
+      expand = expansion(
         mult = c(0, 0.02)
       )
     ) +
-    ggplot2::labs(
+    labs(
       title = "Sampling",
       subtitle = "From Survey",
       x = NULL,
@@ -896,7 +898,7 @@ if (isTRUE(check_strata2)) {
         ns_name
       )
     ) +
-    ggplot2::theme(
+    theme(
       legend.position = "none"
     )
   
@@ -938,23 +940,23 @@ if (isTRUE(check_strata2)) {
       na.rm = TRUE
     )
     
-    strata2_plot_population <- ggplot2::ggplot(
+    strata2_plot_population <- ggplot(
       strata2_population,
-      ggplot2::aes(
+      aes(
         x = Level,
         y = Percentage_plot,
         fill = Level
       )
     ) +
-      ggplot2::geom_col(
+      geom_col(
         na.rm = TRUE
       ) +
-      ggplot2::geom_text(
+      geom_text(
         data = dplyr::filter(
           strata2_population,
           Applicable
         ),
-        ggplot2::aes(
+        aes(
           label = paste0(
             round(Percentage_plot, 1),
             "%"
@@ -963,42 +965,46 @@ if (isTRUE(check_strata2)) {
         hjust = -0.3,
         size = 4
       ) +
-      ggplot2::geom_text(
+      geom_text(
         data = dplyr::filter(
           strata2_population,
           !Applicable
         ),
-        mapping = ggplot2::aes(
-          x = Level,
+        aes(
           y = y_max * 0.05,
           label = "no data"
         ),
         inherit.aes = FALSE,
+        mapping = aes(
+          x = Level,
+          y = y_max * 0.05,
+          label = "no data"
+        ),
         color = "red",
         hjust = 0,
         size = 4
       ) +
-      ggplot2::coord_flip() +
+      coord_flip() +
       custom_theme() +
-      ggplot2::scale_fill_manual(
+      scale_fill_manual(
         values = rep(
           color_tertiary_100,
           nlevels(strata2_population$Level)
         )
       ) +
-      ggplot2::scale_x_discrete(
+      scale_x_discrete(
         drop = FALSE,
         labels = function(x) {
           stringr::str_wrap(x, 30)
         }
       ) +
-      ggplot2::scale_y_continuous(
+      scale_y_continuous(
         limits = c(0, y_max),
-        expand = ggplot2::expansion(
+        expand = expansion(
           mult = c(0, 0.02)
         )
       ) +
-      ggplot2::labs(
+      labs(
         title = "Population",
         subtitle = strata2_org,
         x = NULL,
@@ -1010,7 +1016,7 @@ if (isTRUE(check_strata2)) {
           "."
         )
       ) +
-      ggplot2::theme(
+      theme(
         legend.position = "none"
       )
     
@@ -1098,17 +1104,17 @@ if (isTRUE(check_strata3)) {
     na.rm = TRUE
   ) + 10
   
-  strata3_plot_survey <- ggplot2::ggplot(
+  strata3_plot_survey <- ggplot(
     strata3,
-    ggplot2::aes(
+    aes(
       x = Category,
       y = Percentage,
       fill = Category
     )
   ) +
-    ggplot2::geom_col() +
-    ggplot2::geom_text(
-      ggplot2::aes(
+    geom_col() +
+    geom_text(
+      aes(
         label = paste0(
           round(Percentage, 1),
           "%"
@@ -1117,29 +1123,29 @@ if (isTRUE(check_strata3)) {
       hjust = -0.3,
       size = 4
     ) +
-    ggplot2::coord_flip() +
+    coord_flip() +
     custom_theme() +
-    ggplot2::scale_fill_manual(
+    scale_fill_manual(
       values = rep(
         color_primary_100,
         nlevels(strata3$Category)
       )
     ) +
-    ggplot2::scale_x_discrete(
+    scale_x_discrete(
       labels = function(x) {
         stringr::str_wrap(x, 30)
       }
     ) +
-    ggplot2::scale_y_continuous(
+    scale_y_continuous(
       limits = c(
         0,
         survey_y_max3
       ),
-      expand = ggplot2::expansion(
+      expand = expansion(
         mult = c(0, 0.02)
       )
     ) +
-    ggplot2::labs(
+    labs(
       title = "Sampling",
       subtitle = "From Survey",
       x = NULL,
@@ -1151,7 +1157,7 @@ if (isTRUE(check_strata3)) {
         ns_name
       )
     ) +
-    ggplot2::theme(
+    theme(
       legend.position = "none"
     )
   
@@ -1193,23 +1199,23 @@ if (isTRUE(check_strata3)) {
     ) + 10
     
     
-    strata3_plot_population <- ggplot2::ggplot(
+    strata3_plot_population <- ggplot(
       strata3_population,
-      ggplot2::aes(
+      aes(
         x = Level,
         y = Percentage,
         fill = Level
       )
     ) +
-      ggplot2::geom_col(
+      geom_col(
         na.rm = TRUE
       ) +
-      ggplot2::geom_text(
+      geom_text(
         data = dplyr::filter(
           strata3_population,
           Applicable
         ),
-        ggplot2::aes(
+        aes(
           label = paste0(
             round(Percentage, 1),
             "%"
@@ -1218,12 +1224,12 @@ if (isTRUE(check_strata3)) {
         hjust = -0.3,
         size = 4
       ) +
-      ggplot2::geom_text(
+      geom_text(
         data = dplyr::filter(
           strata3_population,
           !Applicable
         ),
-        ggplot2::aes(
+        aes(
           x = Level,
           y = y_max3 * 0.05,
           label = "no data"
@@ -1233,30 +1239,30 @@ if (isTRUE(check_strata3)) {
         hjust = 0,
         size = 4
       ) +
-      ggplot2::coord_flip() +
+      coord_flip() +
       custom_theme() +
-      ggplot2::scale_fill_manual(
+      scale_fill_manual(
         values = rep(
           color_tertiary_100,
           nlevels(strata3_population$Level)
         )
       ) +
-      ggplot2::scale_x_discrete(
+      scale_x_discrete(
         drop = FALSE,
         labels = function(x) {
           stringr::str_wrap(x, 30)
         }
       ) +
-      ggplot2::scale_y_continuous(
+      scale_y_continuous(
         limits = c(
           0,
           y_max3
         ),
-        expand = ggplot2::expansion(
+        expand = expansion(
           mult = c(0, 0.02)
         )
       ) +
-      ggplot2::labs(
+      labs(
         title = "Population",
         subtitle = strata3_org,
         x = NULL,
@@ -1268,7 +1274,7 @@ if (isTRUE(check_strata3)) {
           "."
         )
       ) +
-      ggplot2::theme(
+      theme(
         legend.position = "none"
       )
     
