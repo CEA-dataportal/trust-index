@@ -301,7 +301,7 @@ if (toupper(module_code) == "EWS") {
           alpha = 0.8,
           colour = color_label_bl,
           fontface = "bold",
-          label.size = 0,
+          linewidth = 0,
           label.padding = grid::unit(4, "pt"),
           label.r = grid::unit(3, "pt")
         ) +
