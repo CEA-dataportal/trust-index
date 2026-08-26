@@ -379,7 +379,11 @@ if (geoname_survey == adm1) {
       fill.legend = tm_legend(title = "Total of respondents", direction = "horizontal"),
       col        = "white",
       lwd        = 0.8,
-      id         = adm1_shp
+      id         = adm1_shp,
+      id          = adm2_shp,
+      popup.vars  = c(
+        "Respondents" = "n"
+      )
     ) +
     
     tm_shape(regions_lbl) +
@@ -407,7 +411,10 @@ if (geoname_survey == adm1) {
       fill.legend = tm_legend(title = "Total of respondents", direction = "horizontal"),
       col        = "white",
       lwd        = 0.8,
-      id         = adm2_shp
+      id         = adm2_shp,
+      popup.vars  = c(
+        "Respondents" = "n"
+      )
     ) +
     
     tm_shape(regions_shp) +
