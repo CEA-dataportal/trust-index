@@ -102,7 +102,7 @@ districts_select <- districts_shp %>%
 # Common geographical levels
 
 #Comparison geographic data between survey and population data
-#geoname_survey <-  adm1    #  from survey data (e.g. adm1 or adm2 without "") (a changer dans EWS)
+geoname_survey <-  get(geoname_survey)    #  from survey data (e.g. adm1 or adm2 without "") (a changer dans EWS)
 #geoname_pop    <- "Admin1" # from population (a changer dans EWS)
 
 
