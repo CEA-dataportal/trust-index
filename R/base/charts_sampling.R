@@ -382,7 +382,7 @@ if (geoname_survey == adm1) {
       id         = adm1_shp,
       id          = adm2_shp,
       popup.vars  = c(
-        "Respondents" = "n"
+        "Respondents: " = "n"
       )
     ) +
     
@@ -413,7 +413,7 @@ if (geoname_survey == adm1) {
       lwd        = 0.8,
       id         = adm2_shp,
       popup.vars  = c(
-        "Respondents" = "n"
+        "Respondents: " = "n"
       )
     ) +
     
