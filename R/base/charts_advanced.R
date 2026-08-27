@@ -111,7 +111,7 @@ score_driver_response <- function(x) {
   x_chr <- as.character(x)
   mapped <- unname(score_map_full[x_chr])
   numeric_value <- suppressWarnings(as.numeric(x_chr))
-
+  
   dplyr::if_else(
     !is.na(mapped),
     as.numeric(mapped),
@@ -123,9 +123,9 @@ move_overall_last <- function(mat) {
   if (is.null(mat) || !"Overall" %in% colnames(mat)) {
     return(mat)
   }
-
+  
   ord <- setdiff(colnames(mat), "Overall")
-
+  
   mat[
     c(ord, "Overall"),
     c(ord, "Overall"),
@@ -137,23 +137,102 @@ get_driver_source <- function() {
   if (exists("survey_data", inherits = TRUE)) {
     return(get("survey_data", inherits = TRUE))
   }
-
+  
   data
 }
+
+# ------------------------------------------------------------
+# Safe pairwise correlation significance test
+# Shared by dimension-level and Institutional combined correlations
+# ------------------------------------------------------------
+
+# Safe pairwise significance matrix.
+# Some pairs may still have fewer than 3 overlapping finite values,
+# even if each variable individually has enough observations.
+safe_cor_mtest <- function(mat, conf.level = 0.95) {
+  
+  mat <- as.data.frame(mat)
+  n <- ncol(mat)
+  
+  p.mat <- matrix(
+    NA_real_,
+    nrow = n,
+    ncol = n,
+    dimnames = list(names(mat), names(mat))
+  )
+  
+  lowCI.mat <- p.mat
+  uppCI.mat <- p.mat
+  
+  diag(p.mat) <- 0
+  diag(lowCI.mat) <- 1
+  diag(uppCI.mat) <- 1
+  
+  if (n < 2L) {
+    return(
+      list(
+        p = p.mat,
+        lowCI = lowCI.mat,
+        uppCI = uppCI.mat
+      )
+    )
+  }
+  
+  for (i in seq_len(n - 1L)) {
+    for (j in (i + 1L):n) {
+      
+      ok <- is.finite(mat[[i]]) &
+        is.finite(mat[[j]])
+      
+      if (sum(ok) < 3L) {
+        next
+      }
+      
+      test <- tryCatch(
+        stats::cor.test(
+          mat[[i]][ok],
+          mat[[j]][ok],
+          conf.level = conf.level,
+          method = "pearson"
+        ),
+        error = function(e) NULL
+      )
+      
+      if (is.null(test)) {
+        next
+      }
+      
+      p.mat[i, j] <- p.mat[j, i] <- test$p.value
+      
+      if (!is.null(test$conf.int) &&
+          length(test$conf.int) == 2L) {
+        lowCI.mat[i, j] <- lowCI.mat[j, i] <- test$conf.int[1]
+        uppCI.mat[i, j] <- uppCI.mat[j, i] <- test$conf.int[2]
+      }
+    }
+  }
+  
+  list(
+    p = p.mat,
+    lowCI = lowCI.mat,
+    uppCI = uppCI.mat
+  )
+}
+
 
 build_dimension_correlation <- function(
     dimension_key,
     dimension_label,
     driver_vars
 ) {
-
+  
   source_data <- get_driver_source()
-
+  
   driver_vars <- intersect(
     driver_vars,
     names(source_data)
   )
-
+  
   if (length(driver_vars) < 2L) {
     warning(
       paste0(
@@ -165,7 +244,7 @@ build_dimension_correlation <- function(
     )
     return(NULL)
   }
-
+  
   driver_rename_map <- question_code %>%
     dplyr::filter(variable %in% driver_vars) %>%
     dplyr::mutate(
@@ -180,7 +259,7 @@ build_dimension_correlation <- function(
       short_label_display
     ) %>%
     tibble::deframe()
-
+  
   survey_dimension <- source_data %>%
     dplyr::select(
       dplyr::all_of(driver_vars)
@@ -203,11 +282,11 @@ build_dimension_correlation <- function(
         na.rm = TRUE
       )
     )
-
+  
   survey_dimension$Overall[
     is.nan(survey_dimension$Overall)
   ] <- NA_real_
-
+  
   # Remove variables with too few finite observations.
   # cor.test() requires enough finite paired values and otherwise errors.
   finite_n <- vapply(
@@ -215,13 +294,13 @@ build_dimension_correlation <- function(
     function(x) sum(is.finite(x)),
     integer(1)
   )
-
+  
   survey_dimension <- survey_dimension[
     ,
     finite_n >= 3L,
     drop = FALSE
   ]
-
+  
   if (ncol(survey_dimension) < 2L) {
     warning(
       paste0(
@@ -233,91 +312,18 @@ build_dimension_correlation <- function(
     )
     return(NULL)
   }
-
-  # Safe pairwise significance matrix.
-  # Some pairs may still have fewer than 3 overlapping finite values,
-  # even if each variable individually has enough observations.
-  safe_cor_mtest <- function(mat, conf.level = 0.95) {
-
-    mat <- as.data.frame(mat)
-    n <- ncol(mat)
-
-    p.mat <- matrix(
-      NA_real_,
-      nrow = n,
-      ncol = n,
-      dimnames = list(names(mat), names(mat))
-    )
-
-    lowCI.mat <- p.mat
-    uppCI.mat <- p.mat
-
-    diag(p.mat) <- 0
-    diag(lowCI.mat) <- 1
-    diag(uppCI.mat) <- 1
-
-    if (n < 2L) {
-      return(
-        list(
-          p = p.mat,
-          lowCI = lowCI.mat,
-          uppCI = uppCI.mat
-        )
-      )
-    }
-
-    for (i in seq_len(n - 1L)) {
-      for (j in (i + 1L):n) {
-
-        ok <- is.finite(mat[[i]]) &
-          is.finite(mat[[j]])
-
-        if (sum(ok) < 3L) {
-          next
-        }
-
-        test <- tryCatch(
-          stats::cor.test(
-            mat[[i]][ok],
-            mat[[j]][ok],
-            conf.level = conf.level,
-            method = "pearson"
-          ),
-          error = function(e) NULL
-        )
-
-        if (is.null(test)) {
-          next
-        }
-
-        p.mat[i, j] <- p.mat[j, i] <- test$p.value
-
-        if (!is.null(test$conf.int) &&
-            length(test$conf.int) == 2L) {
-          lowCI.mat[i, j] <- lowCI.mat[j, i] <- test$conf.int[1]
-          uppCI.mat[i, j] <- uppCI.mat[j, i] <- test$conf.int[2]
-        }
-      }
-    }
-
-    list(
-      p = p.mat,
-      lowCI = lowCI.mat,
-      uppCI = uppCI.mat
-    )
-  }
-
+  
   test_unweighted <- safe_cor_mtest(
     survey_dimension,
     conf.level = 0.95
   )
-
+  
   cor_unweighted <- stats::cor(
     survey_dimension,
     use = "pairwise.complete.obs",
     method = "pearson"
   )
-
+  
   if ("weight" %in% names(data)) {
     weight_vector <- as.numeric(data$weight)
   } else if ("_weight" %in% names(data)) {
@@ -325,11 +331,11 @@ build_dimension_correlation <- function(
   } else {
     weight_vector <- rep(1, nrow(survey_dimension))
   }
-
+  
   if (length(weight_vector) != nrow(survey_dimension)) {
     weight_vector <- rep(1, nrow(survey_dimension))
   }
-
+  
   survey_dimension_weighted <- survey_dimension %>%
     dplyr::mutate(
       dplyr::across(
@@ -337,29 +343,29 @@ build_dimension_correlation <- function(
         ~ .x * weight_vector
       )
     )
-
+  
   cor_weighted <- stats::cor(
     survey_dimension_weighted,
     use = "pairwise.complete.obs",
     method = "pearson"
   )
-
+  
   cor_unweighted <- move_overall_last(cor_unweighted)
   cor_weighted <- move_overall_last(cor_weighted)
   test_unweighted$p <- move_overall_last(test_unweighted$p)
-
+  
   if (!is.null(test_unweighted$lowCI)) {
     test_unweighted$lowCI <- move_overall_last(
       test_unweighted$lowCI
     )
   }
-
+  
   if (!is.null(test_unweighted$uppCI)) {
     test_unweighted$uppCI <- move_overall_last(
       test_unweighted$uppCI
     )
   }
-
+  
   list(
     key = dimension_key,
     dimension = dimension_label,
@@ -380,10 +386,10 @@ build_dimension_correlation <- function(
 correlation_results <- list()
 
 for (i in seq_along(score_prefixes)) {
-
+  
   dimension_key <- names(score_prefixes)[i]
   dimension_label <- score_dimensions[i]
-
+  
   driver_vars <- if (
     exists("score_columns", inherits = TRUE) &&
     dimension_key %in% names(score_columns)
@@ -398,37 +404,37 @@ for (i in seq_along(score_prefixes)) {
       )
     ]
   }
-
+  
   result <- build_dimension_correlation(
     dimension_key = dimension_key,
     dimension_label = dimension_label,
     driver_vars = driver_vars
   )
-
+  
   correlation_results[[dimension_key]] <- result
-
+  
   if (is.null(result)) {
     next
   }
-
+  
   assign(
     paste0("drivers_", dimension_key),
     result$data,
     envir = .GlobalEnv
   )
-
+  
   assign(
     paste0("test_", dimension_key),
     result$test,
     envir = .GlobalEnv
   )
-
+  
   assign(
     paste0("cor_", dimension_key),
     result$cor_unweighted,
     envir = .GlobalEnv
   )
-
+  
   assign(
     paste0("cor_", dimension_key, "_weighted"),
     result$cor_weighted,
@@ -442,7 +448,7 @@ for (i in seq_along(score_prefixes)) {
 # ============================================================
 
 if (toupper(module_code) == "INST") {
-
+  
   available_inst <- correlation_results[
     !vapply(
       correlation_results,
@@ -450,9 +456,9 @@ if (toupper(module_code) == "INST") {
       logical(1)
     )
   ]
-
+  
   if (length(available_inst) > 0L) {
-
+    
     institutional_driver_data <- lapply(
       available_inst,
       function(x) {
@@ -462,24 +468,24 @@ if (toupper(module_code) == "INST") {
           )
       }
     )
-
+    
     driver_unweighted <- dplyr::bind_cols(
       institutional_driver_data
     )
-
+    
     if (anyDuplicated(names(driver_unweighted))) {
       names(driver_unweighted) <- make.unique(
         names(driver_unweighted),
         sep = "_"
       )
     }
-
+    
     cor_matrix_uw <- stats::cor(
       driver_unweighted,
       use = "pairwise.complete.obs",
       method = "pearson"
     )
-
+    
     if ("weight" %in% names(data)) {
       institutional_weight <- as.numeric(data$weight)
     } else if ("_weight" %in% names(data)) {
@@ -490,7 +496,7 @@ if (toupper(module_code) == "INST") {
         nrow(driver_unweighted)
       )
     }
-
+    
     driver_weighted <- driver_unweighted %>%
       dplyr::mutate(
         dplyr::across(
@@ -498,13 +504,13 @@ if (toupper(module_code) == "INST") {
           ~ .x * institutional_weight
         )
       )
-
+    
     cor_matrix_w <- stats::cor(
       driver_weighted,
       use = "pairwise.complete.obs",
       method = "pearson"
     )
-
+    
     testRes <- safe_cor_mtest(
       driver_unweighted,
       conf.level = 0.95
@@ -524,11 +530,11 @@ if (toupper(module_code) == "INST") {
 correlation_ews_plot <- NULL
 
 if (toupper(module_code) == "EWS") {
-
+  
   correlation_ews_plot <- function() {
-
+    
     graphics::par(mfrow = c(2, 2))
-
+    
     if (exists("cor_disaster", inherits = TRUE)) {
       corrplot::corrplot(
         cor_disaster,
@@ -550,7 +556,7 @@ if (toupper(module_code) == "EWS") {
         mar         = c(0, 0, 2, 0)
       )
     }
-
+    
     if (exists("cor_detection", inherits = TRUE)) {
       corrplot::corrplot(
         cor_detection,
@@ -572,7 +578,7 @@ if (toupper(module_code) == "EWS") {
         mar         = c(0, 0, 2, 0)
       )
     }
-
+    
     if (exists("cor_dissemination", inherits = TRUE)) {
       corrplot::corrplot(
         cor_dissemination,
@@ -594,7 +600,7 @@ if (toupper(module_code) == "EWS") {
         mar         = c(0, 0, 2, 0)
       )
     }
-
+    
     if (exists("cor_response", inherits = TRUE)) {
       corrplot::corrplot(
         cor_response,
@@ -616,7 +622,7 @@ if (toupper(module_code) == "EWS") {
         mar         = c(0, 0, 2, 0)
       )
     }
-
+    
     graphics::par(mfrow = c(1, 1))
   }
 }
