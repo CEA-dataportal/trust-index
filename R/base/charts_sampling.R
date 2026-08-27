@@ -365,7 +365,19 @@ regions_lbl <- regions_select %>%
   ) %>%
   sf::st_transform(sf::st_crs(regions_select))
 
+
+
+
 if (geoname_survey == adm1) {
+  
+  
+  regions_select <- regions_select %>%
+    dplyr::mutate(
+      popup = paste0(
+        "<b>", .data[[adm1_shp]], "</b><br>",
+        n, " ", tr("common.respondents")
+      )
+    )
 
   map_region <- tm_basemap("CartoDB.Positron")  +
     tm_shape(country_shp) +
@@ -387,7 +399,7 @@ if (geoname_survey == adm1) {
       lwd = 0.8,
       
       popup = tm_popup(
-        vars = c(adm1_shp, "n")
+        vars = "popup"
       )
     ) +
     
@@ -403,6 +415,14 @@ if (geoname_survey == adm1) {
     tm_borders(lwd = 2, col = "grey50")
 
 } else if (geoname_survey == adm2) {
+  
+  districts_select <- districts_select %>%
+    dplyr::mutate(
+      popup = paste0(
+        "<b>", .data[[adm2_shp]], "</b><br>",
+        n, " ", tr("common.respondents")
+      )
+    )
 
   map_region <- tm_basemap("CartoDB.Positron") +
     tm_shape(country_shp) +
@@ -424,7 +444,7 @@ if (geoname_survey == adm1) {
       lwd = 0.8,
       
       popup = tm_popup(
-        vars = c(adm2_shp, "n")
+        vars = "popup"
       )
     ) +
     
