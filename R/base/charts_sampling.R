@@ -399,7 +399,7 @@ if (geoname_survey == adm1) {
       lwd = 0.8,
       
       popup = tm_popup(
-        vars = "popup"
+        text = "popup"
       )
     ) +
     
@@ -444,7 +444,7 @@ if (geoname_survey == adm1) {
       lwd = 0.8,
       
       popup = tm_popup(
-        vars = "popup"
+        text = "popup"
       )
     ) +
     
