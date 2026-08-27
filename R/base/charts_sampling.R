@@ -373,16 +373,21 @@ if (geoname_survey == adm1) {
     
     tm_shape(regions_select) +
     tm_polygons(
-      fill       = "n",
+      fill = "n",
       fill_alpha = 0.5,
-      fill.scale = tm_scale_intervals(values = "matplotlib.blues",  n = 4),
-      fill.legend = tm_legend(title = "Total of respondents", direction = "horizontal"),
-      col        = "white",
-      lwd        = 0.8,
-      id         = adm1_shp,
-      id          = adm2_shp,
-      popup.vars  = c(
-        "Respondents: " = "n"
+      fill.scale = tm_scale_intervals(
+        values = "matplotlib.blues",
+        n = 4
+      ),
+      fill.legend = tm_legend(
+        title = "Total of respondents",
+        direction = "horizontal"
+      ),
+      col = "white",
+      lwd = 0.8,
+      
+      popup = tm_popup(
+        vars = c(adm1_shp, "n")
       )
     ) +
     
@@ -405,15 +410,21 @@ if (geoname_survey == adm1) {
     
     tm_shape(districts_select) +
     tm_polygons(
-      fill       = "n",
+      fill = "n",
       fill_alpha = 0.5,
-      fill.scale = tm_scale_intervals(values = "matplotlib.blues", n = 4),
-      fill.legend = tm_legend(title = "Total of respondents", direction = "horizontal"),
-      col        = "white",
-      lwd        = 0.8,
-      id         = adm2_shp,
-      popup.vars  = c(
-        "Respondents: " = "n"
+      fill.scale = tm_scale_intervals(
+        values = "matplotlib.blues",
+        n = 4
+      ),
+      fill.legend = tm_legend(
+        title = "Total of respondents",
+        direction = "horizontal"
+      ),
+      col = "white",
+      lwd = 0.8,
+      
+      popup = tm_popup(
+        vars = c(adm2_shp, "n")
       )
     ) +
     
