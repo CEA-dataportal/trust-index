@@ -373,9 +373,17 @@ if (geoname_survey == adm1) {
   
   regions_select <- regions_select %>%
     dplyr::mutate(
-      popup = paste0(
-        "<b>", .data[[adm1_shp]], "</b><br>",
-        n, " ", tr("common.respondents")
+      popup = purrr::map2(
+        .data[[adm1_shp]],
+        n,
+        ~ htmltools::HTML(
+          paste0(
+            "<div style='font-size:14px;'>",
+            "<strong>", .x, "</strong><br>",
+            .y, " ", tr("common.respondents"),
+            "</div>"
+          )
+        )
       )
     )
 
@@ -418,9 +426,17 @@ if (geoname_survey == adm1) {
   
   districts_select <- districts_select %>%
     dplyr::mutate(
-      popup = paste0(
-        "<b>", .data[[adm2_shp]], "</b><br>",
-        n, " ", tr("common.respondents")
+      popup = purrr::map2(
+        .data[[adm2_shp]],
+        n,
+        ~ htmltools::HTML(
+          paste0(
+            "<div style='font-size:14px;'>",
+            "<strong>", .x, "</strong><br>",
+            .y, " ", tr("common.respondents"),
+            "</div>"
+          )
+        )
       )
     )
 
