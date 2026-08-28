@@ -397,7 +397,7 @@ if (geoname_survey == adm1) {
           tr("map.respondents")
         ),
         label.color = "#666666",
-        value.align = "left"
+        value.align = "right"
       )
     ) +
     
@@ -439,7 +439,7 @@ if (geoname_survey == adm1) {
           tr("map.respondents")
         ),
         label.color = "#666666",
-        value.align = "left"
+        value.align = "right"
       )
     ) +
     

@@ -78,7 +78,7 @@ template,sampling.survey_vs_population,Survey vs. population data,Comparaison en
 template,sampling.title,Sampling,Échantillonnage,Muestreo,,
 template,sampling.total_respondents_map,Total respondents,Nombre total de répondants,Número total de personas encuestadas,charts_sampling.R,Generated geographic category/comment label
 template,map.total_respondents,Total respondents,Total des répondants,Total de encuestados,map_sampling,
-template,map.respondents,Respondents,Répondants,Encuestados,map_sampling,
+template,map.respondents, Respondents, Répondants, Encuestados,map_sampling,
 template,score.competencies,Competencies,Compétences,Competencias,charts_sampling.R,Dynamic caption; three source values
 template,score.competency,Competency,Compétence,Competencia,charts_score.R; charts.R; export.R,Chart/export label
 template,score.dimension,Dimension,Dimension,Dimensión,export.R,Module/export label
