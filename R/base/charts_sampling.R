@@ -370,23 +370,6 @@ regions_lbl <- regions_select %>%
 
 if (geoname_survey == adm1) {
   
-  
-  regions_select <- regions_select %>%
-    dplyr::mutate(
-      popup = purrr::map2(
-        .data[[adm1_shp]],
-        n,
-        ~ htmltools::HTML(
-          paste0(
-            "<div style='font-size:14px;'>",
-            "<strong>", .x, "</strong><br>",
-            .y, " ", tr("common.respondents"),
-            "</div>"
-          )
-        )
-      )
-    )
-
   map_region <- tm_basemap("CartoDB.Positron")  +
     tm_shape(country_shp) +
     tm_polygons(fill = "grey90", fill_alpha = 0.5, col = "grey50", lwd = 0) +
@@ -399,15 +382,22 @@ if (geoname_survey == adm1) {
         values = "matplotlib.blues",
         n = 4
       ),
-      fill.legend = tm_legend(
-        title = "Total of respondents",
-        direction = "horizontal"
-      ),
       col = "white",
       lwd = 0.8,
       
+      fill.legend = tm_legend(
+        title = tr("map.total_respondents"),
+        direction = "horizontal"
+      ),
+      
       popup = tm_popup(
-        text = "popup"
+        title = adm1_shp,
+        vars = setNames(
+          "n",
+          tr("map.respondents")
+        ),
+        label.color = "#666666",
+        value.align = "left"
       )
     ) +
     
@@ -424,22 +414,6 @@ if (geoname_survey == adm1) {
 
 } else if (geoname_survey == adm2) {
   
-  districts_select <- districts_select %>%
-    dplyr::mutate(
-      popup = purrr::map2(
-        .data[[adm2_shp]],
-        n,
-        ~ htmltools::HTML(
-          paste0(
-            "<div style='font-size:14px;'>",
-            "<strong>", .x, "</strong><br>",
-            .y, " ", tr("common.respondents"),
-            "</div>"
-          )
-        )
-      )
-    )
-
   map_region <- tm_basemap("CartoDB.Positron") +
     tm_shape(country_shp) +
     tm_polygons(fill = "grey90", fill_alpha = 0.5, col = "grey50", lwd = 0) +
@@ -452,15 +426,20 @@ if (geoname_survey == adm1) {
         values = "matplotlib.blues",
         n = 4
       ),
-      fill.legend = tm_legend(
-        title = "Total of respondents",
-        direction = "horizontal"
-      ),
       col = "white",
       lwd = 0.8,
-      
+      fill.legend = tm_legend(
+        title = tr("map.total_respondents"),
+        direction = "horizontal"
+      ),
       popup = tm_popup(
-        text = "popup"
+        title = adm2_shp,
+        vars = setNames(
+          "n",
+          tr("map.respondents")
+        ),
+        label.color = "#666666",
+        value.align = "left"
       )
     ) +
     
