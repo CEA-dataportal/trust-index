@@ -395,7 +395,7 @@ if (exists("summary_2", inherits = TRUE) &&
         Value = suppressWarnings(as.numeric(Value)),
         Serie = dplyr::case_when(
           SerieRaw == "Overall" ~ "Overall",
-          grepl(":", SerieRaw) ~ trimws(sub("^[^:]*:", "", SerieRaw)),
+          grepl(":", SerieRaw) ~ trimws(sub(":.*$", "", SerieRaw)),
           TRUE ~ as.character(SerieRaw)
         )
       ) %>%
