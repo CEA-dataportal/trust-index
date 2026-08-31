@@ -126,9 +126,13 @@ export_to_supabase <- function(
   
   # Supabase/Postgres columns are lowercase.
   # Keep `Group` in the Google/CSV export, but rename it to
-  # `data_group` only for the Supabase payload.
-  payload <- data %>%
-    dplyr::rename(data_group = Group) %>%
+  # `data_group` only for the Supabase payload. Only applies to the
+  # aggregated database export - the microdata payload has no `Group`.
+  payload <- data
+  if ("Group" %in% names(payload)) {
+    payload <- payload %>% dplyr::rename(data_group = Group)
+  }
+  payload <- payload %>%
     dplyr::rename_with(tolower) %>%
     dplyr::mutate(
       dplyr::across(where(is.factor), as.character)
@@ -145,39 +149,43 @@ export_to_supabase <- function(
     )
   }
   
+  # Postgres rejects ON CONFLICT DO UPDATE when the same conflict key
+  # appears more than once within a single command. Rather than silently
+  # picking which duplicate to keep, write every row involved out for
+  # review and skip the Supabase upsert entirely until the source data
+  # is fixed upstream.
+  key_dup_either_way <- duplicated(payload[, conflict_cols, drop = FALSE]) |
+    duplicated(payload[, conflict_cols, drop = FALSE], fromLast = TRUE)
+  n_dupes <- sum(key_dup_either_way)
   
-  # Remove fully identical rows first.
-  payload <- payload %>%
-    dplyr::distinct()
-  
-  # Ensure the columns used by ON CONFLICT uniquely identify each row
-  # within the same Supabase request.
-  duplicate_keys <- payload %>%
-    dplyr::count(
-      dplyr::across(dplyr::all_of(conflict_cols)),
-      name = "n"
-    ) %>%
-    dplyr::filter(n > 1)
-  
-  if (nrow(duplicate_keys) > 0) {
+  if (n_dupes > 0) {
     
-    duplicate_rows <- payload %>%
-      dplyr::semi_join(
-        duplicate_keys,
-        by = conflict_cols
-      ) %>%
-      dplyr::arrange(
-        dplyr::across(dplyr::all_of(conflict_cols))
+    dupes_export <- payload[key_dup_either_way, , drop = FALSE] %>%
+      dplyr::arrange(dplyr::across(dplyr::all_of(conflict_cols)))
+    
+    dupes_file <- as.character(
+      cfg(
+        "supabase_duplicates_file",
+        paste0(country_iso, subset_postfix, "_supabase_duplicates.csv")
       )
-    
-    print(duplicate_rows, n = 30)
-    
-    stop(
-      "Supabase export contains ",
-      nrow(duplicate_keys),
-      " duplicated conflict key(s). ",
-      "See the rows printed above."
     )
+    
+    tryCatch(
+      readr::write_csv(dupes_export, file.path(path, dupes_file), na = ""),
+      error = function(e) {
+        message("Could not write Supabase duplicates file: ", conditionMessage(e))
+      }
+    )
+    
+    warning(
+      n_dupes, " row(s) shared a duplicate Supabase conflict key (",
+      paste(conflict_cols, collapse = ", "),
+      "). Written to ", dupes_file,
+      " for review. Supabase upsert skipped for this run -- ",
+      "fix the source data so each conflict key is unique, then re-run."
+    )
+    
+    return(invisible(FALSE))
   }
   
   endpoint <- paste0(
@@ -195,6 +203,24 @@ export_to_supabase <- function(
     
     payload_chunk <- payload[row_groups[[i]], , drop = FALSE]
     
+    # Extract PostgREST's JSON error body (message/details/hint/code) so
+    # httr2 folds it straight into the R error text, whatever the status code.
+    supabase_error_body <- function(resp) {
+      tryCatch({
+        b <- httr2::resp_body_json(resp, check_type = FALSE)
+        parts <- c(
+          if (!is.null(b$message)) paste("message:", b$message),
+          if (!is.null(b$details)) paste("details:", b$details),
+          if (!is.null(b$hint))    paste("hint:", b$hint),
+          if (!is.null(b$code))    paste("code:", b$code)
+        )
+        if (length(parts) == 0) return(NULL)
+        paste(parts, collapse = " | ")
+      }, error = function(e) {
+        tryCatch(httr2::resp_body_string(resp), error = function(e2) NULL)
+      })
+    }
+    
     req <- httr2::request(endpoint) %>%
       httr2::req_url_query(
         on_conflict = paste(conflict_cols, collapse = ",")
@@ -209,52 +235,26 @@ export_to_supabase <- function(
         auto_unbox = TRUE,
         null = "null"
       ) %>%
-      httr2::req_method("POST")
-    # Clean non-finite numeric values before JSON serialisation.
-    payload_chunk <- payload_chunk %>%
-      dplyr::mutate(
-        dplyr::across(
-          where(is.numeric),
-          ~ dplyr::if_else(is.finite(.x), .x, NA_real_)
-        )
-      )
+      httr2::req_method("POST") %>%
+      httr2::req_error(body = supabase_error_body)
     
-    message(
-      "Supabase chunk ", i, "/", length(row_groups),
-      ": ", nrow(payload_chunk), " rows"
-    )
-    
-    # Do not let httr2 stop automatically on HTTP errors.
-    # We inspect the Supabase/PostgREST response body ourselves so that
-    # database errors are visible in the report log.
     resp <- tryCatch(
-      req %>%
-        httr2::req_error(is_error = function(resp) FALSE) %>%
-        httr2::req_perform(),
+      httr2::req_perform(req),
       error = function(e) {
         stop(
-          "Supabase request failed before receiving a response for chunk ",
-          i, "/", length(row_groups), ": ",
-          conditionMessage(e)
+          "Supabase export failed for chunk ", i,
+          "/", length(row_groups), ": ",
+          conditionMessage(e),
+          call. = FALSE
         )
       }
     )
     
     status <- httr2::resp_status(resp)
-    
     if (status < 200 || status >= 300) {
-      
-      response_body <- tryCatch(
-        httr2::resp_body_string(resp),
-        error = function(e) "<unable to read response body>"
-      )
-      
       stop(
-        "Supabase export failed for chunk ", i,
-        "/", length(row_groups),
-        " - HTTP ", status, "
-",
-"Response: ", response_body
+        "Supabase returned HTTP ", status,
+        " for chunk ", i, "."
       )
     }
   }
@@ -282,9 +282,10 @@ if (exists("summary_2", inherits = TRUE) &&
   
   scores <- get("summary_2", inherits = TRUE)
   
-  # Default empty object so downstream profile export is always safe
-  # even when no overall/index row is available.
-  overall_row <- tibble::tibble()
+  # Initialised here (not just inside the block below) because it is also
+  # read further down when building Profiles, regardless of whether the
+  # "overall" row itself applies to this module.
+  overall_row <- scores[0, , drop = FALSE]
   
   # Overall score: configuration tells the script which Dimension is the index.
   if (!is.na(overall_dimension) &&
@@ -395,7 +396,7 @@ if (exists("summary_2", inherits = TRUE) &&
         Value = suppressWarnings(as.numeric(Value)),
         Serie = dplyr::case_when(
           SerieRaw == "Overall" ~ "Overall",
-          grepl(":", SerieRaw) ~ trimws(sub(":.*$", "", SerieRaw)),
+          grepl(":", SerieRaw) ~ trimws(sub("^[^:]*:", "", SerieRaw)),
           TRUE ~ as.character(SerieRaw)
         )
       ) %>%
@@ -434,24 +435,12 @@ if (exists("means_df", inherits = TRUE) &&
       tolower()
   }
   
-  means_export <- get("means_df", inherits = TRUE) %>%
-    dplyr::filter(
-      !is.na(variable_value),
-      variable_value != 0
-    ) %>%
+  db_parts[["factors"]] <- get("means_df", inherits = TRUE) %>%
+    dplyr::filter(!is.na(variable_value), variable_value != 0) %>%
     dplyr::mutate(
       clean_variable = tools::toTitleCase(gsub("\\n", " ", variable)),
       is_geographic = tolower(clean_variable) %in% geo_short_labels
-    )
-  
-  # Keep only ADM1 for geographic results
-  means_export <- means_export %>%
-    dplyr::filter(
-      !is_geographic |
-        tolower(variable) == "adm1"
-    )
-  
-  db_parts[["factors"]] <- means_export %>%
+    ) %>%
     dplyr::transmute(
       Country = country_name,
       Module = module_export_name,
@@ -504,17 +493,13 @@ if (exists("tab_gender", inherits = TRUE) &&
 # ---- Sampling: geography ------------------------------------
 if (exists("tab_geo", inherits = TRUE) &&
     is_valid_tbl(get("tab_geo", inherits = TRUE)) &&
-    "Total Respondents" %in% names(tab_geo)) {
+    all(c("Admin1", "Admin2", "Total Respondents") %in% names(tab_geo))) {
   
-  # `tab_geo` is expected to have been prepared upstream using the
-  # geographic level selected by the Excel configuration.
-  geo_label_col <- names(tab_geo)[1]
-  
+  # Keep only rows aggregated at Admin1 level (Admin2 == "TOTAL").
+  # Label = Admin1 name, Series = adm1 (the human-readable level name).
   db_parts[["sampling_geo"]] <- tab_geo %>%
     dplyr::filter(
-      !is.na(.data[[geo_label_col]]),
-      trimws(as.character(.data[[geo_label_col]])) != "",
-      toupper(as.character(.data[[geo_label_col]])) != "TOTAL"
+      toupper(trimws(as.character(Admin2))) == "TOTAL"
     ) %>%
     dplyr::transmute(
       Country = country_name,
@@ -522,8 +507,8 @@ if (exists("tab_geo", inherits = TRUE) &&
       Year = report_year_export,
       Group = "Sampling",
       Name = "Geographic",
-      Label = as.character(.data[[geo_label_col]]),
-      Series = "",
+      Label = as.character(Admin1),
+      Series = as.character(adm1),
       Value = as.numeric(`Total Respondents`)
     )
 }
@@ -535,17 +520,16 @@ if (length(db_parts) > 0) {
     dplyr::filter(!is.na(Value)) %>%
     dplyr::arrange(Country, Module, Year, Group, Name, Label, Series)
   
+  # File name is driven by `export_file` (defined upstream in the report)
+  # so the download-button link built from that same variable stays correct:
+  #   [text](`r export_file`){.button}
   database_export_file <- as.character(
-    cfg(
-      "database_export_file",
-      paste0(country_iso, subset_postfix, "_database_export.csv")
-    )
+    cfg("export_file", paste0(country_iso, subset_postfix, "_database_export.xlsx"))
   )
   
-  readr::write_csv(
+  writexl::write_xlsx(
     output_database,
-    file.path(path, database_export_file),
-    na = ""
+    path = file.path(path, database_export_file)
   )
   
   message("✓ Database export: ", database_export_file)
@@ -560,16 +544,40 @@ if (length(db_parts) > 0) {
       cfg("supabase_table", "cti_results")
     )
     
-    supabase_conflict_cols <- strsplit(
-      as.character(
-        cfg(
-          "supabase_conflict_cols",
-          "country,module,year,data_group,name,label,series"
-        )
-      ),
-      ",",
-      fixed = TRUE
-    )[[1]]
+    # NOTE: cfg() intentionally keeps only the first element when a config
+    # value is a multi-element vector (see cfg() definition above) - correct
+    # for scalar settings, but wrong here since supabase_conflict_cols needs
+    # every column. Read it directly so a config defined either as a single
+    # comma-separated string OR as a multi-element R vector both work fully.
+    default_conflict_cols <- c(
+      "country", "module", "year", "data_group", "name", "label", "series"
+    )
+    
+    if (exists("supabase_conflict_cols", envir = .GlobalEnv, inherits = FALSE)) {
+      raw_conflict_cols <- get("supabase_conflict_cols", envir = .GlobalEnv, inherits = FALSE)
+    } else {
+      raw_conflict_cols <- NULL
+    }
+    
+    if (is.null(raw_conflict_cols) || length(raw_conflict_cols) == 0L ||
+        is.function(raw_conflict_cols)) {
+      supabase_conflict_cols <- default_conflict_cols
+    } else if (length(raw_conflict_cols) > 1L) {
+      # Config supplied as a real R vector -> keep every element.
+      supabase_conflict_cols <- as.character(raw_conflict_cols)
+    } else {
+      # Config supplied as a single (possibly comma-separated) string.
+      supabase_conflict_cols <- strsplit(
+        as.character(raw_conflict_cols), ",", fixed = TRUE
+      )[[1]]
+    }
+    
+    supabase_conflict_cols <- trimws(supabase_conflict_cols)
+    supabase_conflict_cols <- supabase_conflict_cols[nzchar(supabase_conflict_cols)]
+    
+    if (length(supabase_conflict_cols) == 0L) {
+      supabase_conflict_cols <- default_conflict_cols
+    }
     
     supabase_chunk_size <- suppressWarnings(
       as.integer(cfg("supabase_chunk_size", 500))
