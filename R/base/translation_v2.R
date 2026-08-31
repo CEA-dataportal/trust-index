@@ -62,7 +62,10 @@
   tolower(x)
 }
 
-repo <- "https://raw.githubusercontent.com/CEA-dataportal/trust-index/main"
+if (!exists("repo", inherits = TRUE)) {
+  repo <- "https://raw.githubusercontent.com/CEA-dataportal/trust-index/main"
+}
+
 
 repo_path <- function(repo, ...) {
   parts <- c(...)
