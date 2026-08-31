@@ -52,7 +52,7 @@ weighting_plot <- ggplot2::ggplot(
       fill = variable_display
     ),
     color = "white",
-    label.size = 0,
+    linewidth = 0,
     label.r = grid::unit(0.2, "lines"),
     label.padding = grid::unit(2, "pt"),
     size = 4
