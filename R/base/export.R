@@ -145,6 +145,41 @@ export_to_supabase <- function(
     )
   }
   
+  
+  # Remove fully identical rows first.
+  payload <- payload %>%
+    dplyr::distinct()
+  
+  # Ensure the columns used by ON CONFLICT uniquely identify each row
+  # within the same Supabase request.
+  duplicate_keys <- payload %>%
+    dplyr::count(
+      dplyr::across(dplyr::all_of(conflict_cols)),
+      name = "n"
+    ) %>%
+    dplyr::filter(n > 1)
+  
+  if (nrow(duplicate_keys) > 0) {
+    
+    duplicate_rows <- payload %>%
+      dplyr::semi_join(
+        duplicate_keys,
+        by = conflict_cols
+      ) %>%
+      dplyr::arrange(
+        dplyr::across(dplyr::all_of(conflict_cols))
+      )
+    
+    print(duplicate_rows, n = 30)
+    
+    stop(
+      "Supabase export contains ",
+      nrow(duplicate_keys),
+      " duplicated conflict key(s). ",
+      "See the rows printed above."
+    )
+  }
+  
   endpoint <- paste0(
     sub("/+$", "", supabase_url),
     "/rest/v1/",
