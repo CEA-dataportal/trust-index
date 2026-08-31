@@ -219,6 +219,10 @@ if (exists("summary_2", inherits = TRUE) &&
   
   scores <- get("summary_2", inherits = TRUE)
   
+  # Default empty object so downstream profile export is always safe
+  # even when no overall/index row is available.
+  overall_row <- tibble::tibble()
+  
   # Overall score: configuration tells the script which Dimension is the index.
   if (!is.na(overall_dimension) &&
       all(c("Dimension", "Drivers", "Overall") %in% names(scores))) {
