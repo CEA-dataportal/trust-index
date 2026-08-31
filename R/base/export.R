@@ -434,12 +434,24 @@ if (exists("means_df", inherits = TRUE) &&
       tolower()
   }
   
-  db_parts[["factors"]] <- get("means_df", inherits = TRUE) %>%
-    dplyr::filter(!is.na(variable_value), variable_value != 0) %>%
+  means_export <- get("means_df", inherits = TRUE) %>%
+    dplyr::filter(
+      !is.na(variable_value),
+      variable_value != 0
+    ) %>%
     dplyr::mutate(
       clean_variable = tools::toTitleCase(gsub("\\n", " ", variable)),
       is_geographic = tolower(clean_variable) %in% geo_short_labels
-    ) %>%
+    )
+  
+  # Keep only ADM1 for geographic results
+  means_export <- means_export %>%
+    dplyr::filter(
+      !is_geographic |
+        tolower(variable) == "adm1"
+    )
+  
+  db_parts[["factors"]] <- means_export %>%
     dplyr::transmute(
       Country = country_name,
       Module = module_export_name,
