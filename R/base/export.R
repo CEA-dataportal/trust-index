@@ -175,23 +175,51 @@ export_to_supabase <- function(
         null = "null"
       ) %>%
       httr2::req_method("POST")
+    # Clean non-finite numeric values before JSON serialisation.
+    payload_chunk <- payload_chunk %>%
+      dplyr::mutate(
+        dplyr::across(
+          where(is.numeric),
+          ~ dplyr::if_else(is.finite(.x), .x, NA_real_)
+        )
+      )
     
+    message(
+      "Supabase chunk ", i, "/", length(row_groups),
+      ": ", nrow(payload_chunk), " rows"
+    )
+    
+    # Do not let httr2 stop automatically on HTTP errors.
+    # We inspect the Supabase/PostgREST response body ourselves so that
+    # database errors are visible in the report log.
     resp <- tryCatch(
-      httr2::req_perform(req),
+      req %>%
+        httr2::req_error(is_error = function(resp) FALSE) %>%
+        httr2::req_perform(),
       error = function(e) {
         stop(
-          "Supabase export failed for chunk ", i,
-          "/", length(row_groups), ": ",
+          "Supabase request failed before receiving a response for chunk ",
+          i, "/", length(row_groups), ": ",
           conditionMessage(e)
         )
       }
     )
     
     status <- httr2::resp_status(resp)
+    
     if (status < 200 || status >= 300) {
+      
+      response_body <- tryCatch(
+        httr2::resp_body_string(resp),
+        error = function(e) "<unable to read response body>"
+      )
+      
       stop(
-        "Supabase returned HTTP ", status,
-        " for chunk ", i, "."
+        "Supabase export failed for chunk ", i,
+        "/", length(row_groups),
+        " - HTTP ", status, "
+",
+"Response: ", response_body
       )
     }
   }
@@ -213,17 +241,16 @@ export_to_supabase <- function(
 
 db_parts <- list()
 
-# Always initialise these objects before any conditional export block.
-# This guarantees that downstream code can safely test them even when
-# summary_2 or the configured overall dimension is unavailable.
-overall_row <- tibble::tibble()
-scores <- tibble::tibble()
-
 # ---- Overall, dimensions and drivers ------------------------
 if (exists("summary_2", inherits = TRUE) &&
     is_valid_tbl(get("summary_2", inherits = TRUE))) {
   
   scores <- get("summary_2", inherits = TRUE)
+  
+  # Default empty object so downstream profile export is always safe
+  # even when no overall/index row is available.
+  overall_row <- tibble::tibble()
+  
   # Overall score: configuration tells the script which Dimension is the index.
   if (!is.na(overall_dimension) &&
       all(c("Dimension", "Drivers", "Overall") %in% names(scores))) {
@@ -280,7 +307,7 @@ if (exists("summary_2", inherits = TRUE) &&
     
     # Profiles: use the overall module/index row.
     # Name = Grp1 / Grp2 / ... ; Label = human-readable profile name.
-    if (is_valid_tbl(overall_row) && length(profile_cols) > 0) {
+    if (nrow(overall_row) > 0 && length(profile_cols) > 0) {
       
       profile_long <- overall_row %>%
         tidyr::pivot_longer(
