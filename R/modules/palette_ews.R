@@ -66,6 +66,11 @@ palette_module <- c(
   color_quaternary_100
 )
 
+# Gender EWS palette
+color_female_100  <- color_tertiary_100
+color_female_10 <- color_tertiary_10
+color_male_100  <- color_primary_100
+color_male_10 <- color_primary_10
 
 # ---- 4. EWS semantic colours ----
 

@@ -31,7 +31,7 @@ message("read_config.R loaded")
 
 
 .validate_module_config <- function(module_config) {
-
+  
   if (is.null(module_config) || !is.list(module_config)) {
     stop(
       "No valid CTI module configuration found. ",
@@ -40,7 +40,7 @@ message("read_config.R loaded")
       call. = FALSE
     )
   }
-
+  
   required <- c(
     "code",
     "name",
@@ -50,9 +50,9 @@ message("read_config.R loaded")
     "score_prefixes",
     "prefixes"
   )
-
+  
   missing <- setdiff(required, names(module_config))
-
+  
   if (length(missing) > 0L) {
     stop(
       "The module configuration is missing: ",
@@ -60,16 +60,16 @@ message("read_config.R loaded")
       call. = FALSE
     )
   }
-
+  
   if (!is.list(module_config$prefixes)) {
     stop("module_config$prefixes must be a named list.", call. = FALSE)
   }
-
+  
   if (is.null(names(module_config$prefixes)) ||
       any(!nzchar(names(module_config$prefixes)))) {
     stop("All module prefixes must have names.", call. = FALSE)
   }
-
+  
   invisible(TRUE)
 }
 
@@ -88,15 +88,15 @@ read_cti_config <- function(
       ifnotfound = NULL
     )
 ) {
-
+  
   .validate_module_config(module_config)
-
+  
   # ---- Paths ----
-
+  
   path <- file.path("..", country_name)
-
+  
   config_path <- file.path(path, config_file)
-
+  
   if (!file.exists(config_path)) {
     stop(
       "Configuration file not found: ",
@@ -104,10 +104,10 @@ read_cti_config <- function(
       call. = FALSE
     )
   }
-
-
+  
+  
   # ---- Parameters sheet ----
-
+  
   params_df <- readxl::read_xlsx(
     config_path,
     sheet = "Parameters"
@@ -116,7 +116,7 @@ read_cti_config <- function(
       !is.na(parameters),
       !grepl("^#", parameters)
     )
-
+  
   params <- stats::setNames(
     lapply(
       params_df$values,
@@ -124,21 +124,21 @@ read_cti_config <- function(
         if (.is_blank_config_value(x)) {
           return(NULL)
         }
-
+        
         x
       }
     ),
     params_df$parameters
   )
-
-
+  
+  
   # ---- Required parameters ----
-
+  
   required_params <- c(
     "data_file",
     "country_iso"
   )
-
+  
   missing_params <- required_params[
     !required_params %in% names(params) |
       vapply(
@@ -147,7 +147,7 @@ read_cti_config <- function(
         logical(1)
       )
   ]
-
+  
   if (length(missing_params) > 0L) {
     stop(
       "Missing required parameter(s) in the Parameters sheet: ",
@@ -155,39 +155,84 @@ read_cti_config <- function(
       call. = FALSE
     )
   }
-
-
+  
+  
   # ---- Optional geoname lookup ----
-
+  
   geoname_survey <- params[["geoname_survey"]]
-
-
+  
+  
   # ---- Refresh parameters in global environment ----
   #
   # Existing variables with the same names are removed first so that
   # parameters set to blank/NULL in a new configuration do not retain
   # stale values from a previous report run.
-
+  
   previous_parameter_names <- intersect(
     names(params_df$parameters),
     ls(envir = .GlobalEnv)
   )
-
+  
   if (length(previous_parameter_names) > 0L) {
     rm(
       list = previous_parameter_names,
       envir = .GlobalEnv
     )
   }
-
+  
   list2env(
     params,
     envir = .GlobalEnv
   )
-
-
+  
+  
+  # ---- Optional custom translations ----
+  #
+  # A sheet named "translation" can override entries in the shared
+  # translation dictionary. Required columns: key, section, EN, FR, ES.
+  # Rows in this sheet take priority over the standard dictionary.
+  
+  config_sheets <- readxl::excel_sheets(config_path)
+  translations_sheet <- config_sheets[
+    tolower(trimws(config_sheets)) == "translation"
+  ]
+  
+  custom_translations <- if (length(translations_sheet) == 0L) {
+    data.frame(
+      type = character(0),
+      key = character(0),
+      EN = character(0),
+      FR = character(0),
+      ES = character(0),
+      stringsAsFactors = FALSE
+    )
+  } else {
+    readxl::read_xlsx(
+      config_path,
+      sheet = translations_sheet[1L]
+    ) |>
+      as.data.frame(stringsAsFactors = FALSE) |>
+      dplyr::filter(
+        !is.na(key),
+        !grepl("^#", trimws(as.character(key)))
+      )
+  }
+  
+  # Make overrides available whether translations are loaded before or after
+  # read_cti_config() is called.
+  assign("custom_translations", custom_translations, envir = .GlobalEnv)
+  
+  if (exists("load_custom_translation_dictionary", mode = "function")) {
+    assign(
+      "custom_translation_dictionary",
+      load_custom_translation_dictionary(custom_translations),
+      envir = .GlobalEnv
+    )
+  }
+  
+  
   # ---- Module settings ----
-
+  
   module_code       <- module_config$code
   module_name       <- module_config$name
   index_name        <- module_config$index_name
@@ -195,33 +240,33 @@ read_cti_config <- function(
   score_dimensions  <- module_config$score_dimensions
   score_prefixes    <- module_config$score_prefixes
   module_prefixes   <- module_config$prefixes
-
-
+  
+  
   # ---- Global report settings ----
-
+  
   date <- format(Sys.Date(), "%d%m%y")
-
+  
   path_data_file <- file.path(
     path,
     params$data_file
   )
-
+  
   path_archives <- "Archives"
-
+  
   if (!dir.exists(path_archives)) {
     dir.create(
       path_archives,
       recursive = TRUE
     )
   }
-
-
+  
+  
   # ---- Optional subset postfix ----
-
+  
   subset_postfix <- ""
-
+  
   subset_value <- params[["subset_value"]]
-
+  
   if (!.is_blank_config_value(subset_value)) {
     subset_postfix <- paste0(
       "_",
@@ -232,10 +277,10 @@ read_cti_config <- function(
       )
     )
   }
-
-
+  
+  
   # ---- Module-specific output names ----
-
+  
   html_output <- file.path(
     path,
     paste0(
@@ -246,7 +291,7 @@ read_cti_config <- function(
       ".html"
     )
   )
-
+  
   export_file <- file.path(
     path,
     paste0(
@@ -257,36 +302,36 @@ read_cti_config <- function(
       "_export.xlsx"
     )
   )
-
-
+  
+  
   # ---- Answer mappings ----
-
+  
   mapping_df <- readxl::read_xlsx(
     config_path,
     sheet = "Answer_mapping"
   )
-
+  
   make_mapping_local <- function(df, object_name) {
-
+    
     x <- dplyr::filter(
       df,
       map == object_name
     )
-
+    
     if (nrow(x) == 0L) {
       return(character(0))
     }
-
+    
     if (all(is.na(x$to) | x$to == "")) {
       return(x$from)
     }
-
+    
     stats::setNames(
       x$to,
       x$from
     )
   }
-
+  
   score_map          <- make_mapping_local(mapping_df, "score_map")
   answer_likertscale <- make_mapping_local(mapping_df, "answer_likertscale")
   answer_extra       <- make_mapping_local(mapping_df, "answer_extra")
@@ -294,55 +339,62 @@ read_cti_config <- function(
   answer_behaviours  <- make_mapping_local(mapping_df, "answer_behaviours")
   answer_intention   <- make_mapping_local(mapping_df, "answer_intention")
   answer_impact      <- make_mapping_local(mapping_df, "answer_impact")
+  answer_risk        <- make_mapping_local(mapping_df, "answer_risk")
+  answer_ews         <- make_mapping_local(mapping_df, "answer_ews")
   answer_yn_map      <- make_mapping_local(mapping_df, "answer_yn_map")
+  answer_channel     <- make_mapping_local(mapping_df, "answer_channel")
+  answer_knowledge   <- make_mapping_local(mapping_df, "answer_knowledge")
   gender_map         <- make_mapping_local(mapping_df, "gender_map")
-
-
+  
+  
+  
+  
   # ---- Standard exclusions ----
-
+  
   display_no <- c(
     "Don't know",
     "No data",
     "Prefer not to answer"
   )
-
+  
   gender_no <- c(
     "Other",
     "No data",
     "Prefer not to say"
   )
-
+  
   excluded_regions <- c(
     "Don't know",
     "No data",
     "Prefer not to answer"
   )
-
-
+  
+  
   # ---- Return configuration ----
-
+  
   base_config <- list(
     path = path,
     config_file = config_file,
     country_name = country_name,
-
+    
     params = params,
     geoname_survey = geoname_survey,
-
+    custom_translations = custom_translations,
+    
     module_code = module_code,
     module_name = module_name,
     index_name = index_name,
     score_categories = score_categories,
     score_dimensions = score_dimensions,
     score_prefixes = score_prefixes,
-
+    
     date = date,
     path_data_file = path_data_file,
     path_archives = path_archives,
     subset_postfix = subset_postfix,
     html_output = html_output,
     export_file = export_file,
-
+    
     score_map = score_map,
     answer_likertscale = answer_likertscale,
     answer_extra = answer_extra,
@@ -350,20 +402,25 @@ read_cti_config <- function(
     answer_behaviours = answer_behaviours,
     answer_impact = answer_impact,
     answer_intention = answer_intention,
+    answer_risk  = answer_risk,
+    answer_ews = answer_ews,
+    answer_channel = answer_channel,
+    answer_knowledge = answer_knowledge,
     answer_yn_map = answer_yn_map,
     gender_map = gender_map,
-
+    
+    
     display_no = display_no,
     gender_no = gender_no,
     excluded_regions = excluded_regions
   )
-
+  
   # Prefix variables are returned at the top level for compatibility
   # with the current analysis and chart scripts:
   #
   # INST: prefix_comp, prefix_val
   # EWS : prefix_disaster, prefix_detection, prefix_dissemination, etc.
-
+  
   c(
     base_config,
     module_prefixes

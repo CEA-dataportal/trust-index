@@ -40,11 +40,11 @@ if (length(missing_analysis_config) > 0) {
 
 if ("analysis" %in% names(question_code)) {
   disaggregation_levels <- question_code |>
-    dplyr::filter(tolower(analysis) == "yes")  |>
+    dplyr::filter(tolower(analysis) == "yes") |>
     dplyr::mutate(
       variable = if_else(variable == "age", "Age_group", variable)
     ) |>
-    dplyr::select(variable, short_label, long_label)
+    dplyr::select(variable, short_label, long_label, category)
 } else {
   disaggregation_levels <- NULL
 }
@@ -55,9 +55,9 @@ if ("analysis" %in% names(question_code)) {
 if ("breakdown" %in% names(question_code)) {
   group_map <- question_code %>%
     dplyr::filter(!is.na(breakdown) & breakdown != "") |>
-    separate_rows(breakdown, sep = ",") |>
+    separate_rows(breakdown, sep = ";") |>
     dplyr::mutate(
-      term        = str_to_title(str_trim(breakdown)),         
+      term = str_trim(breakdown),         
       group_col   = variable,
       group_value = term,
       group_label = paste0(short_label, ": ", term)             
@@ -235,19 +235,23 @@ if (!is.null(disaggregation_levels) && nrow(disaggregation_levels) > 0) {
   }
 
   means_df <- means_df %>%
-    filter(!is.na(mean), !is.nan(mean)) %>%
-    filter(!variable_value %in% c("Prefer not to answer", "Don't know")) %>%
-    left_join(disaggregation_levels, by = "variable") %>%
-    mutate(variable = stringr::str_wrap(short_label, 10)) %>%
-    select(-short_label)
-
-  means_df <- means_df %>%
-    mutate(
+    dplyr::filter(
+      !is.na(mean),
+      !is.nan(mean),
+      !variable_value %in% c("Prefer not to answer", "Don't know")
+    ) %>%
+    dplyr::left_join(disaggregation_levels, by = "variable") %>%
+    dplyr::mutate(
+      variable_code = variable,
       variable = factor(
-        variable,
-        levels = stringr::str_wrap(disaggregation_levels$short_label, 10)
+        stringr::str_wrap(tr_variable(short_label), 10),
+        levels = stringr::str_wrap(
+          tr_variable(disaggregation_levels$short_label),
+          10
+        )
       )
-    )
+    ) %>%
+    dplyr::select(-short_label)
 }
 
 # This chunk standardises the weight variable (or sets it to 1 if missing),

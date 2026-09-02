@@ -32,6 +32,7 @@ height_intention_plot  <- 1
 height_knowledge_plot  <- 1
 height_extra_plot      <- 1
 height_risk_plot       <- 1
+height_ews_plot        <- 1
 height_strip_plot      <- 1
 
 # Normalised category list
@@ -83,25 +84,25 @@ caption_no_str <- switch(
 
 # Build the response distribution for one score dimension / EWS pillar.
 build_driver_summary <- function(dimension_key, dimension_label) {
-
+  
   dimension_lookup <- drivers_lookup %>%
     dplyr::filter(tolower(Dimension) == tolower(dimension_label)) %>%
     dplyr::select(Variables, Drivers)
-
+  
   dimension_vars <- intersect(
     dimension_lookup$Variables,
     names(survey_data)
   )
-
+  
   if (length(dimension_vars) == 0L) {
     return(NULL)
   }
-
+  
   recode_map <- stats::setNames(
     dimension_lookup$Drivers,
     dimension_lookup$Variables
   )
-
+  
   survey_data %>%
     dplyr::select(dplyr::all_of(dimension_vars)) %>%
     tidyr::pivot_longer(
@@ -131,21 +132,21 @@ build_driver_summary <- function(dimension_key, dimension_label) {
 
 # Create summary_<dimension> objects for the active module.
 for (dimension_key in names(score_columns)) {
-
+  
   dimension_position <- match(
     dimension_key,
     names(score_prefixes)
   )
-
+  
   if (is.na(dimension_position)) next
-
+  
   dimension_label <- score_dimensions[dimension_position]
-
+  
   summary_dimension <- build_driver_summary(
     dimension_key,
     dimension_label
   )
-
+  
   assign(
     paste0("summary_", dimension_key),
     summary_dimension,
@@ -172,26 +173,39 @@ if (!exists("pal_score", inherits = TRUE)) {
 }
 
 make_driver_score_plot <- function(summary_df, dimension_key, dimension_label) {
-
+  
   if (is.null(summary_df) || nrow(summary_df) == 0L) {
     return(NULL)
   }
-
+  
   is_ews <- exists("module_code", inherits = TRUE) &&
     identical(toupper(as.character(module_code)), "EWS")
-
+  
+  ews_dimension_titles <- c(
+    disaster      = tr("score.disaster_risk_knowledge"),
+    detection     = tr("score.detection_monitoring_forecasting"),
+    dissemination = tr("score.warning_dissemination_communication"),
+    response      = tr("score.preparedness_response_capabilities")
+  )
+  
   plot_title <- if (is_ews) {
-    tr_variable(dimension_label)
+    translated_title <- unname(ews_dimension_titles[dimension_key])
+    
+    if (length(translated_title) == 0L || is.na(translated_title)) {
+      tr_variable(dimension_label)
+    } else {
+      translated_title
+    }
   } else {
     tr("drivers.responses_by_subdimension")
   }
-
+  
   plot_subtitle <- if (is_ews) {
     tr("drivers.responses_by_subdimension")
   } else {
     NULL
   }
-
+  
   ggplot2::ggplot(
     summary_df,
     ggplot2::aes(
@@ -201,6 +215,7 @@ make_driver_score_plot <- function(summary_df, dimension_key, dimension_label) {
     )
   ) +
     ggplot2::geom_col(
+      position = ggplot2::position_stack(reverse = TRUE),
       colour = "white",
       linewidth = 0.35,
       width = 0.50,
@@ -215,7 +230,7 @@ make_driver_score_plot <- function(summary_df, dimension_key, dimension_label) {
         )
       ),
       colour = color_label_White,
-      position = ggplot2::position_stack(vjust = 0.5),
+      position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
       size = 4,
       show.legend = FALSE
     ) +
@@ -228,7 +243,7 @@ make_driver_score_plot <- function(summary_df, dimension_key, dimension_label) {
       labels = function(x) tr_variable(x)
     ) +
     ggplot2::guides(
-      fill = ggplot2::guide_legend(reverse = TRUE)
+      fill = ggplot2::guide_legend(reverse = FALSE)
     ) +
     ggplot2::labs(
       title = plot_title,
@@ -243,25 +258,25 @@ make_driver_score_plot <- function(summary_df, dimension_key, dimension_label) {
 
 # Create drivers_<dimension>_plot objects dynamically.
 for (dimension_key in names(score_columns)) {
-
+  
   summary_name <- paste0("summary_", dimension_key)
   if (!exists(summary_name, inherits = TRUE)) next
-
+  
   dimension_position <- match(
     dimension_key,
     names(score_prefixes)
   )
-
+  
   if (is.na(dimension_position)) next
-
+  
   dimension_label <- score_dimensions[dimension_position]
-
+  
   plot_object <- make_driver_score_plot(
     get(summary_name, inherits = TRUE),
     dimension_key,
     dimension_label
   )
-
+  
   assign(
     paste0("drivers_", dimension_key, "_plot"),
     plot_object,
@@ -276,41 +291,191 @@ if (exists("drivers_values_plot", inherits = FALSE)) {
 
 
 # ------------------------------------------------------------
+# EWS contextual-question chart
+# ------------------------------------------------------------
+
+# Stacked distribution of questions whose category is "ews".
+# Entirely conditional: Institutional reports are unaffected.
+ews_plot <- NULL
+
+if (isTRUE(check_ews)) {
+  
+  select_ews <- question_code %>%
+    dplyr::filter(tolower(category) == "ews") %>%
+    dplyr::transmute(
+      variable,
+      ShortLabel      = short_label,
+      LongLabel       = long_label,
+      ShortLabel_wrap = stringr::str_wrap(short_label, width = 20)
+    )
+  
+  ews_variables <- intersect(
+    select_ews$variable,
+    names(data)
+  )
+  
+  if (length(ews_variables) > 0L) {
+    
+    select_ews <- select_ews %>%
+      dplyr::filter(variable %in% ews_variables)
+    
+    # Preserve the order defined in question_code.
+    long_levels <- unique(select_ews$LongLabel)
+    
+    ews_data <- data %>%
+      dplyr::select(dplyr::all_of(ews_variables)) %>%
+      tidyr::pivot_longer(
+        cols = dplyr::everything(),
+        names_to = "variable",
+        values_to = "Response"
+      ) %>%
+      dplyr::left_join(select_ews, by = "variable") %>%
+      dplyr::filter(!is.na(Response), Response != "") %>%
+      dplyr::mutate(
+        Response = dplyr::recode(
+          as.character(Response),
+          !!!answer_ews
+        ),
+        Response = tidyr::replace_na(Response, "No answer"),
+        Question = factor(
+          LongLabel,
+          levels = long_levels
+        )
+      )
+    
+    summary_ews <- ews_data %>%
+      dplyr::count(Question, Response, name = "n") %>%
+      dplyr::group_by(Question) %>%
+      dplyr::mutate(
+        percent = 100 * n / sum(n)
+      ) %>%
+      dplyr::ungroup()
+    
+    # Keep the global response order from answer_extra, while retaining
+    # any unexpected response values at the end rather than dropping them.
+    ews_response_levels <- unique(as.character(answer_ews))
+    present_ews_levels <- unique(as.character(summary_ews$Response))
+    
+    ews_response_levels <- c(
+      ews_response_levels[ews_response_levels %in% present_ews_levels],
+      setdiff(present_ews_levels, ews_response_levels)
+    )
+    
+    summary_ews <- summary_ews %>%
+      dplyr::mutate(
+        Response = factor(
+          Response,
+          levels = ews_response_levels
+        )
+      )
+    
+    n_ews_levels <- max(1L, length(ews_response_levels))
+    pal_ews_questions <- if (exists("palette_1", inherits = TRUE)) {
+      palette_candidate <- get("palette_1", inherits = TRUE)
+      
+      if (length(palette_candidate) < n_ews_levels) {
+        grDevices::colorRampPalette(palette_candidate)(n_ews_levels)
+      } else {
+        palette_candidate[seq_len(n_ews_levels)]
+      }
+    } else {
+      grDevices::colorRampPalette(color_scale)(n_ews_levels)
+    }
+    
+    n_ews_questions <- dplyr::n_distinct(summary_ews$Question)
+    height_ews_plot <- max(
+      6,
+      min(14, n_ews_questions * 1.10 + 2)
+    )
+    
+    ews_plot <- ggplot2::ggplot(
+      summary_ews,
+      ggplot2::aes(
+        x = Question,
+        y = percent,
+        fill = Response
+      )
+    ) +
+      ggplot2::geom_col(
+        position = ggplot2::position_stack(reverse = TRUE),
+        colour = "white",
+        width = 0.50,
+        linewidth = 0.35
+      ) +
+      ggplot2::geom_text(
+        ggplot2::aes(
+          label = ifelse(
+            percent > 2,
+            paste0(round(percent, 0), "%"),
+            ""
+          )
+        ),
+        position = ggplot2::position_stack(vjust = 0.5, reverse = TRUE),
+        colour = color_label_White,
+        size = 4.3,
+        show.legend = FALSE
+      ) +
+      ggplot2::scale_fill_manual(
+        values = pal_ews_questions,
+        name = NULL,
+        labels = function(x) tr_data(x)
+      ) +
+      ggplot2::scale_x_discrete(
+        labels = function(x) stringr::str_wrap(
+          tr_variable(as.character(x)),
+          width = 30
+        )
+      ) +
+      ggplot2::guides(
+        fill = ggplot2::guide_legend(reverse = FALSE)
+      ) +
+      ggplot2::labs(
+        title = "Perceptions and Trust in Early Warning Systems",
+        x = NULL,
+        y = NULL
+      ) +
+      ggplot2::coord_flip() +
+      custom_theme()
+  }
+}
+
+
+# ------------------------------------------------------------
 # EWS risk-perception chart
 # ------------------------------------------------------------
 
 # This is the only additional driver/context chart required by EWS.
 # It is entirely conditional: Institutional reports are unaffected.
 if (isTRUE(check_risk)) {
-
+  
   select_risk <- question_code %>%
     dplyr::filter(tolower(category) == "risk") %>%
     dplyr::select(variable, short_label, long_label)
-
+  
   if (nrow(select_risk) > 0L) {
-
+    
     questions_risk <- stats::setNames(
       select_risk$short_label,
       select_risk$variable
     )
-
+    
     risk_labels <- stats::setNames(
       select_risk$long_label,
       select_risk$short_label
     )
-
+    
     risk_variables <- intersect(
       select_risk$variable,
       names(data)
     )
-
+    
     survey_risk <- data %>%
       dplyr::select(dplyr::all_of(risk_variables)) %>%
       dplyr::rename_with(
         ~ questions_risk[.x],
         .cols = dplyr::everything()
       )
-
+    
     data_risk <- survey_risk %>%
       tidyr::pivot_longer(
         cols = dplyr::everything(),
@@ -319,10 +484,14 @@ if (isTRUE(check_risk)) {
       ) %>%
       dplyr::mutate(
         Question_long = risk_labels[Question_short],
-        Response = as.character(Response)
-      ) %>%
+        Response = dplyr::recode(
+          as.character(Response),
+          !!!answer_risk,
+          .default = as.character(Response)
+        )
+      )%>%
       dplyr::filter(!is.na(Response), Response != "")
-
+    
     summary_risk <- data_risk %>%
       dplyr::group_by(
         Question_short,
@@ -341,24 +510,25 @@ if (isTRUE(check_risk)) {
         percent = n / sum(n) * 100
       ) %>%
       dplyr::ungroup()
-
+    
     make_risk_barchart <- function(df_q) {
-
+      
       q_name <- as.character(
         unique(df_q$Question_short)[1]
       )
-
+      
       # Use the EWS question-specific ordering when available.
-      desired_levels <- NULL
-      if (exists("question_label_map", inherits = TRUE)) {
-        desired_levels <- get(
-          "question_label_map",
-          inherits = TRUE
-        )[[q_name]]
+      desired_levels <- if (
+        exists("answer_risk", inherits = TRUE) &&
+        length(answer_risk) > 0
+      ) {
+        unique(unname(answer_risk))
+      } else {
+        NULL
       }
-
+      
       present <- unique(as.character(df_q$Response))
-
+      
       if (!is.null(desired_levels)) {
         levels_in_use <- desired_levels[
           desired_levels %in% present
@@ -370,19 +540,19 @@ if (isTRUE(check_risk)) {
       } else {
         levels_in_use <- present
       }
-
-      # Keep "Don't know" at the end when present.
-      dont_know <- grepl(
-        "^Don.?t know$",
-        levels_in_use,
-        ignore.case = TRUE
-      )
-
-      levels_in_use <- c(
-        levels_in_use[!dont_know],
-        levels_in_use[dont_know]
-      )
-
+      
+      # # Keep "Don't know" at the end when present.
+      # dont_know <- grepl(
+      #   "^Don.?t know$",
+      #   levels_in_use,
+      #   ignore.case = TRUE
+      # )
+      # 
+      # levels_in_use <- c(
+      #   levels_in_use[!dont_know],
+      #   levels_in_use[dont_know]
+      # )
+      # 
       df_q <- df_q %>%
         dplyr::mutate(
           Response = factor(
@@ -390,39 +560,39 @@ if (isTRUE(check_risk)) {
             levels = levels_in_use
           )
         )
-
+      
       # Use question-specific EWS palettes when available; otherwise
       # construct a palette from the active module colours.
       base_pal <- NULL
-
+      
       if (exists("question_palettes", inherits = TRUE)) {
         base_pal <- get(
           "question_palettes",
           inherits = TRUE
         )[[q_name]]
       }
-
+      
       if (is.null(base_pal)) {
         palette_base <- if (exists("palette_module", inherits = TRUE)) {
           get("palette_module", inherits = TRUE)
         } else {
           c(color_primary_100, color_secondary_100, color_grey)
         }
-
+        
         base_pal <- grDevices::colorRampPalette(
           c(palette_base, color_grey)
         )(max(1L, length(levels_in_use)))
       }
-
+      
       if (length(base_pal) < length(levels_in_use)) {
         base_pal <- grDevices::colorRampPalette(base_pal)(
           length(levels_in_use)
         )
       }
-
+      
       palette_q <- base_pal[seq_along(levels_in_use)]
       names(palette_q) <- levels_in_use
-
+      
       ggplot2::ggplot(
         df_q,
         ggplot2::aes(
@@ -457,8 +627,9 @@ if (isTRUE(check_risk)) {
         ) +
         ggplot2::labs(
           title = tr_variable(q_name),
-          subtitle = tr_variable(
-            unique(df_q$Question_long)[1]
+          subtitle = stringr::str_wrap(
+            tr_variable(unique(df_q$Question_long)[1]),
+            width = 40
           ),
           x = NULL,
           y = NULL
@@ -472,17 +643,17 @@ if (isTRUE(check_risk)) {
           )
         )
     }
-
+    
     risk_plots <- summary_risk %>%
       dplyr::group_split(Question_short) %>%
       purrr::map(make_risk_barchart)
-
+    
     n_risk_questions <- length(risk_plots)
     height_risk_plot <- max(
       5,
       ceiling(n_risk_questions / 2) * 4
     )
-
+    
     risk_grid <- patchwork::wrap_plots(
       risk_plots,
       ncol = 2
@@ -566,7 +737,7 @@ if ("extra" %in% question_code$category) {
       arrange(total) %>%                       # ascending so biggest ends up on top after flip
       pull(long_label)
     
-    extra_order <- c("Mostly agree","Strongly agree","Don't know","Strongly disagree","Mostly disagree")
+    extra_order <- unique(as.character(answer_extra))
     
     df_driver <- df_driver %>%
       mutate(
@@ -589,7 +760,7 @@ if ("extra" %in% question_code$category) {
       geom_col(color = "white", width = 0.55) +
       geom_text(
         aes(label = ifelse(percent >= 5, paste0(round(percent, 1), "%"), "")),
-        position = position_stack(vjust = 0.5),
+        position = position_stack(vjust = 0.5, reverse = TRUE),
         color = "white",
         size = 4,
         show.legend = FALSE
@@ -605,14 +776,11 @@ if ("extra" %in% question_code$category) {
       scale_y_continuous(labels = function(x) paste0(x, "%"), expand = expansion(mult = c(0, 0.02))) +
       labs(
         title = tr_variable(unique(df_driver$Drivers)),
-        subtitle = paste0(
-          tr("drivers.opinions_subtitle"),
-          tolower(tr_variable(unique(df_driver$Drivers)))
-        ),
+        subtitle = NULL,
         x = NULL,
         y = NULL
       ) +
-      guides(fill = guide_legend(reverse = TRUE)) +
+      guides(fill = guide_legend(reverse = FALSE)) +
       custom_theme() +
       theme(
         axis.text.y = element_text(size=12)
@@ -678,7 +846,7 @@ if ("experience" %in% question_code$category) {
   # Plot
   experience_plot <- ggplot(summary_exp, aes(x = Question, y = percent, fill = Response)) +
     geom_bar(
-      position = "stack",
+      position = position_stack(reverse = TRUE),
       stat = "identity",
       lwd = 0.35,
       color = "white",
@@ -689,7 +857,7 @@ if ("experience" %in% question_code$category) {
       aes(
         label = ifelse(percent > 2, paste0(round(percent, 1), "%"), "")),
       color = color_label_White,
-      position = position_stack(vjust = 0.5),
+      position = position_stack(vjust = 0.5, reverse = TRUE),
       size = 4,
       vjust = 0.5,
       show.legend = FALSE
@@ -702,9 +870,10 @@ if ("experience" %in% question_code$category) {
     scale_x_discrete(
       labels = function(x) stringr::str_wrap(tr_variable(x), 20)
     ) +
-    guides(fill = guide_legend(reverse = TRUE)) +
+    guides(fill = guide_legend(reverse = FALSE)) +
     labs(
-      title = tr("drivers.exp_title"),
+      title = tr("drivers.experience_title"),
+      subtitle = tr("drivers.last_12_months"),
       x = NULL,
       y = NULL
     ) +
@@ -762,7 +931,7 @@ if ("behaviours" %in% question_code$category) {
   # Plot
   behaviours_plot <- ggplot(summary_behaviours, aes(x = Question, y = percent, fill = Response)) +
     geom_bar(
-      position = "stack",
+      position = position_stack(reverse = TRUE),
       stat = "identity",
       lwd = 0.35,
       color = "white",
@@ -773,7 +942,7 @@ if ("behaviours" %in% question_code$category) {
       aes(
         label = ifelse(percent > 2, paste0(round(percent, 1), "%"), "")),
       color = color_label_White,
-      position = position_stack(vjust = 0.5),
+      position = position_stack(vjust = 0.5, reverse = TRUE),
       size = 4,
       vjust = 0.5,
       show.legend = FALSE
@@ -786,9 +955,10 @@ if ("behaviours" %in% question_code$category) {
     scale_x_discrete(
       labels = function(x) stringr::str_wrap(tr_variable(x), 20)
     ) +
-    guides(fill = guide_legend(reverse = TRUE))+
+    guides(fill = guide_legend(reverse = FALSE))+
     labs(
       title = tr("drivers.behaviours_title"),
+      subtitle = tr("drivers.last_12_months"),
       x = NULL,
       y = NULL
     ) +
@@ -849,14 +1019,14 @@ if ("intention" %in% question_code$category) {
   
   intention_plot <- ggplot(summary_intention, aes(x = Question, y = percent, fill = Response)) +
     geom_col(
-      position = "stack",
+      position = position_stack(reverse = TRUE),
       color = "white",
       width = 0.50,
       linewidth = 0.35
     ) +
     geom_text(
       aes(label = ifelse(percent > 2, paste0(round(percent, 1), "%"), "")),
-      position = position_stack(vjust = 0.5),
+      position = position_stack(vjust = 0.5, reverse = TRUE),
       color = color_label_White,
       size = 4,
       show.legend = FALSE
@@ -869,8 +1039,13 @@ if ("intention" %in% question_code$category) {
     scale_x_discrete(
       labels = function(x) stringr::str_wrap(tr_variable(x), 20)
     ) +
-    guides(fill = guide_legend(reverse = TRUE))+
-    labs(title = "", x = NULL, y = NULL) +
+    guides(fill = guide_legend(reverse = FALSE))+
+    labs(
+      title = tr("drivers.intention_title"),
+      subtitle = tr("drivers.next_12_months"),
+      x = NULL,
+      y = NULL
+    ) +
     coord_flip() +
     custom_theme()
   
@@ -926,7 +1101,7 @@ if ("impact" %in% question_code$category) {
   # Plot
   impact_plot <- ggplot(summary_impact, aes(x = Question, y = percent, fill = Response)) +
     geom_bar(
-      position = "stack",
+      position = position_stack(reverse = TRUE),
       stat = "identity",
       lwd = 0.35,
       color = "white",
@@ -937,7 +1112,7 @@ if ("impact" %in% question_code$category) {
       aes(
         label = ifelse(percent > 2, paste0(round(percent, 1), "%"), "")),
       color = color_label_White,
-      position = position_stack(vjust = 0.5),
+      position = position_stack(vjust = 0.5, reverse = TRUE),
       size = 4,
       vjust = 0.5,
       show.legend = FALSE
@@ -950,9 +1125,10 @@ if ("impact" %in% question_code$category) {
     scale_x_discrete(
       labels = function(x) stringr::str_wrap(tr_variable(x), 20)
     ) +
-    guides(fill = guide_legend(reverse = TRUE)) +
+    guides(fill = guide_legend(reverse = FALSE)) +
     labs(
       title = tr("drivers.impact_title"),
+      subtitle = tr("drivers.impact_subtitle"),
       x = NULL,
       y = NULL
     ) +
@@ -960,91 +1136,198 @@ if ("impact" %in% question_code$category) {
     custom_theme()
   
 }
+# ---- Channel questions ----
+# Distribution of respondents who received information through each channel.
 
-# ---- Original chunk: channel_questions ----
-# Charts for channel question
-# Long Label -> Subtitle
-# Question -> X axis
-
-if ("channel" %in% question_code$category) {
+if ("channel" %in% tolower(question_code$category)) {
+  
   questions_channel <- question_code %>%
-    filter(category == "channel") %>%
-    select(variable, short_label) %>%
-    tibble::deframe()   # named char vector
+    dplyr::filter(tolower(category) == "channel") %>%
+    dplyr::select(variable, short_label) %>%
+    tibble::deframe()
   
   question_map_channel <- question_code %>%
-    filter(category == "channel") %>%
-    mutate(
-      Drivers    = str_split(variable, "_", simplify = TRUE)[, 2],
-      Question   = short_label
+    dplyr::filter(tolower(category) == "channel") %>%
+    dplyr::mutate(
+      Drivers = stringr::str_split(variable, "_", simplify = TRUE)[, 2],
+      Question = short_label
     ) %>%
-    select(variable, Question, Drivers, long_label)
+    dplyr::select(variable, Question, Drivers, long_label)
   
-  survey_channel <- data %>%
-    select(all_of(names(questions_channel))) %>%
-    rename_with(~ questions_channel[.x], .cols = names(questions_channel))  # columns now are short_label
+  channel_variables <- intersect(
+    names(questions_channel),
+    names(data)
+  )
   
-  channel_data <- survey_channel %>%
-    pivot_longer(everything(), names_to = "Question", values_to = "Response") %>%
-    filter(!is.na(Response) & Response != "") %>%          # drop empty
-    left_join(
-      question_map_channel %>% select(Question, Drivers, long_label),
-      by = "Question"
+  if (length(channel_variables) > 0L) {
+    
+    survey_channel <- data %>%
+      dplyr::select(dplyr::all_of(channel_variables)) %>%
+      dplyr::rename_with(
+        ~ questions_channel[.x],
+        .cols = dplyr::everything()
+      )
+    
+    channel_data <- survey_channel %>%
+      tidyr::pivot_longer(
+        dplyr::everything(),
+        names_to = "Question",
+        values_to = "Response"
+      ) %>%
+      dplyr::filter(!is.na(Response), Response != "") %>%
+      dplyr::left_join(
+        question_map_channel %>%
+          dplyr::select(Question, Drivers, long_label),
+        by = "Question"
+      )
+    
+    # Use the specific channel mapping when available;
+    # otherwise, fall back to the generic Yes / No mapping.
+    channel_answer_map <- if (
+      exists("answer_channel", inherits = TRUE) &&
+      length(answer_channel) > 0
+    ) {
+      answer_channel
+    } else {
+      answer_yn_map
+    }
+    
+    summary_channel <- channel_data %>%
+      dplyr::mutate(
+        Response = dplyr::recode(
+          as.character(Response),
+          !!!channel_answer_map
+        )
+      ) %>%
+      dplyr::filter(Response %in% c("Yes", "No")) %>%
+      dplyr::group_by(
+        Drivers,
+        Question,
+        Response,
+        long_label
+      ) %>%
+      dplyr::summarise(
+        n = dplyr::n(),
+        .groups = "drop"
+      ) %>%
+      dplyr::group_by(
+        Drivers,
+        long_label,
+        Question
+      ) %>%
+      dplyr::mutate(
+        percent = n / sum(n) * 100
+      ) %>%
+      dplyr::ungroup() %>%
+      # Keep only the proportion of respondents who answered Yes.
+      dplyr::filter(Response == "Yes") %>%
+      dplyr::mutate(
+        Response = factor(
+          Response,
+          levels = "Yes"
+        )
+      )
+    
+    # Yes = blue / No = orange.
+    # The No value is retained in the palette for consistency with other charts.
+    channel_palette <- c(
+      "Yes" = color_primary_100,
+      "No" = color_tertiary_100
     )
-  
-  summary_channel <- channel_data %>%
-    mutate(
-      Response = recode(as.character(Response), !!!answer_yn_map)
-    ) %>%
-    group_by(Drivers, Question, Response, long_label) %>%
-    summarise(n = n(), .groups = "drop") %>%
-    mutate(Response = factor(Response, levels = unique(answer_yn_map))) %>%
-    group_by(long_label, Question) %>%
-    mutate(percent = n / sum(n) * 100) %>%
-    ungroup()
-  
-  plots_by_channel <- summary_channel %>%
-    split(.$long_label) %>%
-    map(~ .x %>%
-          dplyr::filter(Response == "Yes") %>% 
-          ggplot(
-            aes(
-              x = forcats::fct_reorder(
-                stringr::str_wrap(tr_variable(Question), 40),
-                percent
-              ),
-              y = percent,
-              fill = Response
-            )
-          ) +
-          geom_col(color = "white", width = 0.65) +
-          geom_text(
-            aes(label = ifelse(percent > 2, paste0(round(percent, 1), "%"), "")),
-            position = position_stack(vjust = 0.5),
-            color = "white", size = 4, show.legend = FALSE
-          ) +
-          scale_fill_manual(
-            values = color_primary_100,
-            name = NULL,
-            labels = function(x) tr_data(x)
-          ) +
-          guides(fill = guide_legend(reverse = TRUE))+
-          coord_flip() + 
-          scale_y_continuous(labels = function(x) paste0(x, "%"), expand = expansion(mult = c(0, 0.02))) +
-          scale_x_discrete(expand = expansion(add = 0.35)) +
-          labs(
-            title = tr_variable(unique(.x$Drivers)),
-            subtitle = tr_variable(unique(.x$long_label)),
-            x = NULL,
-            y = NULL
-          ) +
-          custom_theme() +
-          theme(
-            legend.position = "none",
-            axis.text.y = element_text(size=12)
+    
+    make_channel_plot <- function(df_channel) {
+      
+      # Retrieve the full question wording for the chart subtitle.
+      channel_subtitle <- unique(df_channel$long_label)
+      channel_subtitle <- channel_subtitle[
+        !is.na(channel_subtitle) & nzchar(channel_subtitle)
+      ][1]
+      
+      # Order channels from the highest to the lowest share of Yes responses.
+      channel_order <- df_channel %>%
+        dplyr::arrange(percent) %>%
+        dplyr::pull(Question) %>%
+        as.character()
+      
+      df_channel <- df_channel %>%
+        dplyr::mutate(
+          Question = factor(
+            Question,
+            levels = channel_order
           )
+        )
+      
+      ggplot2::ggplot(
+        df_channel,
+        ggplot2::aes(
+          x = Question,
+          y = percent,
+          fill = Response
+        )
+      ) +
+        ggplot2::geom_col(
+          colour = "white",
+          linewidth = 0.35,
+          width = 0.50
+        ) +
+        ggplot2::geom_text(
+          ggplot2::aes(
+            y = percent -2,
+            label = dplyr::if_else(
+              percent >= 3,
+              paste0(round(percent, 0), "%"),
+              ""
+            )
+          ),
+          colour = color_label_White,
+          size = 4.2,
+          show.legend = FALSE
+        ) +
+        ggplot2::scale_fill_manual(
+          values = channel_palette,
+          breaks = "Yes",
+          labels = function(x) tr_data(x),
+          name = NULL,
+          drop = FALSE
+        ) +
+        ggplot2::scale_x_discrete(
+          labels = function(x) stringr::str_wrap(
+            tr_variable(x),
+            width = 28
+          ),
+          expand = ggplot2::expansion(add = 0.35)
+        ) +
+        ggplot2::scale_y_continuous(
+          limits = c(0, 100),
+          breaks = c(0, 25, 50, 75, 100),
+          labels = function(x) x,
+          expand = ggplot2::expansion(mult = c(0, 0))
+        ) +
+        ggplot2::labs(
+          title = toupper(tr("drivers.channel_title")),
+          subtitle = tr_variable(channel_subtitle),
+          x = NULL,
+          y = NULL
+        ) +
+        ggplot2::coord_flip() +
+        custom_theme() +
+        ggplot2::theme(
+          legend.position = "none",
+          axis.text.y = ggplot2::element_text(size = 12)
+        )
+    }
+    
+    plots_by_channel <- summary_channel %>%
+      split(.$long_label) %>%
+      purrr::map(make_channel_plot)
+    
+    n_channel_questions <- dplyr::n_distinct(summary_channel$Question)
+    
+    height_channel_plot <- max(
+      6,
+      min(14, n_channel_questions * 0.90 + 2)
     )
-  
+  }
 }
 
 # ---- Original chunk: knowledge_questions ----
@@ -1078,13 +1361,22 @@ if ("knowledge" %in% question_code$category) {
       by = "Question"
     )
   
+  knowledge_answer_map <- if (
+    exists("answer_knowledge", inherits = TRUE) &&
+    length(answer_knowledge) > 0
+  ) {
+    answer_knowledge
+  } else {
+    answer_yn_map
+  }
+  
   summary_knowledge <- knowledge_data %>%
     mutate(
-      Response = recode(as.character(Response), !!!answer_yn_map)
+      Response = recode(as.character(Response), !!!knowledge_answer_map)
     ) %>%
     group_by(Drivers, Question, Response, long_label) %>%
     summarise(n = n(), .groups = "drop") %>%
-    mutate(Response = factor(Response, levels = unique(answer_yn_map))) %>%
+    mutate(Response = factor(Response, levels = unique(knowledge_answer_map))) %>%
     group_by(Drivers, Question) %>%
     mutate(percent = n / sum(n) * 100) %>%
     ungroup()
@@ -1118,8 +1410,8 @@ if ("knowledge" %in% question_code$category) {
           scale_y_continuous(labels = function(x) paste0(x, "%"), expand = expansion(mult = c(0, 0.02))) +
           scale_x_discrete(expand = expansion(add = 0.35)) +
           labs(
-            title = tr_variable(unique(.x$Drivers)),
-            subtitle = tr_variable(unique(.x$long_label)),
+            title = tr("drivers.knowledge_title"),
+            subtitle = tr("drivers.knowledge_subtitle"),
             x = NULL,
             y = NULL
           ) +

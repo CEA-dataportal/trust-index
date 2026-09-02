@@ -64,6 +64,12 @@ palette_module <- c(
   color_quaternary_100
 )
 
+# Gender INST palette
+color_female_100  <- color_secondary_100
+color_female_10 <- color_secondary_10
+color_male_100  <- color_primary_100
+color_male_10 <- color_primary_10
+
 
 # ---- 4. Institutional semantic colours ----
 

@@ -447,6 +447,9 @@ for (i in seq_along(score_prefixes)) {
 # 4. Backward compatibility
 # ============================================================
 
+
+corr_plot_height <- 12
+  
 if (toupper(module_code) == "INST") {
   
   available_inst <- correlation_results[
@@ -526,6 +529,10 @@ if (toupper(module_code) == "INST") {
 
 # Build the four EWS correlation plots here so the Rmd only needs to
 # call one prepared function.
+
+n_corr_plot_row <- length(unique(all_pillars_df$question))
+n_dim <- length (ews_pillar_dimensions)/2
+corr_plot_height <- n_corr_plot_row*1.5*n_dim
 
 correlation_ews_plot <- NULL
 

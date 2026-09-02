@@ -21,10 +21,10 @@ score_title_map <- if (toupper(module_code) == "INST") {
   )
 } else {
   c(
-    disaster      = "Disaster Risk Knowledge",
-    detection     = "Detection, Monitoring & Forecasting",
-    dissemination = "Warning Dissemination & Communication",
-    response      = "Preparedness & Response Capabilities"
+    disaster      = tr("score.disaster_risk_knowledge"),
+    detection     = tr("score.detection_monitoring_forecasting"),
+    dissemination = tr("score.warning_dissemination_communication"),
+    response      = tr("score.preparedness_response_capabilities")
   )
 }
 
@@ -75,21 +75,21 @@ make_overall_score_data <- function(dimension_label) {
   out <- df4 %>%
     dplyr::filter(tolower(Dimension) == tolower(dimension_label)) %>%
     dplyr::select(question, weighted)
-
+  
   if (nrow(out) == 0L) return(NULL)
-
+  
   dimension_mean <- mean(out$weighted, na.rm = TRUE)
-
+  
   out <- out %>%
     dplyr::mutate(question = as.character(question)) %>%
     dplyr::add_row(question = " ", weighted = NA_real_) %>%
     dplyr::add_row(question = "Overall", weighted = dimension_mean)
-
+  
   driver_levels <- sort(
     setdiff(as.character(out$question), c("Overall", " ")),
     decreasing = TRUE
   )
-
+  
   out %>%
     dplyr::mutate(
       question = factor(
@@ -101,7 +101,7 @@ make_overall_score_data <- function(dimension_label) {
 
 make_overall_score_plot <- function(plot_df, key) {
   if (is.null(plot_df) || nrow(plot_df) == 0L) return(NULL)
-
+  
   ggplot2::ggplot(plot_df, ggplot2::aes(x = question, y = weighted)) +
     ggplot2::geom_col(fill = unname(score_color_map[key])) +
     ggplot2::geom_text(
@@ -134,13 +134,13 @@ overall_score_plots <- list()
 for (i in seq_along(score_keys)) {
   key <- score_keys[i]
   dimension_label <- score_dimensions[i]
-
+  
   plot_df <- make_overall_score_data(dimension_label)
   plot_obj <- make_overall_score_plot(plot_df, key)
-
+  
   overall_score_data[[key]]  <- plot_df
   overall_score_plots[[key]] <- plot_obj
-
+  
   assign(paste0(key, "_df"), plot_df, envir = .GlobalEnv)
   assign(paste0(key, "_plot"), plot_obj, envir = .GlobalEnv)
 }
@@ -166,15 +166,9 @@ if (toupper(module_code) == "EWS") {
 }
 
 
-
 # ============================================================
 # 3. Combined pillar score - EWS only
 # ============================================================
-
-# This chart is specific to the EWS module.
-# It shows the mean score for each driver across the pillars in which
-# that driver is assessed, while the stacked segments show each pillar's
-# contribution to that mean.
 
 combined_pillar_plot <- NULL
 p_summary_stack <- NULL
@@ -183,39 +177,39 @@ allpillars_plot_df <- NULL
 allpillars_totals_lab <- NULL
 
 if (toupper(module_code) == "EWS") {
-
+  
   ews_pillar_keys <- c(
     "disaster",
     "detection",
     "dissemination",
     "response"
   )
-
+  
   ews_pillar_labels <- c(
-    disaster      = "Pillar 1",
-    detection     = "Pillar 2",
-    dissemination = "Pillar 3",
-    response      = "Pillar 4"
+    disaster      = tr("score.pillar1.label"),
+    detection     = tr("score.pillar2.label"),
+    dissemination = tr("score.pillar3.label"),
+    response      = tr("score.pillar4.label")
+   
   )
-
+  
   ews_pillar_dimensions <- c(
     disaster      = "Disaster",
     detection     = "Detection",
     dissemination = "Dissemination",
     response      = "Response"
   )
-
-  # Keep only pillars actually available in the current survey.
+  
   available_pillars <- ews_pillar_keys[
     ews_pillar_dimensions[ews_pillar_keys] %in% unique(df4$Dimension)
   ]
-
+  
   if (length(available_pillars) > 0L) {
-
+    
     pillar_dfs <- lapply(
       available_pillars,
       function(key) {
-
+        
         df4 %>%
           dplyr::filter(
             Dimension == ews_pillar_dimensions[[key]],
@@ -229,13 +223,11 @@ if (toupper(module_code) == "EWS") {
           )
       }
     )
-
+    
     all_pillars_df <- dplyr::bind_rows(pillar_dfs)
-
+    
     if (nrow(all_pillars_df) > 0L) {
-
-      # Mean driver score across the pillars in which the driver exists.
-      # The stacked segments are rescaled so the full bar equals that mean.
+      
       allpillars_plot_df <- all_pillars_df %>%
         dplyr::group_by(question) %>%
         dplyr::mutate(
@@ -249,25 +241,24 @@ if (toupper(module_code) == "EWS") {
           weighted_for_stack = mean_total * weighted_share
         ) %>%
         dplyr::ungroup()
-
+      
       allpillars_totals_lab <- allpillars_plot_df %>%
         dplyr::distinct(question, mean_total) %>%
         dplyr::mutate(
           label_y = mean_total,
-          label_text = sprintf("Avg.: %.2f", mean_total)
+          label_text = sprintf(tr("score.average"), mean_total)
         )
-
+      
       y_limit <- max(
         allpillars_totals_lab$mean_total,
         na.rm = TRUE
       ) * 1.15
-
-      # Use the module palette and keep the pillar order stable.
+      
       combined_colors <- stats::setNames(
         palette_module[seq_along(ews_pillar_keys)],
         ews_pillar_labels[ews_pillar_keys]
       )
-
+      
       combined_pillar_plot <- ggplot2::ggplot(
         allpillars_plot_df,
         ggplot2::aes(
@@ -334,11 +325,10 @@ if (toupper(module_code) == "EWS") {
         ggplot2::labs(
           x = NULL,
           y = NULL,
-          title = "Combined Scores by Drivers",
-          subtitle = "Mean score by driver, disaggregated by pillar contribution"
+          title = tr("score.combined_scores_by_drivers"),
+          subtitle = tr("score.mean_score_by_driver_pillar")
         )
-
-      # Legacy alias used by the previous EWS Rmd.
+      
       p_summary_stack <- combined_pillar_plot
     }
   }
@@ -349,15 +339,60 @@ if (toupper(module_code) == "EWS") {
 # 4. Score by factors
 # ============================================================
 
+factor_answer_map <- c(
+  answer_likertscale,
+  answer_extra,
+  answer_ews,
+  answer_channel,
+  answer_knowledge,
+  answer_risk,
+  answer_impact,
+  answer_behaviours,
+  answer_intention,
+  answer_yn_map
+)
+
+make_factor_label <- function(value, category) {
+  
+  value <- as.character(value)
+  category <- tolower(as.character(category))
+  
+  if (!is.na(category) && category %in% c("geo", "demo")) {
+    label <- tr_data(value)
+  } else {
+    recoded_value <- unname(factor_answer_map[value])
+    
+    if (length(recoded_value) == 0 || is.na(recoded_value)) {
+      recoded_value <- value
+    }
+    
+    label <- tr_data(recoded_value)
+  }
+  
+  if (!is.na(label) && nchar(label) > 15) {
+    paste0(substr(label, 1, 15), "...")
+  } else {
+    label
+  }
+}
+
 factor_data <- means_df %>%
-  dplyr::filter(n > 10, !is.na(variable_value))
+  dplyr::filter(n > 10, !is.na(variable_value)) %>%
+  dplyr::mutate(
+    variable_value_label = mapply(
+      make_factor_label,
+      value = as.character(variable_value),
+      category = as.character(category),
+      USE.NAMES = FALSE
+    )
+  )
 
 n_strip_rows <- nrow(factor_data)
 height_strip_plot <- n_strip_rows * 0.3 + 2
 
 strip <- ggplot2::ggplot(
   factor_data,
-  ggplot2::aes(x = mean, y = stringr::str_wrap(variable_value, 20))
+  ggplot2::aes(x = mean, y = variable_value_label)
 ) +
   ggplot2::geom_col(fill = color_bg) +
   ggplot2::geom_text(
@@ -386,10 +421,10 @@ strip <- ggplot2::ggplot(
 make_factor_plot <- function(key) {
   df_key <- factor_data %>% dplyr::filter(dimension == key)
   if (nrow(df_key) == 0L) return(NULL)
-
+  
   ggplot2::ggplot(
     df_key,
-    ggplot2::aes(x = mean, y = stringr::str_wrap(variable_value, 20))
+    ggplot2::aes(x = mean, y = variable_value_label)
   ) +
     ggplot2::geom_col(fill = unname(score_color_map[key])) +
     ggplot2::geom_text(
@@ -417,13 +452,11 @@ for (key in score_keys) {
   assign(paste0("factor_", key, "_plot"), factor_score_plots[[key]], envir = .GlobalEnv)
 }
 
-# Institutional aliases used by current Rmd
 if (toupper(module_code) == "INST") {
   co <- factor_score_plots$comp
   va <- factor_score_plots$values
 }
 
-# EWS aliases
 if (toupper(module_code) == "EWS") {
   p1_factor_plot <- factor_score_plots$disaster
   p2_factor_plot <- factor_score_plots$detection
@@ -461,27 +494,27 @@ if (length(cols_to_pivot) > 0L) {
       Group = factor(Group, levels = cols_to_pivot),
       Question = Drivers
     )
-
+  
   make_profile_plot <- function(key, dimension_label) {
     plot_data <- score_data %>%
       dplyr::filter(tolower(Dimension) == tolower(dimension_label))
-
+    
     if (nrow(plot_data) == 0L) return(NULL)
-
+    
     plot_data <- plot_data %>%
       dplyr::mutate(
         Question = factor(Question, levels = unique(Question))
       )
-
+    
     n_groups <- length(unique(plot_data$Group))
     base_color <- unname(score_color_map[key])
     light_color <- unname(score_light_map[key])
     if (length(light_color) == 0L || is.na(light_color)) light_color <- "#E5E5E5"
-
+    
     profile_palette <- grDevices::colorRampPalette(
       c(base_color, light_color)
     )(max(1L, n_groups))
-
+    
     ggplot2::ggplot(
       plot_data,
       ggplot2::aes(x = Question, y = Mean, fill = Group)
@@ -512,7 +545,7 @@ if (length(cols_to_pivot) > 0L) {
         legend.title = ggplot2::element_blank()
       )
   }
-
+  
   for (i in seq_along(score_keys)) {
     key <- score_keys[i]
     profile_score_plots[[key]] <- make_profile_plot(key, score_dimensions[i])
@@ -524,7 +557,6 @@ if (length(cols_to_pivot) > 0L) {
   }
 }
 
-# Current Institutional Rmd aliases
 if (toupper(module_code) == "INST" && !is.null(score_data)) {
   comp_plot_data <- score_data %>% dplyr::filter(Dimension == "Competency")
   val_plot_data  <- score_data %>% dplyr::filter(Dimension == "Value")
@@ -532,13 +564,12 @@ if (toupper(module_code) == "INST" && !is.null(score_data)) {
   v_plot <- profile_score_plots$values
 }
 
-# EWS profile aliases
 if (toupper(module_code) == "EWS" && !is.null(score_data)) {
   p1_score <- score_data %>% dplyr::filter(Dimension == "Disaster")
   p2_score <- score_data %>% dplyr::filter(Dimension == "Detection")
   p3_score <- score_data %>% dplyr::filter(Dimension == "Dissemination")
   p4_score <- score_data %>% dplyr::filter(Dimension == "Response")
-
+  
   p1_profile_plot <- profile_score_plots$disaster
   p2_profile_plot <- profile_score_plots$detection
   p3_profile_plot <- profile_score_plots$dissemination
@@ -547,11 +578,12 @@ if (toupper(module_code) == "EWS" && !is.null(score_data)) {
 
 
 # ============================================================
-# 5. Availability flags for the Rmd
+# 6. Availability flags for the Rmd
 # ============================================================
 
 has_score_dimension <- function(key) {
-  key %in% names(overall_score_plots) && !is.null(overall_score_plots[[key]])
+  key %in% names(overall_score_plots) &&
+    !is.null(overall_score_plots[[key]])
 }
 
 check_comp   <- has_score_dimension("comp")
