@@ -1412,11 +1412,6 @@ if (isTRUE(check_strata3)) {
         legend.position = "none"
       )
     
-    strata3_plot <- gridExtra::grid.arrange(
-      strata3_plot_survey,
-      strata3_plot_population,
-      nrow = 1
-    )
     
   } else {
     
@@ -1430,11 +1425,6 @@ if (isTRUE(check_strata3)) {
       just = "center"
     )
     
-    strata3_plot <- gridExtra::grid.arrange(
-      strata3_plot_survey,
-      placeholder_plot3,
-      nrow = 1
-    )
   }
   
   # End of Strata 3
