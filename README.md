@@ -23,6 +23,8 @@ https://trust.communityengagementhub.org
 
 **Ecuador** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/ECU/ECU_summary.html) |
 
+**Madagascar** | [`Early Warning`](https://cea-dataportal.github.io/trust-index/summary/MDG/MDG-Report-EWS-EN.html.html) |
+
 **Mongolia** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/MNG/MNG_summary.html) |
 
 **Nepal** | [`Institution`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_INST_summary.html) | [`Early Warning`](https://cea-dataportal.github.io/trust-index/summary/NPL/NPL_report_EWS.html) 
