@@ -532,7 +532,7 @@ if (toupper(module_code) == "INST") {
 
 n_corr_plot_row <- length(unique(all_pillars_df$question))
 n_dim <- length (ews_pillar_dimensions)/2
-corr_plot_height <- n_corr_plot_row*1.5*n_dim
+corr_plot_height <- n_corr_plot_row*n_dim*0.7
 
 correlation_ews_plot <- NULL
 
