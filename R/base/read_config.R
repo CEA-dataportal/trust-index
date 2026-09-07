@@ -293,7 +293,6 @@ read_cti_config <- function(
   )
   
   export_file <- file.path(
-    path,
     paste0(
       params$country_iso,
       subset_postfix,
