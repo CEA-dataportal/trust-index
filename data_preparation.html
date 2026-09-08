@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Préparation des données | Community Trust Index</title>
+    <meta name="description" content="Préparer et vérifier les données d’enquête avant de générer le Community Trust Index.">
+    <style>
+      :root {
+        --navy: #17284b;
+        --navy-soft: #edf1f8;
+        --ink: #202c42;
+        --muted: #617089;
+        --line: #dfe5ef;
+        --canvas: #ffffff;
+        --wash: #f7f9fc;
+        --accent: #de6c54;
+        --accent-dark: #bd553f;
+        --success: #1f7a5a;
+        --radius: 14px;
+        --shadow: 0 5px 16px rgba(23, 40, 75, .08);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; color: var(--ink); background: var(--canvas); font-size: 16px; line-height: 1.6; }
+      a { color: inherit; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1, h2, h3 { line-height: 1.16; letter-spacing: -.025em; }
+      h2 { font-size: clamp(1.7rem, 3vw, 2.25rem); margin-bottom: .7rem; }
+      h3 { font-size: 1.1rem; margin-bottom: .35rem; }
+      .container { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; }
+
+      .site-header { border-bottom: 1px solid var(--line); background: rgba(255,255,255,.96); }
+      .site-header .container { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+      .brand { text-decoration: none; font-weight: 700; letter-spacing: -.02em; display: flex; align-items: center; gap: .6rem; }
+      .brand-mark { color: var(--accent); font-size: 1.35rem; line-height: 1; }
+      .site-nav { display: flex; align-items: center; gap: 1.15rem; font-size: .9rem; color: var(--muted); }
+      .site-nav a { text-decoration: none; }
+      .site-nav a:hover { color: var(--ink); }
+
+      .hero { background: var(--navy); color: #fff; padding: 5.25rem 0 5.5rem; }
+      .eyebrow { margin-bottom: 1rem; color: rgba(255,255,255,.7); font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+      .hero h1 { max-width: 770px; margin-bottom: 1.25rem; font-size: clamp(2.6rem, 7vw, 4.7rem); }
+      .hero-copy { max-width: 720px; margin-bottom: 1.75rem; color: rgba(255,255,255,.82); font-size: clamp(1.05rem, 2vw, 1.2rem); }
+      .pills { display: flex; flex-wrap: wrap; gap: .55rem; }
+      .pill { display: inline-flex; border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: .3rem .7rem; color: rgba(255,255,255,.9); font-size: .82rem; }
+
+      .section { padding: 4.75rem 0; }
+      .section-wash { background: var(--wash); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .section-intro { max-width: 690px; margin-bottom: 2.2rem; color: var(--muted); }
+      .section-intro strong { color: var(--ink); }
+
+      .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+      .card { min-height: 100%; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.55rem; background: #fff; box-shadow: var(--shadow); }
+      .icon { width: 2.5rem; height: 2.5rem; display: grid; place-items: center; margin-bottom: 1rem; border-radius: .7rem; background: #fbece8; color: var(--accent-dark); font-size: 1.15rem; font-weight: 700; }
+      .card p { margin-bottom: 0; color: var(--muted); font-size: .95rem; }
+
+      .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; counter-reset: steps; }
+      .step { position: relative; padding: 1.15rem 1rem 1rem 3.5rem; border-top: 2px solid var(--accent); background: #fff; }
+      .step::before { counter-increment: steps; content: counter(steps); position: absolute; left: .95rem; top: 1.12rem; display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 50%; background: var(--navy); color: #fff; font-size: .8rem; font-weight: 700; }
+      .step h3 { font-size: 1rem; }
+      .step p { margin-bottom: 0; color: var(--muted); font-size: .9rem; }
+
+      .split { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); gap: 3rem; align-items: start; }
+      .prose p, .prose li { color: var(--muted); }
+      .prose ul { padding-left: 1.2rem; }
+      .prose li + li { margin-top: .38rem; }
+      .note { border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 1.2rem 1.35rem; background: #fff8f6; }
+      .note h3 { color: var(--ink); }
+      .note p { margin-bottom: 0; color: var(--muted); font-size: .95rem; }
+
+      .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+      table { width: 100%; border-collapse: collapse; font-size: .92rem; background: #fff; }
+      th, td { padding: .85rem 1rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+      th { background: var(--navy-soft); color: var(--navy); font-weight: 700; }
+      tr:last-child td { border-bottom: 0; }
+      code { border-radius: .25rem; padding: .1rem .3rem; background: #eef2f7; color: #31435f; font-size: .9em; }
+
+      .checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: .7rem 1.2rem; padding: 0; list-style: none; }
+      .checklist li { position: relative; padding: .95rem .9rem .95rem 2.6rem; border: 1px solid var(--line); border-radius: .7rem; background: #fff; color: var(--ink); font-size: .93rem; }
+      .checklist li::before { content: "✓"; position: absolute; left: .95rem; top: .9rem; color: var(--success); font-weight: 800; }
+
+      .next { display: flex; justify-content: space-between; gap: 1.5rem; align-items: center; border-radius: var(--radius); padding: 2rem; background: var(--navy); color: #fff; }
+      .next h2 { margin-bottom: .35rem; font-size: 1.55rem; }
+      .next p { max-width: 650px; margin-bottom: 0; color: rgba(255,255,255,.8); }
+      .next-link { flex: 0 0 auto; border-radius: .45rem; padding: .65rem 1rem; background: var(--accent); color: #fff; font-size: .9rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .next-link:hover { background: var(--accent-dark); }
+      footer { padding: 2rem 0; color: var(--muted); font-size: .85rem; }
+
+      @media (max-width: 780px) {
+        .hero { padding: 4rem 0; }
+        .cards, .steps, .checklist, .split { grid-template-columns: 1fr; }
+        .section { padding: 3.5rem 0; }
+        .next { display: block; }
+        .next-link { display: inline-block; margin-top: 1.15rem; }
+      }
+      @media (max-width: 530px) {
+        .site-header .container { min-height: 64px; }
+        .site-nav a:first-child { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="#top"><span class="brand-mark">♥</span><span>Community Trust Index</span></a>
+        <nav class="site-nav" aria-label="Navigation principale">
+          <a href="https://trust.communityengagementhub.org" target="_blank" rel="noreferrer">Site actuel</a>
+          <a href="https://github.com/CEA-dataportal/trust-index" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="container">
+          <p class="eyebrow">CEA Data Portal · Documentation</p>
+          <h1>Préparation des données</h1>
+          <p class="hero-copy">Préparez et contrôlez votre enquête avant le calcul du Community Trust Index. Cette étape garantit des données fiables, comparables et prêtes à être analysées.</p>
+          <div class="pills" aria-label="Portée de cette page">
+            <span class="pill">Institutional</span>
+            <span class="pill">Early Warning Systems</span>
+            <span class="pill">Avant configuration et pondération</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Ce que cette étape prépare</h2>
+          <p class="section-intro">La préparation commence dès la réception de l’export de collecte. Elle permet de conserver une source brute, de créer un fichier de travail cohérent et de documenter les décisions nécessaires avant l’analyse.</p>
+          <div class="cards">
+            <article class="card">
+              <div class="icon">01</div>
+              <h3>Fichier d’enquête</h3>
+              <p>Un export propre, avec une ligne par répondant, un identifiant unique et les variables attendues par le questionnaire.</p>
+            </article>
+            <article class="card">
+              <div class="icon">02</div>
+              <h3>Données de population</h3>
+              <p>Des tableaux de référence cohérents avec la population cible et les variables retenues pour la pondération.</p>
+            </article>
+            <article class="card">
+              <div class="icon">03</div>
+              <h3>Contrôles qualité</h3>
+              <p>Des vérifications documentées sur l’éligibilité, les doublons, les modalités de réponse et la géographie.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container">
+          <h2>Le parcours de préparation</h2>
+          <p class="section-intro">Suivez ces quatre étapes dans l’ordre. Elles s’appliquent à tous les modules, avec des mappings de questions spécifiques à Institutional ou EWS.</p>
+          <div class="steps">
+            <article class="step"><h3>Archiver</h3><p>Conservez l’export original, non modifié, reçu de Kobo, ODK ou de l’outil de collecte.</p></article>
+            <article class="step"><h3>Préparer</h3><p>Créez une copie de travail et vérifiez la structure, l’éligibilité et les variables nécessaires.</p></article>
+            <article class="step"><h3>Harmoniser</h3><p>Standardisez les libellés, groupes d’âge et niveaux géographiques sans effacer les données source.</p></article>
+            <article class="step"><h3>Valider</h3><p>Contrôlez la cohérence avec les tables de population et consignez chaque décision dans un journal.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container split">
+          <div class="prose">
+            <h2>1. Préparer le fichier d’enquête</h2>
+            <p>Le fichier d’analyse doit contenir <strong>une ligne par répondant</strong>. Conservez les noms techniques des questions : le fichier de configuration les associera ensuite aux libellés et aux indicateurs du rapport.</p>
+            <p>Chaque répondant doit disposer d’un identifiant unique et stable, idéalement celui créé par la plateforme de collecte. Les en-têtes de colonnes doivent également être uniques.</p>
+            <h3>Échantillon analysé</h3>
+            <p>Définissez dès cette étape les règles d’inclusion : consentement, formulaire finalisé, population cible, éventuelle déduplication et, lorsque le protocole le prévoit, une question de connaissance de la Croix-Rouge ou de la Société nationale. Ces règles devront être identiques dans la configuration, les résultats et le rapport.</p>
+          </div>
+          <aside class="note">
+            <h3>Principe essentiel</h3>
+            <p>Ne modifiez jamais le fichier source. Travaillez sur une copie et consignez toute transformation : date, variable concernée, action appliquée et justification.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container">
+          <h2>Variables à vérifier</h2>
+          <p class="section-intro">Les variables requises dépendent du plan d’échantillonnage et du module, mais les éléments ci-dessous constituent la base de préparation du CTI.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Domaine</th><th>Contenu attendu</th><th>Utilisation</th></tr></thead>
+              <tbody>
+                <tr><td>Identifiant</td><td>Identifiant unique du répondant</td><td>Traçabilité et détection des doublons</td></tr>
+                <tr><td>Éligibilité</td><td>Consentement, statut de soumission, âge minimum</td><td>Définition de l’échantillon analysé</td></tr>
+                <tr><td>Désagrégations</td><td>Âge, genre et localisation au minimum ; autres variables selon l’échantillonnage</td><td>Analyses désagrégées et pondération</td></tr>
+                <tr><td>Profils</td><td>Volontariat, soutien reçu, interaction EWS ou réception d’alertes</td><td>Analyse par profil de répondant</td></tr>
+                <tr><td>Questions CTI</td><td>Questions standardisées du module, codées selon une convention commune</td><td>Calcul des scores et graphiques</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <aside class="note" style="margin-top: 1.5rem;">
+            <h3>Désagrégation et pondération</h3>
+            <p>L’âge, le genre et la localisation sont le minimum requis. Pour le calcul des pondérations, jusqu’à trois strates supplémentaires peuvent être ajoutées. Pour l’analyse désagrégée, privilégiez au minimum les strates du plan d’échantillonnage : elles permettent de produire une analyse représentative lorsque les effectifs le permettent.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container split">
+          <div class="prose">
+            <h2>2. Harmoniser les données</h2>
+            <p>Utilisez une variable harmonisée lorsque des valeurs différentes désignent une même catégorie. Gardez toujours la valeur originale à côté de cette variable de travail.</p>
+            <h3>Âge</h3>
+            <p>Pour les analyses sur les personnes de 18 ans ou plus, utilisez les groupes <code>18-29</code>, <code>30-39</code>, <code>40-49</code>, <code>50-59</code> et <code>60+</code>. Le package normalise cette information vers <code>Age_group</code>.</p>
+            <h3>Réponses et valeurs spéciales</h3>
+            <p>Ne confondez pas une cellule vide, une réponse « Ne sais pas », un refus et une question non posée par logique de saut. Ces situations doivent rester distinguées dans le fichier de travail.</p>
+            <h3>Questions CTI et codification</h3>
+            <p>Les questions qui alimentent les scores CTI sont standardisées. Leur code doit suivre une convention stable : un préfixe correspondant à la dimension ou au pilier, suivi d’un suffixe correspondant à la sous-dimension, sous la forme <code>DIMENSION_Sousdimension</code>. La table de référence des questions et de leurs codes sera ajoutée à cette documentation.</p>
+          </div>
+          <div class="prose">
+            <h3>Échelle Likert de référence</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Ordre</th><th>Modalité</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Oui, complètement</td></tr>
+                  <tr><td>2</td><td>En grande partie oui</td></tr>
+                  <tr><td>3</td><td>Plutôt non</td></tr>
+                  <tr><td>4</td><td>Pas du tout</td></tr>
+                  <tr><td>Hors échelle</td><td>Ne sais pas</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Les traductions et recodages sont définis dans la configuration. Les modalités observées dans l’export doivent correspondre au mapping déclaré.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container split">
+          <div class="prose">
+            <h2>3. Préparer la géographie et les données de population</h2>
+            <p>Les noms de zones dans l’enquête doivent correspondre aux niveaux administratifs, aux tables de population et aux limites administratives utilisées pour les cartes. Créez une table de correspondance lorsque nécessaire.</p>
+            <p>Les tables de population doivent décrire la <strong>même population cible</strong> que l’enquête, par exemple les personnes de 18 ans ou plus. Elles doivent correspondre exactement aux données collectées : mêmes tranches d’âge, mêmes catégories de genre et mêmes régions ou niveaux administratifs.</p>
+            <p>Le modèle de données comprend généralement une table âge × genre, une table géographique, puis jusqu’à trois tables de strates additionnelles. Les tables indiquent les effectifs ou proportions utilisés pour la pondération.</p>
+          </div>
+          <aside class="note">
+            <h3>Où trouver les données ?</h3>
+            <p>Privilégiez l’institut national de la statistique et les données de recensement. Selon le contexte, les sources peuvent aussi inclure la Banque mondiale, les enquêtes MICS ou les Enquêtes démographiques et de santé (EDS). Conservez systématiquement la source, l’année de référence et les éventuels regroupements effectués.</p>
+          </aside>
+        </div>
+        <div class="container" style="margin-top: 1.5rem;">
+          <aside class="note">
+            <h3>Attention aux strates absentes</h3>
+            <p>Une catégorie présente dans la population mais absente de l’échantillon ne peut pas être corrigée automatiquement par pondération. Signalez-la et documentez la décision méthodologique.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container split">
+          <div class="prose">
+            <h2>4. Prévoir les analyses par profil</h2>
+            <p>Au-delà des désagrégations sociodémographiques, le CTI permet de comparer les scores selon l’expérience et la relation des répondants avec les institutions. Ces analyses enrichissent l’interprétation des résultats sans modifier le calcul du score global.</p>
+            <p>Les questionnaires de base comportent des questions permettant de créer des profils selon les interactions avec les institutions, les comportements, les intentions, les connaissances ou les habitudes. Elles peuvent être adaptées ou complétées pour répondre aux spécificités du contexte.</p>
+          </div>
+          <aside class="note">
+            <h3>À documenter dans la configuration</h3>
+            <p>Pour chaque profil, précisez la ou les variables utilisées, les modalités retenues et la règle appliquée lorsqu’un répondant peut appartenir à plusieurs catégories.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container">
+          <h2>5. Passer le contrôle qualité</h2>
+          <p class="section-intro">Avant de préparer la configuration, vérifiez que le fichier de travail et les données de référence sont prêts pour l’analyse.</p>
+          <ul class="checklist">
+            <li>L’export brut est archivé et n’a pas été modifié.</li>
+            <li>Le fichier de travail contient une ligne par répondant et un identifiant unique.</li>
+            <li>Les règles d’éligibilité sont définies et appliquées.</li>
+            <li>Les modalités de réponse sont harmonisées sans supprimer les valeurs source.</li>
+            <li>Les catégories d’âge, de genre et de localisation correspondent aux données de population.</li>
+            <li>Les questions CTI, leur codification et les profils de répondants sont documentés.</li>
+            <li>Les tables de population correspondent à la population et à la zone couvertes par l’enquête.</li>
+            <li>Les corrections et exceptions sont consignées dans un journal de préparation.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container">
+          <div class="next">
+            <div>
+              <h2>Prêt pour l’étape suivante ?</h2>
+              <p>Une fois les données préparées, poursuivez avec le fichier de configuration : informations pays et module, mappings des questions, profils, facteurs et traductions.</p>
+            </div>
+            <a class="next-link" href="#top">Préparation de la configuration →</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer><div class="container">Community Trust Index · CEA Data Portal</div></footer>
+  </body>
+</html>
