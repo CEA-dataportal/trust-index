@@ -530,13 +530,14 @@ if (toupper(module_code) == "INST") {
 # Build the four EWS correlation plots here so the Rmd only needs to
 # call one prepared function.
 
-n_corr_plot_row <- length(unique(all_pillars_df$question))
-n_dim <- length (ews_pillar_dimensions)/2
-corr_plot_height <- n_corr_plot_row*n_dim*0.7
 
 correlation_ews_plot <- NULL
 
 if (toupper(module_code) == "EWS") {
+  
+  n_corr_plot_row <- length(unique(all_pillars_df$question))
+  n_dim <- length (ews_pillar_dimensions)/2
+  corr_plot_height <- n_corr_plot_row*n_dim*0.7
   
   correlation_ews_plot <- function() {
     
