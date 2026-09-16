@@ -23,6 +23,104 @@ message(tr("runtime.loading_charts"))
 # 1. Weighting comparison chart
 # ============================================================
 
+if (
+  !exists("score_prefixes", inherits = TRUE) ||
+  length(score_prefixes) == 0L
+) {
+  stop(
+    "score_prefixes is missing. Load the module configuration before charts_advanced.R.",
+    call. = FALSE
+  )
+}
+
+weighting_score_keys <- names(score_prefixes)
+
+weighting_title_map <- if (toupper(module_code) == "INST") {
+  c(
+    comp = tr("score.competencies"),
+    values = tr("score.values")
+  )
+} else {
+  c(
+    disaster = tr("score.disaster_risk_knowledge"),
+    detection = tr("score.detection_monitoring_forecasting"),
+    dissemination = tr("score.warning_dissemination_communication"),
+    response = tr("score.preparedness_response_capabilities")
+  )
+}
+
+for (i in seq_along(weighting_score_keys)) {
+  key <- weighting_score_keys[i]
+  if (!(key %in% names(weighting_title_map))) {
+    weighting_title_map[key] <- score_dimensions[i]
+  }
+}
+
+translate_short_label <- function(variable, short_label) {
+  variable <- as.character(variable)
+  short_label <- as.character(short_label)
+  
+  vapply(
+    seq_along(variable),
+    function(i) {
+      if (is.na(variable[[i]])) {
+        return(tr_variable(short_label[[i]])[[1L]])
+      }
+      
+      # Prefer translations configured against the question code. If there is
+      # no code-specific entry, match the visible short label in the shared or
+      # custom translation dictionary.
+      label_from_code <- tr_variable(
+        variable[[i]],
+        label = "short",
+        fallback = NA_character_
+      )
+      
+      if (!is.na(label_from_code) &&
+          !identical(label_from_code, variable[[i]])) {
+        return(label_from_code)
+      }
+      
+      tr_variable(short_label[[i]])[[1L]]
+    },
+    character(1)
+  )
+}
+
+weighting_facet_label <- function(x) {
+  x_chr <- as.character(x)
+  dimension_index <- match(
+    tolower(x_chr),
+    tolower(as.character(score_dimensions))
+  )
+  translated_titles <- unname(
+    weighting_title_map[weighting_score_keys]
+  )
+  
+  out <- x_chr
+  matched <- !is.na(dimension_index)
+  out[matched] <- translated_titles[dimension_index[matched]]
+  
+  vapply(
+    out,
+    function(label) {
+      wrapped <- stringr::str_wrap(label, width = 26)
+      lines <- strsplit(wrapped, "\n", fixed = TRUE)[[1L]]
+      
+      if (length(lines) <= 2L) {
+        return(wrapped)
+      }
+      
+      paste0(
+        lines[1L],
+        "\n",
+        stringr::str_trunc(lines[2L], width = 24, side = "right")
+      )
+    },
+    character(1)
+  )
+}
+
 df_long <- df3 %>%
   reshape2::melt(
     id.vars       = c("Dimension", "Drivers"),
@@ -31,9 +129,14 @@ df_long <- df3 %>%
   ) %>%
   dplyr::mutate(
     Drivers_display   = tr_variable(as.character(Drivers)),
-    Dimension_display = tr_variable(as.character(Dimension)),
     variable_display  = tr_variable(as.character(variable))
   )
+
+# Use this value in the report chunk: fig.height = weighting_plot_height.
+# Four EWS facets need more vertical space than the two Institutional ones.
+weighting_plot_height <- if (
+  dplyr::n_distinct(df_long$Dimension) > 2L
+) 12 else 7
 
 weighting_plot <- ggplot2::ggplot(
   df_long,
@@ -44,47 +147,74 @@ weighting_plot <- ggplot2::ggplot(
     color = variable_display
   )
 ) +
-  ggplot2::geom_point() +
-  ggplot2::geom_line() +
+  ggplot2::geom_line(
+    position = ggplot2::position_dodge(width = 0.45),
+    linewidth = 0.8
+  ) +
+  ggplot2::geom_point(
+    position = ggplot2::position_dodge(width = 0.45),
+    size = 2.4
+  ) +
   ggplot2::geom_label(
     ggplot2::aes(
-      label = round(value, 2),
-      fill = variable_display
+      label = sprintf("%.2f", value)
     ),
-    color = "white",
-    linewidth = 0,
-    label.r = grid::unit(0.2, "lines"),
-    label.padding = grid::unit(2, "pt"),
-    size = 4
+    position = ggplot2::position_dodge(width = 0.45),
+    vjust = -0.75,
+    fill = "white",
+    alpha = 0.92,
+    label.size = 0,
+    label.padding = grid::unit(1.5, "pt"),
+    size = 3.2,
+    show.legend = FALSE
   ) +
   ggplot2::facet_wrap(
-    ~ Dimension_display,
-    nrow = 1,
-    scales = "free_x"
+    ~ Dimension,
+    nrow = 2,
+    ncol = 2,
+    scales = "free_x",
+    labeller = ggplot2::as_labeller(weighting_facet_label)
   ) +
+  ggplot2::scale_y_continuous(
+    limits = c(0, 10),
+    breaks = seq(0, 10, by = 2),
+    expand = ggplot2::expansion(mult = c(0.02, 0.14))
+  ) +
+  custom_theme() +
   ggplot2::theme(
     axis.text.x = ggplot2::element_text(
       color = "black",
-      size = 12,
-      angle = 90,
-      vjust = 0.5,
+      size = 9,
+      angle = 45,
+      vjust = 1,
       hjust = 1
     ),
-    axis.title.x = ggplot2::element_text(
-      margin = ggplot2::margin(t = 15),
-      size = 16
-    ),
     axis.title.y = ggplot2::element_text(
-      margin = ggplot2::margin(r = 15),
-      size = 16
+      margin = ggplot2::margin(r = 10),
+      size = 12
     ),
     panel.grid.minor = ggplot2::element_blank(),
     panel.background = ggplot2::element_blank(),
-    legend.title = ggplot2::element_blank()
+    panel.grid.major.x = ggplot2::element_blank(),
+    panel.spacing = grid::unit(1.6, "lines"),
+    strip.background = ggplot2::element_rect(
+      fill = "#F1F3F5",
+      color = NA
+    ),
+    strip.text = ggplot2::element_text(
+      size = 11,
+      face = "bold",
+      lineheight = 0.9,
+      margin = ggplot2::margin(6, 10, 6, 10)
+    ),
+    legend.position = "bottom",
+    legend.direction = "horizontal",
+    legend.title = ggplot2::element_blank(),
+    legend.text = ggplot2::element_text(size = 10),
+    plot.margin = ggplot2::margin(14, 20, 14, 14)
   ) +
-  custom_theme() +
   ggplot2::labs(
-    x = tr("score.drivers"),
+    x = NULL,
     y = tr("score.score_variation")
   )
 
@@ -92,16 +222,6 @@ weighting_plot <- ggplot2::ggplot(
 # ============================================================
 # 2. Driver correlation preparation
 # ============================================================
-
-if (
-  !exists("score_prefixes", inherits = TRUE) ||
-  length(score_prefixes) == 0L
-) {
-  stop(
-    "score_prefixes is missing. Load the module configuration before charts_advanced.R.",
-    call. = FALSE
-  )
-}
 
 score_map_full <- score_map
 score_map_full["Don't know"] <- 5
@@ -248,10 +368,9 @@ build_dimension_correlation <- function(
   driver_rename_map <- question_code %>%
     dplyr::filter(variable %in% driver_vars) %>%
     dplyr::mutate(
-      short_label_display = tr_variable(
+      short_label_display = translate_short_label(
         variable,
-        label = "short",
-        fallback = short_label
+        short_label
       )
     ) %>%
     dplyr::select(
@@ -388,7 +507,10 @@ correlation_results <- list()
 for (i in seq_along(score_prefixes)) {
   
   dimension_key <- names(score_prefixes)[i]
-  dimension_label <- score_dimensions[i]
+  dimension_label <- tr_variable(
+    score_dimensions[i],
+    fallback = score_dimensions[i]
+  )
   
   driver_vars <- if (
     exists("score_columns", inherits = TRUE) &&
@@ -449,7 +571,7 @@ for (i in seq_along(score_prefixes)) {
 
 
 corr_plot_height <- 12
-  
+
 if (toupper(module_code) == "INST") {
   
   available_inst <- correlation_results[
@@ -560,7 +682,7 @@ if (toupper(module_code) == "EWS") {
         number.cex  = 0.65,
         diag        = FALSE,
         addgrid.col = "white",
-        title       = "Disaster Risk Knowledge",
+        title       = tr("score.pillar1.long_label"),
         mar         = c(0, 0, 2, 0)
       )
     }
@@ -582,7 +704,7 @@ if (toupper(module_code) == "EWS") {
         number.cex  = 0.65,
         diag        = FALSE,
         addgrid.col = "white",
-        title       = "Detection, Monitoring & Forecasting",
+        title       = tr("score.pillar2.long_label"),
         mar         = c(0, 0, 2, 0)
       )
     }
@@ -604,7 +726,7 @@ if (toupper(module_code) == "EWS") {
         number.cex  = 0.65,
         diag        = FALSE,
         addgrid.col = "white",
-        title       = "Warning Dissemination & Communication",
+        title       = tr("score.pillar3.long_label"),
         mar         = c(0, 0, 2, 0)
       )
     }
@@ -626,7 +748,7 @@ if (toupper(module_code) == "EWS") {
         number.cex  = 0.65,
         diag        = FALSE,
         addgrid.col = "white",
-        title       = "Preparedness & Response Capabilities",
+        title       = tr("score.pillar4.long_label"),
         mar         = c(0, 0, 2, 0)
       )
     }
