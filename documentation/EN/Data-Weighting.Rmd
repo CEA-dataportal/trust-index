@@ -1,0 +1,890 @@
+---
+title: "Data Weighting"
+output: github_document
+---
+
+This section describes how we **recode and harmonize survey response options** to a common CTI schema so the **Community Trust Index (CTI) score** can be computed consistently across sources. Starting from raw survey exports (CSV/Excel), we align differing scales (e.g., 1–5 vs. 0–10), standardize directionality (ensuring higher values = higher trust), map text labels to numeric codes, and resolve “Don’t know/Refuse” categories. The output is a set of uniformly coded CTI items ready for reliable index calculation and cross-survey comparison.
+
+### Load packages
+
+Load required libraries for data import, cleaning, transformation, and export
+
+```{r libraries, message=FALSE, result="hide"}
+library(readxl)
+library(survey)
+library(dplyr)
+library(stringr)
+library(writexl)
+```
+
+### File paths
+
+```{r path_configuration, message=FALSE, result="hide"}
+
+### ------ FOR TRAINING ------ ###
+# path        <- "../Test-INST"
+# 
+# data_file   <- "TEST_Data.xlsx" #
+# output      <- "TEST_Data_weighted.xlsx" # Output recoded file
+# data_sheet  <- 1 # Sheet name with data
+# 
+# pop_file <- "TEST_population_data.xlsx"
+# demo_tab <- "age"        # age group x gender
+# geo_tab  <- "geo"        # geographic area
+# edu_tab  <- "education"  # education level
+# employment_tab  <- "employment"  # employment category
+# 
+# # ---- Level of geographic level use for weighting
+# geo_var1 = "admin2" # from survey data
+# geo_var2 = "Admin2" # from population data
+
+### ------ FOR SVK ------ ###
+# path        <- "../Slovakia"
+# 
+# data_file   <- "SVK_Data_2.xlsx" #
+# output      <- "SVK_Data_weighted.xlsx" # Output recoded file
+# data_sheet  <- "data" # Sheet name with data
+# 
+# pop_file <- "SVK_population_data.xlsx"
+# demo_tab <- "age"        # age group x gender
+# geo_tab  <- "geo"        # geographic area
+# edu_tab  <- "education"  # education level
+# employment_tab  <- "employment"  # employment category
+# 
+# #---- Level of geographic level use for weighting
+# geo_var1 = "admin1" # from survey data
+# geo_var2 = "Admin1" # from population data
+
+# # ### ------ FOR DRC ------ ###
+# path        <- "../DRC"
+# 
+# data_file   <- "DRC_Data_en.xlsx" #
+# output      <- "DRC_Data_weighted_en.xlsx" # Output recoded file
+# data_sheet  <- "data" # Sheet name with data
+# 
+# pop_file <- "DRC_population_data_en.xlsx"
+# demo_tab <- "age"        # age group x gender
+# geo_tab  <- "geo"        # geographic area
+# edu_tab  <- "education"  # education level
+# employment_tab  <- "employment"  # employment category
+# 
+# #---- Level of geographic level use for weighting
+# geo_var1 = "admin1" # from survey data
+# geo_var2 = "Admin1" # from population data
+
+# ### ------ FOR Nepal ------ ###
+# path        <- "../Nepal/EWS"
+# 
+# data_file   <- "NPL_EWS_transformed.xlsx" #
+# data_sheet  <- 1 # Sheet name with data
+# pop_file <- "NPL_population_data.xlsx"
+# full_path <- file.path(path, pop_file)
+# 
+# output      <- "NPL_EWS_weighted.xlsx" # Output recoded file
+
+# ### ------ FOR Colombia ------ ###
+# path        <- "../Colombia"
+# 
+# data_file   <- "COL_Data_en.xlsx" #
+# data_sheet  <- 1 # Sheet name with data
+# pop_file <- "COL_population_data_en.xlsx"
+# full_path <- file.path(path, pop_file)
+# output      <- "COL_data_weighted_en.xlsx" # Output recoded file
+# 
+# # Fixed variables
+# demo_tab <- "age"
+# geo_tab  <- "geo"
+# 
+# #---- Level of geographic level use for weighting
+# geo_var1 <- "admin1" # survey data
+# geo_var2 <- "Admin1" # population data
+# 
+# # Flexible variables: change these as needed
+# flex_tabs <- c(
+#  #education  = "education"
+#   #employment = "ethnic"
+#   # add tabs here 
+#   #beneficiary  = "",
+# )
+# 
+# flex_survey_vars <- c(
+#   #education  = "education"
+#   #employment = "ethnic_group"
+#   # add variables here 
+#   #beneficiary  = "BEHAVIOUR_beneficiary",
+# )
+
+
+
+# ### ------ FOR Cameroon ------ ###
+# path        <- "../Cameroon"
+# 
+# data_file   <- "CAM_data_fr.xlsx" #
+# data_sheet  <- 1 # Sheet name with data
+# pop_file <- "CAM_population_data.xlsx"
+# full_path <- file.path(path, pop_file)
+# output      <- "CAM_data_weighted.xlsx" # Output recoded file
+# 
+# # Fixed variables
+# demo_tab <- "age"
+# geo_tab  <- "geo"
+# 
+# #---- Level of geographic level use for weighting
+# geo_var1 <- "admin2" # survey data
+# geo_var2 <- "Admin2" # population data
+# 
+# # Flexible variables: change these as needed
+# flex_tabs <- c(
+#  #education  = "education"
+#   #employment = "ethnic"
+#   # add tabs here 
+#   #beneficiary  = "",
+# )
+# 
+# flex_survey_vars <- c(
+#   #education  = "education"
+#   #employment = "ethnic_group"
+#   # add variables here 
+#   #beneficiary  = "BEHAVIOUR_beneficiary",
+# )
+
+
+### ------ FOR Burundi ------ ###
+#path        <- "../Burundi"
+
+#data_file   <- "BDI_data_en.xlsx" #
+#data_sheet  <- 1 # Sheet name with data
+#pop_file <- "BDI_population_data_en.xlsx"
+#full_path <- file.path(path, pop_file)
+#output      <- "BDI_data_weighted_en.xlsx" # Output recoded file
+
+
+### ------ FOR Madagascar ------ ###
+path        <- "../Madagascar"
+
+data_file   <- "MDG_data_en.xlsx" #
+data_sheet  <- 1 # Sheet name with data
+pop_file <- "MDG_population_data.xlsx"
+full_path <- file.path(path, pop_file)
+output      <- "MDG_data_weighted_en.xlsx" # Output recoded file
+
+# Fixed variables
+demo_tab <- "age"
+geo_tab  <- "geo"
+
+#---- Level of geographic level use for weighting
+geo_var1 <- "admin1" # survey data
+geo_var2 <- "Admin1" # population data
+
+# Flexible variables: change these as needed
+flex_tabs <- c(
+ education  = "education"
+)
+
+flex_survey_vars <- c(
+  education  = "education"
+  #employment = "ethnic_group"
+  # add variables here 
+  #beneficiary  = "BEHAVIOUR_beneficiary",
+)
+
+
+```
+
+### Import data
+
+```{r import_data, warning=FALSE, message=FALSE, result="hide"}
+
+data_df   <- read_excel(file.path(path, data_file), sheet = data_sheet, guess_max = 10000)
+# View a few rows
+#dplyr::glimpse(data_df)
+```
+
+Import data population
+
+```{r}
+
+is_empty_sheet <- function(df) {
+  is.null(df) ||
+    nrow(df) == 0 ||
+    ncol(df) == 0 ||
+    all(is.na(df))
+}
+
+calc_proportion <- function(df, value_col, prop_col = "pop_prop") {
+  if (is.null(df)) return(NULL)
+
+  total <- sum(df[[value_col]], na.rm = TRUE)
+
+  if (is.na(total) || total == 0) {
+    warning("Total of ", value_col, " is zero or NA; cannot compute proportions.")
+    df[[prop_col]] <- NA_real_
+  } else {
+    df[[prop_col]] <- df[[value_col]] / total
+  }
+
+  df
+}
+
+make_margin <- function(pop_tbl, strata_type_value, var_name, total_n) {
+  pop_tbl |>
+    filter(strata_type == strata_type_value) |>
+    transmute(
+      !!var_name := strata,
+      Freq = pop_prop * total_n
+    )
+}
+
+```
+
+### Population Data
+
+Function that creates a new column and calculates each row’s value divided by the sum of all rows.
+
+```{r}
+
+if (file.exists(full_path)) {
+  population_demo <- read_excel(full_path, sheet = demo_tab)
+  population_geo  <- read_excel(full_path, sheet = geo_tab)
+
+  if (is_empty_sheet(population_demo)) population_demo <- NULL
+  if (is_empty_sheet(population_geo))  population_geo  <- NULL
+
+} else {
+  stop("Population file not found: ", full_path)
+}
+
+# Age and Gender
+if (!is.null(population_demo)) {
+  pop_demo_tbl <- population_demo |>
+    mutate(
+      strata = paste(AGEgroup, Gender, sep = "_")
+    ) |>
+    group_by(strata) |>
+    summarise(
+      Freq = sum(Freq, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    calc_proportion(
+      value_col = "Freq",
+      prop_col = "pop_prop"
+    ) |>
+    mutate(strata_type = "demo") |>
+    select(strata_type, strata, pop_prop)
+} else {
+  pop_demo_tbl <- NULL
+}
+
+# Geographic
+
+if (!is.null(population_geo)) {
+  if (is.character(population_geo$Pop)) {
+    population_geo$Pop <- as.numeric(gsub(",", ".", population_geo$Pop))
+  }
+
+  pop_geo_tbl <- population_geo |>
+    mutate(
+      strata = .data[[geo_var2]]
+    ) |>
+    group_by(strata) |>
+    summarise(
+      Pop = sum(Pop, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    calc_proportion(
+      value_col = "Pop",
+      prop_col = "pop_prop"
+    ) |>
+    mutate(strata_type = "geo") |>
+    select(strata_type, strata, pop_prop)
+} else {
+  pop_geo_tbl <- NULL
+}
+
+#Other strata
+
+pop_flex_tbls <- list()
+
+if (file.exists(full_path)) {
+  available_sheets <- excel_sheets(full_path)
+
+  for (v in names(flex_tabs)) {
+
+    tab_name <- flex_tabs[[v]]
+
+    if (tab_name %in% available_sheets) {
+
+      pop_tmp <- read_excel(full_path, sheet = tab_name)
+
+      if (!is_empty_sheet(pop_tmp)) {
+
+        if (!all(c("Level", "Percentage") %in% names(pop_tmp))) {
+          warning("Sheet '", tab_name, "' must contain columns Level and Percentage.")
+          next
+        }
+
+        if (is.character(pop_tmp$Percentage)) {
+          pop_tmp$Percentage <- as.numeric(gsub(",", ".", pop_tmp$Percentage))
+        }
+
+        pop_flex_tbls[[v]] <- pop_tmp |>
+          mutate(strata = Level) |>
+          group_by(strata) |>
+          summarise(
+            Percentage = sum(Percentage, na.rm = TRUE),
+            .groups = "drop"
+          ) |>
+          calc_proportion(
+            value_col = "Percentage",
+            prop_col = "pop_prop"
+          ) |>
+          mutate(strata_type = v) |>
+          select(strata_type, strata, pop_prop)
+      }
+
+    } else {
+      message("Population sheet not found for flexible variable: ", tab_name)
+    }
+  }
+}
+
+pop_flex_tbl <- bind_rows(pop_flex_tbls)
+
+```
+
+Summary
+
+```{r}
+
+
+population_summary <- bind_rows(
+  pop_demo_tbl,
+  pop_geo_tbl,
+  pop_flex_tbl
+) |>
+  filter(!is.na(strata), !is.na(pop_prop), pop_prop > 0)
+
+```
+
+### Sampling Data
+
+**Demography** : age and gender
+
+We first standardize the age variable: if it is numeric, we convert it into predefined age groups; if it is already categorical, we simply rename it. Next, we create a demographic stratum by combining age group and gender for respondents with valid information. For these strata, we count the sample cases and compute their sample proportions, stored in sample_demo_tbl. If no valid strata exist, this table is set to NULL.
+
+```{r}
+
+if (is.numeric(data_df$age)) {
+  data_df <- data_df |>
+    mutate(
+      Age_group = case_when(
+        age >= 18 & age <= 29 ~ "18-29",
+        age >= 30 & age <= 39 ~ "30-39",
+        age >= 40 & age <= 49 ~ "40-49",
+        age >= 50 & age <= 59 ~ "50-59",
+        age >= 60             ~ "60+",
+        TRUE                  ~ NA_character_
+      )
+    )
+} else {
+  data_df <- data_df |>
+    rename(Age_group = age)
+}
+
+data_df <- data_df |>
+  mutate(
+    demo = if_else(
+      !is.na(Age_group) & !is.na(gender),
+      paste(Age_group, gender, sep = "_"),
+      NA_character_
+    )
+  )
+
+if (any(!is.na(data_df$demo))) {
+  sample_demo_tbl <- data_df |>
+    filter(!is.na(demo)) |>
+    count(strata = demo, name = "Count") |>
+    calc_proportion(
+      value_col = "Count",
+      prop_col = "sample_prop"
+    ) |>
+    mutate(strata_type = "demo") |>
+    select(strata_type, strata, sample_prop, Count)
+} else {
+  sample_demo_tbl <- NULL
+}
+
+```
+
+**Geographic**
+
+We first create a geographic variable geo based on the chosen input variable (geo_var1). If any respondents have non-missing values on geo, we form geographic strata, count the number of cases in each, and compute their sample proportions, storing the results in sample_geo_tbl with strata_type = "geo". If all geo values are missing, sample_geo_tbl is set to NULL.
+
+```{r}
+
+data_df <- data_df |>
+  mutate(
+    geo = .data[[geo_var1]]
+  )
+
+if (any(!is.na(data_df$geo))) {
+  sample_geo_tbl <- data_df |>
+    filter(!is.na(geo)) |>
+    count(strata = geo, name = "Count") |>
+    calc_proportion(
+      value_col = "Count",
+      prop_col = "sample_prop"
+    ) |>
+    mutate(strata_type = "geo") |>
+    select(strata_type, strata, sample_prop, Count)
+} else {
+  sample_geo_tbl <- NULL
+}
+```
+
+**Other variables**
+
+If an education variable exists and has valid values, we define education strata, count respondents in each, and compute their sample proportions in sample_edu_tbl (with strata_type = "edu"). If not, sample_edu_tbl is set to NULL.
+
+```{r}
+
+sample_flex_tbls <- list()
+
+for (v in names(flex_survey_vars)) {
+
+  survey_var <- flex_survey_vars[[v]]
+
+  if (survey_var %in% names(data_df) && any(!is.na(data_df[[survey_var]]))) {
+
+    data_df <- data_df |>
+      mutate(!!v := .data[[survey_var]])
+
+    sample_flex_tbls[[v]] <- data_df |>
+      filter(!is.na(.data[[v]])) |>
+      count(strata = .data[[v]], name = "Count") |>
+      calc_proportion(
+        value_col = "Count",
+        prop_col = "sample_prop"
+      ) |>
+      mutate(strata_type = v) |>
+      select(strata_type, strata, sample_prop, Count)
+
+  } else {
+    message("Survey variable not found or empty: ", survey_var)
+  }
+}
+
+sample_flex_tbl <- bind_rows(sample_flex_tbls)
+
+```
+
+We then combine all available strata tables (demographic, geographic, education, and employment) into a single sample_summary table, which contains the sample proportions and counts for all defined strata types.
+
+```{r}
+sample_summary <- bind_rows(
+  sample_demo_tbl,
+  sample_geo_tbl,
+  sample_flex_tbl
+)
+
+```
+
+### Weight calculation
+
+**Stratum-Level Weight Calculation**
+
+We calculate survey weights using raking, also known as iterative proportional fitting. Raking adjusts respondent weights so that the weighted sample matches the available population margins for demographics, geography, education, and employment.
+
+This avoids multiplying separate post-stratification weights directly, which can create unstable or overly large weights.
+
+```{r Raking}
+
+### Raking weight calculation
+
+data_df <- data_df |>
+  mutate(row_id = row_number())
+
+# Define raking variables
+raking_vars <- c()
+
+if (!is.null(pop_demo_tbl) && "demo" %in% names(data_df)) {
+  raking_vars <- c(raking_vars, "demo")
+}
+
+if (!is.null(pop_geo_tbl) && "geo" %in% names(data_df)) {
+  raking_vars <- c(raking_vars, "geo")
+}
+
+for (v in names(flex_survey_vars)) {
+  if (
+    v %in% names(data_df) &&
+    v %in% population_summary$strata_type &&
+    any(!is.na(data_df[[v]]))
+  ) {
+    raking_vars <- c(raking_vars, v)
+  }
+}
+
+# Check unmatched sample levels
+for (v in raking_vars) {
+
+  pop_levels <- population_summary |>
+    filter(strata_type == v) |>
+    pull(strata)
+
+  bad_levels <- setdiff(unique(na.omit(data_df[[v]])), pop_levels)
+
+  if (length(bad_levels) > 0) {
+    warning(
+      "These sample levels in ", v, " are not in the population margins: ",
+      paste(bad_levels, collapse = ", ")
+    )
+  }
+}
+
+# Keep complete cases for raking variables
+if (length(raking_vars) > 0) {
+  rake_df <- data_df |>
+    filter(if_all(all_of(raking_vars), ~ !is.na(.x)))
+} else {
+  rake_df <- data_df[0, ]
+}
+
+# Drop sample levels not in population margins
+for (v in raking_vars) {
+
+  valid_levels <- population_summary |>
+    filter(strata_type == v) |>
+    pull(strata)
+
+  rake_df <- rake_df |>
+    filter(.data[[v]] %in% valid_levels)
+}
+
+
+# ------------------------------------------------------------
+# Validate sample and population strata before raking
+# ------------------------------------------------------------
+
+raking_mismatch_report <- list()
+
+for (v in raking_vars) {
+
+  # Levels in the original sample before complete-case filtering
+  original_sample_levels <- sort(
+    unique(
+      trimws(
+        as.character(
+          na.omit(data_df[[v]])
+        )
+      )
+    )
+  )
+
+  # Levels remaining in the final dataset used for raking
+  final_sample_levels <- sort(
+    unique(
+      trimws(
+        as.character(
+          na.omit(rake_df[[v]])
+        )
+      )
+    )
+  )
+
+  # Population levels
+  population_levels <- population_summary |>
+    filter(strata_type == v) |>
+    pull(strata) |>
+    as.character() |>
+    trimws() |>
+    unique() |>
+    sort()
+
+  # Population categories not represented in the final sample
+  population_missing_from_sample <- setdiff(
+    population_levels,
+    final_sample_levels
+  )
+
+  # Sample categories that do not exist in the population margin
+  sample_missing_from_population <- setdiff(
+    final_sample_levels,
+    population_levels
+  )
+
+  # Categories that existed initially but disappeared after filtering
+  sample_levels_removed_during_filtering <- setdiff(
+    original_sample_levels,
+    final_sample_levels
+  )
+
+  if (
+    length(population_missing_from_sample) > 0 ||
+    length(sample_missing_from_population) > 0 ||
+    length(sample_levels_removed_during_filtering) > 0
+  ) {
+
+    raking_mismatch_report[[v]] <- tibble(
+      variable = v,
+      issue = c(
+        rep(
+          "Population stratum absent from final raking sample",
+          length(population_missing_from_sample)
+        ),
+        rep(
+          "Sample stratum absent from population margin",
+          length(sample_missing_from_population)
+        ),
+        rep(
+          "Sample stratum removed during complete-case filtering",
+          length(sample_levels_removed_during_filtering)
+        )
+      ),
+      stratum = c(
+        population_missing_from_sample,
+        sample_missing_from_population,
+        sample_levels_removed_during_filtering
+      )
+    )
+  }
+}
+
+raking_mismatch_summary <- bind_rows(raking_mismatch_report)
+
+if (nrow(raking_mismatch_summary) > 0) {
+
+  cat("\n")
+  cat("====================================================\n")
+  cat("RAKING STRATA VALIDATION FAILED\n")
+  cat("====================================================\n\n")
+
+  print(raking_mismatch_summary, n = Inf)
+
+  cat("\nPlease check the following in the source datasets:\n")
+  cat("- spelling and capitalization;\n")
+  cat("- leading or trailing spaces;\n")
+  cat("- hyphen '-' versus en dash '–';\n")
+  cat("- different category labels between sample and population;\n")
+  cat("- strata disappearing because of missing values in another raking variable.\n\n")
+
+  stop(
+    "Raking cannot continue because sample and population strata do not match. ",
+    "See 'raking_mismatch_summary' for details.",
+    call. = FALSE
+  )
+}
+
+
+total_n <- nrow(rake_df)
+
+sample_margins <- list()
+population_margins <- list()
+
+for (v in raking_vars) {
+  sample_margins <- c(
+    sample_margins,
+    list(as.formula(paste0("~", v)))
+  )
+
+  population_margins <- c(
+    population_margins,
+    list(make_margin(population_summary, v, v, total_n))
+  )
+}
+
+if (length(sample_margins) > 0 && nrow(rake_df) > 0) {
+
+  design_unweighted <- svydesign(
+    ids = ~1,
+    data = rake_df,
+    weights = ~1
+  )
+
+  design_raked <- rake(
+    design = design_unweighted,
+    sample.margins = sample_margins,
+    population.margins = population_margins,
+    control = list(
+      maxit = 50,
+      epsilon = 1e-6,
+      verbose = FALSE
+    )
+  )
+
+  rake_weights <- rake_df |>
+    mutate(weight = weights(design_raked)) |>
+    select(row_id, weight)
+
+  data_df <- data_df |>
+    left_join(rake_weights, by = "row_id") |>
+    mutate(weight = ifelse(is.na(weight), 1, weight))
+
+} else {
+
+  warning("No valid raking margins found. Setting all weights to 1.")
+
+  data_df <- data_df |>
+    mutate(weight = 1)
+}
+
+
+# Trim and normalize final weights
+cap <- 4
+
+data_df <- data_df |>
+  mutate(
+    weight_trimmed = pmin(weight, cap),
+    weight = weight_trimmed / mean(weight_trimmed, na.rm = TRUE)
+  ) |>
+  select(-weight_trimmed)
+
+
+### Strata-level weight summary
+
+strata_weight_tables <- list()
+
+for (v in raking_vars) {
+  
+  strata_weight_tables[[v]] <- data_df |>
+    filter(!is.na(.data[[v]])) |>
+    group_by(strata = .data[[v]]) |>
+    summarise(
+      weight = mean(weight, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    mutate(strata_type = v) |>
+    left_join(
+      sample_summary |>
+        filter(strata_type == v) |>
+        select(strata_type, strata, sample_prop, Count),
+      by = c("strata_type", "strata")
+    ) |>
+    left_join(
+      population_summary |>
+        filter(strata_type == v) |>
+        select(strata_type, strata, pop_prop),
+      by = c("strata_type", "strata")
+    ) |>
+    select(
+      strata_type,
+      strata,
+      Count,
+      sample_prop,
+      pop_prop,
+      weight
+    )
+}
+
+strata_weight_summary <- bind_rows(strata_weight_tables) |>
+  arrange(strata_type, strata)
+
+print(strata_weight_summary)
+
+
+#DEBUG
+#IF you have this error: 
+# Error in postStratify.survey.design(design, strata[[i]], population.margins[[i]],  : 
+#  Some strata absent from sample: use partial=TRUE to ignore them.
+
+# Run the following code and check what is missing in the dataset
+
+# for (v in raking_vars) {
+# 
+#   sample_levels <- sort(unique(na.omit(rake_df[[v]])))
+# 
+#   pop_levels <- population_summary |>
+#     filter(strata_type == v) |>
+#     pull(strata) |>
+#     unique() |>
+#     sort()
+# 
+#   missing_in_sample <- setdiff(pop_levels, sample_levels)
+# 
+#   if (length(missing_in_sample) > 0) {
+# 
+#     cat("\n====================================\n")
+#     cat("Variable:", v, "\n")
+#     cat("Population strata missing from sample:\n")
+#     print(missing_in_sample)
+# 
+#   }
+#  }
+
+
+```
+
+### Create a Weight Summary Table
+
+```{r}
+### Weight summary and diagnostics
+weight_summary <- data.frame(
+  Metric = c(
+    "N",
+    "Mean",
+    "Median",
+    "Min",
+    "Max",
+    "SD",
+    "CV",
+    "Effective sample size"
+  ),
+  Value = c(
+    length(data_df$weight),
+    mean(data_df$weight, na.rm = TRUE),
+    median(data_df$weight, na.rm = TRUE),
+    min(data_df$weight, na.rm = TRUE),
+    max(data_df$weight, na.rm = TRUE),
+    sd(data_df$weight, na.rm = TRUE),
+    sd(data_df$weight, na.rm = TRUE) / mean(data_df$weight, na.rm = TRUE),
+    (sum(data_df$weight, na.rm = TRUE)^2) /
+      sum(data_df$weight^2, na.rm = TRUE)
+  )
+)
+
+
+print(weight_summary)
+
+
+```
+
+**Interpretation**
+
+| Metric | Explanation |
+|------|------|
+|    **N**    |Total number of observations (respondents) included in the weighted dataset. This represents the sample size after excluding any cases removed from the weighting procedure due to missing or unmatched strata.|
+|  **Mean**   |Average survey weight across all respondents. After normalization, this should usually be close to **1**. Values substantially different from 1 indicate that weights have not been rescaled.|
+| **Median**  |Middle value of the weight distribution. Comparing the median with the mean helps identify whether the distribution is skewed by a few large or small weights.|
+|  **Min**    |Smallest respondent weight in the dataset. Very small values indicate respondents whose characteristics are overrepresented in the sample and therefore receive less influence.|
+|   **Max**   |Largest respondent weight in the dataset. Large values indicate respondents from underrepresented groups whose influence has been increased. Excessively large values can increase variance and reduce estimate stability.|
+|   **SD**    |Measures how spread out the weights are around their average value. Higher values indicate more variation across respondent weights.|
+|   **CV**    |The standard deviation divided by the mean weight: `CV = SD / Mean`. It provides a standardized measure of weight variability. Lower values indicate more stable weights.|
+|   **Effective Sample Size**   |An estimate of the sample size after accounting for weighting effects. Calculated using the Kish formula: `(Σw)² / Σ(w²)`. A large reduction compared with the original sample size indicates that weighting has increased variance and reduced statistical efficiency. Around 60–80% efficiency is often acceptable; below 50% usually suggests very aggressive weighting.|
+
+### Export
+
+```{r}
+
+# Remove temporary column
+temporary_cols <- c(
+  "row_id",
+  "demo",
+  "geo",
+  names(flex_survey_vars)
+)
+
+temporary_cols <- temporary_cols[temporary_cols %in% names(data_df)]
+
+data_export <- data_df |>
+  select(-row_id)
+
+write_xlsx(
+  list(
+    data = data_export,
+    weight_summary = weight_summary,
+    strata_weight_summary = strata_weight_summary
+  ),
+  path = file.path(path, output)
+)
+
+```

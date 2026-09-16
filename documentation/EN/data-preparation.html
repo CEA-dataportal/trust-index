@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data preparation | Community Trust Index</title>
+    <meta name="description" content="Prepare and check survey data before calculating the Community Trust Index.">
+    <style>
+      :root {
+        --navy: #17284b;
+        --navy-soft: #edf1f8;
+        --ink: #202c42;
+        --muted: #617089;
+        --line: #dfe5ef;
+        --canvas: #ffffff;
+        --wash: #f7f9fc;
+        --accent: #de6c54;
+        --accent-dark: #bd553f;
+        --success: #1f7a5a;
+        --radius: 14px;
+        --shadow: 0 5px 16px rgba(23, 40, 75, .08);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; color: var(--ink); background: var(--canvas); font-size: 16px; line-height: 1.6; }
+      a { color: inherit; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1, h2, h3 { line-height: 1.16; letter-spacing: -.025em; }
+      h2 { font-size: clamp(1.7rem, 3vw, 2.25rem); margin-bottom: .7rem; }
+      h3 { font-size: 1.1rem; margin-bottom: .35rem; }
+      .container { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; }
+
+      .site-header { border-bottom: 1px solid var(--line); background: rgba(255,255,255,.96); }
+      .site-header .container { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+      .brand { text-decoration: none; font-weight: 700; letter-spacing: -.02em; display: flex; align-items: center; gap: .6rem; }
+      .brand-mark { color: var(--accent); font-size: 1.35rem; line-height: 1; }
+      .site-nav { display: flex; align-items: center; gap: 1.15rem; font-size: .9rem; color: var(--muted); }
+      .site-nav a { text-decoration: none; }
+      .site-nav a:hover { color: var(--ink); }
+
+      .hero { background: var(--navy); color: #fff; padding: 5.25rem 0 5.5rem; }
+      .eyebrow { margin-bottom: 1rem; color: rgba(255,255,255,.7); font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+      .hero h1 { max-width: 770px; margin-bottom: 1.25rem; font-size: clamp(2.6rem, 7vw, 4.7rem); }
+      .hero-copy { max-width: 720px; margin-bottom: 1.75rem; color: rgba(255,255,255,.82); font-size: clamp(1.05rem, 2vw, 1.2rem); }
+      .pills { display: flex; flex-wrap: wrap; gap: .55rem; }
+      .pill { display: inline-flex; border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: .3rem .7rem; color: rgba(255,255,255,.9); font-size: .82rem; }
+
+      .section { padding: 4.75rem 0; }
+      .section-wash { background: var(--wash); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .section-intro { max-width: 690px; margin-bottom: 2.2rem; color: var(--muted); }
+      .section-intro strong { color: var(--ink); }
+
+      .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+      .card { min-height: 100%; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.55rem; background: #fff; box-shadow: var(--shadow); }
+      .icon { width: 2.5rem; height: 2.5rem; display: grid; place-items: center; margin-bottom: 1rem; border-radius: .7rem; background: #fbece8; color: var(--accent-dark); font-size: 1.15rem; font-weight: 700; }
+      .card p { margin-bottom: 0; color: var(--muted); font-size: .95rem; }
+
+      .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; counter-reset: steps; }
+      .step { position: relative; padding: 1.15rem 1rem 1rem 3.5rem; border-top: 2px solid var(--accent); background: #fff; }
+      .step::before { counter-increment: steps; content: counter(steps); position: absolute; left: .95rem; top: 1.12rem; display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 50%; background: var(--navy); color: #fff; font-size: .8rem; font-weight: 700; }
+      .step h3 { font-size: 1rem; }
+      .step p { margin-bottom: 0; color: var(--muted); font-size: .9rem; }
+
+      .split { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); gap: 3rem; align-items: start; }
+      .prose p, .prose li { color: var(--muted); }
+      .prose ul { padding-left: 1.2rem; }
+      .prose li + li { margin-top: .38rem; }
+      .note { border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 1.2rem 1.35rem; background: #fff8f6; }
+      .note h3 { color: var(--ink); }
+      .note p { margin-bottom: 0; color: var(--muted); font-size: .95rem; }
+
+      .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+      table { width: 100%; border-collapse: collapse; font-size: .92rem; background: #fff; }
+      th, td { padding: .85rem 1rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+      th { background: var(--navy-soft); color: var(--navy); font-weight: 700; }
+      tr:last-child td { border-bottom: 0; }
+      code { border-radius: .25rem; padding: .1rem .3rem; background: #eef2f7; color: #31435f; font-size: .9em; }
+
+      .checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: .7rem 1.2rem; padding: 0; list-style: none; }
+      .checklist li { position: relative; padding: .95rem .9rem .95rem 2.6rem; border: 1px solid var(--line); border-radius: .7rem; background: #fff; color: var(--ink); font-size: .93rem; }
+      .checklist li::before { content: "✓"; position: absolute; left: .95rem; top: .9rem; color: var(--success); font-weight: 800; }
+
+      .next { display: flex; justify-content: space-between; gap: 1.5rem; align-items: center; border-radius: var(--radius); padding: 2rem; background: var(--navy); color: #fff; }
+      .next h2 { margin-bottom: .35rem; font-size: 1.55rem; }
+      .next p { max-width: 650px; margin-bottom: 0; color: rgba(255,255,255,.8); }
+      .next-link { flex: 0 0 auto; border-radius: .45rem; padding: .65rem 1rem; background: var(--accent); color: #fff; font-size: .9rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .next-link:hover { background: var(--accent-dark); }
+      footer { padding: 2rem 0; color: var(--muted); font-size: .85rem; }
+
+      @media (max-width: 780px) {
+        .hero { padding: 4rem 0; }
+        .cards, .steps, .checklist, .split { grid-template-columns: 1fr; }
+        .section { padding: 3.5rem 0; }
+        .next { display: block; }
+        .next-link { display: inline-block; margin-top: 1.15rem; }
+      }
+      @media (max-width: 530px) {
+        .site-header .container { min-height: 64px; }
+        .site-nav a:first-child { display: none; }
+      }
+    </style>
++    <style data-style="cti-documentation">
+      :root{--navy:#17284b;--navy-soft:#edf1f8;--ink:#202c42;--muted:#617089;--line:#dfe5ef;--wash:#f7f9fc;--accent:#de6c54;--accent-dark:#bd553f;--success:#1f7a5a;--radius:14px;--shadow:0 5px 16px rgba(23,40,75,.08)}body{font-size:16px;line-height:1.6}.container{width:min(1120px,calc(100% - 2rem));margin:0 auto}.site-header{border-bottom:1px solid var(--line);background:rgba(255,255,255,.96)}.site-header .container{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:1rem}.site-nav{gap:1.15rem;font-size:.9rem}.hero{padding:5.25rem 0 5.5rem}.hero h1{max-width:850px;font-size:clamp(2.6rem,7vw,4.7rem)}.hero-copy{max-width:760px}.section{padding:4.75rem 0}.section-intro{max-width:760px}.cards,.steps{grid-template-columns:repeat(4,1fr);gap:1.1rem}.card{padding:1.45rem}.icon{width:2.45rem;height:2.45rem;font-size:.82rem}.split{gap:3rem}.table-wrap{border-radius:var(--radius)}.workflow{border-bottom:1px solid var(--line);background:#fff}.workflow .container{display:flex;align-items:center;gap:1rem;padding:.8rem 0}.workflow-label{flex:0 0 auto;margin:0;color:var(--muted);font-size:.76rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase}.workflow-list{display:flex;align-items:center;gap:.5rem;margin:0;padding:0;overflow-x:auto;list-style:none}.workflow-step{display:flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.84rem;white-space:nowrap}.workflow-step:not(:last-child)::after{content:"→";color:#aeb8c8}.workflow-step a{text-decoration:none}.workflow-step a:hover{color:var(--navy)}.workflow-step.current a{color:var(--navy);font-weight:750}.workflow-step.pending{color:#9ba6b7}.workflow-num{display:grid;place-items:center;width:1.35rem;height:1.35rem;border:1px solid currentColor;border-radius:50%;font-size:.7rem;font-weight:700}.workflow-step.current .workflow-num{border-color:var(--accent);background:var(--accent);color:#fff}.workflow-bottom{border-top:1px solid var(--line)}.next{padding:2rem;border-radius:var(--radius)}.next-link[aria-disabled="true"]{opacity:.68;cursor:not-allowed}@media(max-width:850px){.cards,.steps{grid-template-columns:repeat(2,1fr)}}@media(max-width:780px){.hero{padding:4rem 0}.cards,.steps,.checklist,.split{grid-template-columns:1fr}.section{padding:3.5rem 0}.next{display:block}.next-link{display:inline-block;margin-top:1.15rem}}@media(max-width:530px){.site-header .container{min-height:64px}.site-nav a:first-child{display:none}.workflow .container{align-items:flex-start}.workflow-label{padding-top:.25rem}}
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="#top"><span class="brand-mark">♥</span><span>Community Trust Index</span></a>
+        <nav class="site-nav" aria-label="Navigation principale">
+          <a href="https://trust.communityengagementhub.org" target="_blank" rel="noreferrer">Current site</a>
+          <a href="https://github.com/CEA-dataportal/trust-index" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </nav>
+      </div>
+    </header>
+    <nav class="workflow" aria-label="CTI documentation workflow"><div class="container"><p class="workflow-label">CTI workflow</p><ol class="workflow-list"><li class="workflow-step current"><span class="workflow-num">1</span><a href="./data-preparation.html">Data preparation</a></li><li class="workflow-step"><span class="workflow-num">2</span><a href="./data-weighting.html">Weighting</a></li><li class="workflow-step"><span class="workflow-num">3</span><a href="./configuration-preparation.html">Configuration</a></li><li class="workflow-step"><span class="workflow-num">4</span><a href="./report-generation.html">Report generation</a></li><li class="workflow-step pending"><span class="workflow-num">5</span><span>Web publication</span></li></ol></div></nav>
+
+    <main id="top">
+      <section class="hero">
+        <div class="container">
+          <p class="eyebrow">CEA Data Portal · Documentation</p>
+          <h1>Data preparation</h1>
+          <p class="hero-copy">Prepare and quality-check your survey before calculating the Community Trust Index. This stage ensures reliable, comparable data that are ready for analysis.</p>
+          <div class="pills" aria-label="Page scope">
+            <span class="pill">Institutional</span>
+            <span class="pill">Early Warning Systems</span>
+            <span class="pill">Before configuration and weighting</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>What this stage prepares</h2>
+          <p class="section-intro">Preparation starts as soon as the survey export is received. It preserves a raw source, creates a consistent working file and documents the decisions needed before analysis.</p>
+          <div class="cards">
+            <article class="card">
+              <div class="icon">01</div>
+              <h3>Survey file</h3>
+              <p>A clean export with one row per respondent, a unique identifier and the variables expected by the questionnaire.</p>
+            </article>
+            <article class="card">
+              <div class="icon">02</div>
+              <h3>Population data</h3>
+              <p>Reference tables aligned with the target population and the variables selected for weighting.</p>
+            </article>
+            <article class="card">
+              <div class="icon">03</div>
+              <h3>Quality checks</h3>
+              <p>Documented checks on eligibility, duplicates, response options and geography.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container">
+          <h2>The preparation workflow</h2>
+          <p class="section-intro">Follow these four steps in order. They apply to every module, with question mappings specific to the Institutional or Early Warning module.</p>
+          <div class="steps">
+            <article class="step"><h3>Archive</h3><p>Keep the original, unmodified export received from Kobo, ODK or the data-collection tool.</p></article>
+            <article class="step"><h3>Prepare</h3><p>Create a working copy and check the structure, eligibility and required variables.</p></article>
+            <article class="step"><h3>Harmonise</h3><p>Standardise labels, age groups and geographic levels without overwriting source data.</p></article>
+            <article class="step"><h3>Validate</h3><p>Check alignment with population tables and record every decision in a log.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container split">
+          <div class="prose">
+            <h2>1. Prepare the survey file</h2>
+            <p>The analysis file must contain <strong>one row per respondent</strong>. Keep technical question names: the configuration file will later link them to report labels and indicators.</p>
+            <p>Every respondent must have a unique and stable identifier, ideally the one created by the data-collection platform. Column headers must also be unique.</p>
+            <h3>Analysis sample</h3>
+            <p>Define the inclusion rules at this stage: consent, completed form, target population, any deduplication and, where the protocol requires it, a question about knowledge of the Red Cross or National Society. These rules must be identical in the configuration, results and report.</p>
+          </div>
+          <aside class="note">
+            <h3>Key principle</h3>
+            <p>Never modify the source file. Work on a copy and record every transformation: date, variable concerned, action taken and rationale.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container">
+          <h2>Variables to check</h2>
+          <p class="section-intro">Required variables depend on the sampling plan and module, but the items below form the basis for CTI preparation.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Domain</th><th>Expected content</th><th>Use</th></tr></thead>
+              <tbody>
+                <tr><td>Identifier</td><td>Unique respondent identifier</td><td>Traceability and duplicate detection</td></tr>
+                <tr><td>Eligibility</td><td>Consent, submission status, minimum age</td><td>Definition of the analysis sample</td></tr>
+                <tr><td>Disaggregations</td><td>At minimum: age, gender and location; other variables according to the sampling plan</td><td>Disaggregated analysis and weighting</td></tr>
+                <tr><td>Profiles</td><td>Volunteering, support received, EWS interaction or receipt of warnings</td><td>Analysis by respondent profile</td></tr>
+                <tr><td>CTI questions</td><td>Standardised module questions, coded using a shared convention</td><td>Score calculation and charts</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <aside class="note" style="margin-top: 1.5rem;">
+            <h3>Disaggregation and weighting</h3>
+            <p>Age, gender and location are the minimum requirements. Up to three additional strata may be added for weighting. For disaggregated analysis, use at least the sampling strata: they enable representative analysis where sample sizes allow.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container split">
+          <div class="prose">
+            <h2>2. Harmonise the data</h2>
+            <p>Use a harmonised variable when different values refer to the same category. Always retain the original value alongside this working variable.</p>
+            <h3>Age</h3>
+            <p>For analysis of people aged 18 and above, use the groups <code>18-29</code>, <code>30-39</code>, <code>40-49</code>, <code>50-59</code> and <code>60+</code>. The package standardises this information as <code>Age_group</code>.</p>
+            <h3>Responses and special values</h3>
+            <p>Do not confuse a blank cell, a “Don’t know” response, a refusal and a question not asked because of skip logic. These cases must remain distinct in the working file.</p>
+            <h3>CTI questions and coding</h3>
+            <p>Questions used to calculate CTI scores are standardised. Their code must follow a stable convention: a prefix for the dimension or pillar, followed by a suffix for the sub-dimension, in the form <code>DIMENSION_Subdimension</code>. A reference table of questions and codes will be added to this documentation.</p>
+          </div>
+          <div class="prose">
+            <h3>Reference Likert scale</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Order</th><th>Response option</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Yes, completely</td></tr>
+                  <tr><td>2</td><td>Mostly yes</td></tr>
+                  <tr><td>3</td><td>Mostly no</td></tr>
+                  <tr><td>4</td><td>Not at all</td></tr>
+                  <tr><td>Outside the scale</td><td>Don’t know</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Translations and recoding are defined in the configuration. Response options observed in the export must match the declared mapping.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container split">
+          <div class="prose">
+            <h2>3. Prepare geography and population data</h2>
+            <p>Area names in the survey must match the administrative levels, population tables and administrative boundaries used for maps. Create a crosswalk table where needed.</p>
+            <p>Population tables must describe the <strong>same target population</strong> as the survey, for example people aged 18 and above. They must match collected data exactly: the same age bands, gender categories and regions or administrative levels.</p>
+            <p>The data model generally includes an age × gender table, a geographic table and up to three additional stratum tables. Tables provide the counts or proportions used for weighting.</p>
+          </div>
+          <aside class="note">
+            <h3>Where to find the data</h3>
+            <p>Prioritise the national statistics office and census data. Depending on the context, sources may also include the World Bank, MICS surveys or Demographic and Health Surveys (DHS). Always record the source, reference year and any recoding or aggregation carried out.</p>
+          </aside>
+        </div>
+        <div class="container" style="margin-top: 1.5rem;">
+          <aside class="note">
+            <h3>Watch for absent strata</h3>
+            <p>A category present in the population but absent from the sample cannot be automatically corrected through weighting. Flag it and document the methodological decision.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container split">
+          <div class="prose">
+            <h2>4. Plan profile analysis</h2>
+            <p>Beyond socio-demographic disaggregations, CTI enables score comparisons by respondents’ experience of and relationship with institutions. These analyses enrich interpretation without changing the overall score calculation.</p>
+            <p>Core questionnaires include questions that create profiles based on interactions with institutions, behaviours, intentions, knowledge or habits. They may be adapted or supplemented for the specific context.</p>
+          </div>
+          <aside class="note">
+            <h3>Document in the configuration</h3>
+            <p>For each profile, specify the variable or variables used, the response options included and the rule applied when a respondent can belong to more than one category.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container">
+          <h2>5. Complete quality checks</h2>
+          <p class="section-intro">Before preparing the configuration, check that the working file and reference data are ready for analysis.</p>
+          <ul class="checklist">
+            <li>The raw export is archived and has not been modified.</li>
+            <li>The working file contains one row per respondent and a unique identifier.</li>
+            <li>Eligibility rules are defined and applied.</li>
+            <li>Response options are harmonised without removing source values.</li>
+            <li>Age, gender and location categories match the population data.</li>
+            <li>CTI questions, their coding and respondent profiles are documented.</li>
+            <li>Population tables match the population and area covered by the survey.</li>
+            <li>Corrections and exceptions are recorded in a preparation log.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section section-wash">
+        <div class="container">
+          <div class="next">
+            <div>
+              <h2>Ready for the next step?</h2>
+              <p>Once data are prepared, calculate and check the weights before preparing the configuration file.</p>
+            </div>
+            <a class="next-link" href="./data-weighting.html">Calculate weights →</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="workflow workflow-bottom" aria-label="CTI documentation workflow"><div class="container"><p class="workflow-label">CTI workflow</p><ol class="workflow-list"><li class="workflow-step current"><span class="workflow-num">1</span><a href="./data-preparation.html">Data preparation</a></li><li class="workflow-step"><span class="workflow-num">2</span><a href="./data-weighting.html">Weighting</a></li><li class="workflow-step"><span class="workflow-num">3</span><a href="./configuration-preparation.html">Configuration</a></li><li class="workflow-step"><span class="workflow-num">4</span><a href="./report-generation.html">Report generation</a></li><li class="workflow-step pending"><span class="workflow-num">5</span><span>Web publication</span></li></ol></div></nav>
+    <footer><div class="container">Community Trust Index · CEA Data Portal</div></footer>
+    <script>document.querySelectorAll('.workflow-step.pending').forEach(function(step){var label=step.lastElementChild;if(label&&label.textContent.trim()==='Web publication'){var link=document.createElement('a');link.href='./web-publication.html';link.textContent=label.textContent;label.replaceWith(link);step.classList.remove('pending');}});</script>
+  </body>
+</html>

@@ -1,0 +1,795 @@
+---
+title: "Madagascar"
+subtitle: "Early Warning"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    self_contained: true
+    df_print: paged
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r input, include=FALSE}
+# ============================================================
+# User inputs
+# ============================================================
+knitr::opts_chunk$set(
+  error = TRUE
+)
+
+# Adjust these two values for each country/report
+country_name <- "Madagascar"
+config_file  <- "MDG_configuration.xlsx"
+module <- "ews"   # ews
+
+# Main project path
+path <- file.path("..", country_name)
+
+```
+
+```{=html}
+<!-- This section imports custom fonts (Inter and Poppins) from Google Fonts
+     and loads loads an external CSS stylesheet from the CEA GitHub repository.
+     These styles help ensure that the document follows a clean and cohesive
+     visual design. CSS style is in CEA github-->
+     
+     
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<link rel="stylesheet" href="https://cea-dataportal.github.io/trust-index/asset/style.css">
+```
+
+```{r setup_data, include=FALSE}
+# ============================================================
+# Setup
+# ============================================================
+
+# repo <- "https://raw.githubusercontent.com/CEA-dataportal/trust-index/main" #DO NOT CHANGE
+repo <- "/Users/vincentturmine/Documents/GitHub/trust-index"
+
+# Module selection
+
+module <- tolower(module)
+supported_modules <- c(
+  "inst",
+  "ews"
+)
+
+if (!module %in% supported_modules) {
+  stop("Unsupported module: ",module,". Expected: ",paste(supported_modules, collapse = ", "))
+}
+
+
+# Module configuration
+
+source(paste0(repo,"/R/modules/palette_",module,".R")) # Style and colours
+source(paste0(repo,"/R/modules/config_",module,".R")) # Module parameters and prefixes
+
+
+# Core configuration
+
+source(paste0(repo, "/R/base/setup.R")) 
+source(paste0(repo, "/R/base/read_config.R"), local = knitr::knit_global())  # from Configuration file to R
+
+cti_config <- read_cti_config(config_file = config_file, country_name = country_name) 
+list2env(cti_config, envir = knitr::knit_global())
+
+source(paste0(repo, "/R/base/load_data.R")) # Load data
+translation <- "EN"   # ews
+source(paste0(repo, "/R/base/translation_v2.R")) # Load CTI translation
+
+
+```
+
+```{r setup_analysis, include=FALSE}
+
+# Analysis and Score calculation
+
+source(paste0(repo, "/R/base/analysis.R"))
+
+```
+
+::: input-required
+*Text to be modified here. / Texte à modifier ici. / Texto a modificar
+aquí.*
+:::
+
+*Overall perceptions of the Burundian Red Cross are highly positive,
+with consistently strong ratings across both competencies and values.
+Capability and respectfulness are the highest-rated dimensions, while
+effectiveness, engagement, and transparency score comparatively lower
+but remain positive. Trust is broadly consistent across provinces and
+demographic groups, with only modest variation. In contrast, respondents
+with previous engagement with the Burundian Red Cross including
+volunteers, beneficiaries, donors, and those who have interacted with
+its services or activities consistently report higher levels of trust
+than those without prior engagement.*
+
+**`r tr("report.insights")`**
+
+::: input-required
+*Text to be modified here. / Texte à modifier ici. / Texto a modificar
+aquí.*
+:::
+
+- High overall trust: Respondents report consistently positive
+  perceptions of the Burundian Red Cross across all competency and value
+  dimensions.
+
+- Limited demographic differences: Trust levels remain broadly similar
+  across provinces, age groups, gender, and education, indicating that
+  positive perceptions are widely shared.
+
+- Engagement strengthens trust: Previous interaction with the Burundian
+  Red Cross is associated with higher ratings across both competencies
+  and values, with the largest differences observed between respondents
+  who have and have not engaged with the organization.
+
+# `r tr("report.sampling")` {.tabset .tabset-fade .tabset-pills}
+
+The survey was conducted across four regions of Madagascar:
+Analanjirofo, Atsimo-Andrefana, Menabe and Vatovavy Fitovinany. A
+stratified sampling approach was used to achieve coverage across the
+study regions and key population groups.
+
+- **Geographic coverage:** The sample closely matched the population
+  distribution in Atsimo-Andrefana (33.9% of respondents, compared with
+  35.0% of the population). Analanjirofo (32.5% vs. 23.8%) and Menabe
+  (17.0% vs. 14.1%) were overrepresented, while Vatovavy Fitovinany was
+  underrepresented (16.6% vs. 27.1%).
+
+- **Age and sex:** The overall sex distribution was broadly aligned with
+  population estimates (52.7% women and 47.3% men in the sample).
+  However, the sample was older than the population: respondents aged
+  18–29 accounted for 21.9% of the sample, compared with 42.0% of the
+  population. All age groups aged 30 and above were overrepresented,
+  particularly those aged 60+ (14.7% vs. 8.7%).
+
+- **Education, employment and disability:** Comparable population data
+  were not available for these characteristics, so representativeness
+  could not be assessed. Within the sample, 41.3% of respondents
+  reported primary education, 31.5% secondary education, 25.1% no formal
+  education and 2.2% university education. Regarding employment, 32.6%
+  reported informal or irregular work, 26.9% were unemployed and 21.7%
+  had regular or part-time employment. In addition, 17.4% of respondents
+  reported having a disability.
+
+```{r setup_charts, results='asis'}
+
+source(paste0(repo, "/R/base/charts_sampling.R"))
+source(paste0(repo, "/R/base/charts_drivers.R"))
+source(paste0(repo, "/R/base/charts_score.R"))
+source(paste0(repo, "/R/base/charts_advanced.R"))
+source(paste0(repo, "/R/base/tables.R"))
+
+
+```
+
+```{r geographic_header, results='asis', echo=FALSE}
+if (isTRUE(check_adm)) {
+  cat("## ", tr("report.geographic_distribution"), "\n\n")
+}
+```
+
+```{r geographical distribution, echo=FALSE,fig.width=12, fig.height=6, eval=check_adm}
+
+grid.arrange(geo_plot_survey, geo_plot_population, nrow = 1)
+
+```
+
+```{r maps_header, results='asis', echo=FALSE}
+if (isTRUE(check_adm)) {
+  cat("## ", tr("report.coverage"), "\n\n")
+}
+```
+
+```{r maps, echo=FALSE, fig.width=8, warning = FALSE, results='asis', eval=check_adm}
+
+stopifnot(exists("map_region"))
+stopifnot(inherits(map_region, "tmap"))
+
+map_widget <- tmap::tmap_leaflet(map_region)
+
+htmltools::browsable(
+  htmltools::tagList(map_widget)
+)
+
+```
+
+## `r tr("report.gender")`
+
+```{r gender_charts, echo=FALSE,fig.width=12, fig.height=7}
+
+pyramid_plot
+
+```
+
+`r if(check_strata1) paste0("## ", tr_variable(strata1_tab))`
+
+```{r strata1, echo=FALSE,fig.width=12, fig.height=5}
+
+## Display a grid with 2 charts
+if(check_strata1) {
+
+             if (has_pop_strata1) {
+               gridExtra::grid.arrange(
+                strata1_plot_survey,
+                strata1_plot_population,
+                nrow = 1)
+             } else {
+               gridExtra::grid.arrange(
+                strata1_plot_survey,
+                placeholder_plot1,
+                nrow = 1)
+               }
+}
+
+```
+
+`r if(check_strata2) paste0("## ", tr_variable(strata2_tab))`
+
+```{r strata2, echo=FALSE,fig.width=12, fig.height=5}
+
+## Display a grid with 2 charts
+if(check_strata2) {
+
+             if (has_pop_strata2) {
+               gridExtra::grid.arrange(
+                strata2_plot_survey,
+                strata2_plot_population,
+                nrow = 1)
+             } else {
+               gridExtra::grid.arrange(
+                strata2_plot_survey,
+                placeholder_plot2,
+                nrow = 1)
+               }
+}
+
+
+```
+
+`r if(check_strata3) paste0("## ", tr_variable(strata3_tab))`
+
+```{r strata3, echo=FALSE,fig.width=12, fig.height=5}
+
+## Display a grid with 2 charts
+if(check_strata3) {
+
+             if (has_pop_strata3) {
+               gridExtra::grid.arrange(
+                strata3_plot_survey,
+                strata3_plot_population,
+                nrow = 1)
+             } else {
+               gridExtra::grid.arrange(
+                strata3_plot_survey,
+                placeholder_plot3,
+                nrow = 1)
+               }
+}
+
+
+```
+
+## `r tr("report.limitations")`
+
+::: input-required
+*Add a text describing the study limitations. / Ajouter un texte
+décrivant les limites de l’étude. / Añadir un texto que describa las
+limitaciones del estudio.*
+:::
+
+# `r tr("report.results")`
+
+```{r results_intro, results='asis'}
+
+include_text("responses_intro")
+
+```
+
+## `r tr("report.drivers")` {.tabset .tabset-fade .tabset-pills}
+
+`r if(module == "inst") paste0("### ", tr("score.competencies"))`
+
+```{r drivers_competencies, echo=FALSE, fig.width=12, fig.height=10, warning=FALSE, message=FALSE, eval=module == "inst"}
+
+ if (module == "inst") {
+  drivers_comp_plot
+}
+```
+
+`r if(module == "inst") paste0("### ", tr("score.values"))`
+
+```{r drivers_values, echo=FALSE, fig.width=12, fig.height=10, warning=FALSE, message=FALSE, eval=module == "inst"}
+
+if (module == "inst") {
+  drivers_val_plot
+}
+
+
+```
+
+`r if(module == "ews" && check_pillar1) paste0("### ", tr("score.pillar1.label"))`
+
+```{r drivers_ews_pillar1, echo=FALSE, fig.width=12, fig.height=10, warning = FALSE,message = FALSE, eval=check_pillar1}
+
+if (module == "ews") {
+  drivers_disaster_plot
+}
+  
+
+```
+
+`r if(module == "ews" && check_pillar2)  paste0("### ", tr("score.pillar2.label"))`
+
+```{r drivers_ews_pillar2, echo=FALSE, fig.width=12, fig.height=10, warning = FALSE,message = FALSE, eval=check_pillar2}
+
+if (module == "ews") {
+  drivers_detection_plot
+}
+
+```
+
+`r if(module == "ews" && check_pillar3)  paste0("### ", tr("score.pillar3.label"))`
+
+```{r drivers_ews_pillar3, echo=FALSE, fig.width=12, fig.height=10, warning = FALSE,message = FALSE, eval=check_pillar3}
+
+if (module == "ews") {
+  drivers_dissemination_plot
+}
+  
+
+```
+
+`r if(module == "ews" && check_pillar4)  paste0("### ", tr("score.pillar4.label"))`
+
+```{r drivers_ews_pillar4, echo=FALSE, fig.width=12, fig.height=10, warning = FALSE,message = FALSE, eval=check_pillar4}
+
+if (module == "ews") {
+  drivers_response_plot
+}
+
+  
+
+```
+
+`r if(check_extra) {"### Additional Questions {.tabset .tabset-fade .tabset-pills}"}`
+
+```{r extra_charts, echo=FALSE, results='asis', fig.width=12, fig.height=8}
+
+if (isTRUE(check_extra)) {
+  
+  for (i in seq_along(extra_plots)) {
+    
+    cat("#### ", names(extra_plots)[i], "\n\n", sep = "")
+    
+    print(extra_plots[[i]])
+    
+    cat("\n\n")
+  }
+}
+```
+
+## `r tr("report.contextual_questions")` {.tabset}
+
+```{r experience_intro, results='asis'}
+
+include_text("experience_intro")
+
+```
+
+`r if (check_experience) paste0("### ", tr("report.exp_questions")) else ""`
+
+```{r experience_question, fig.width=12, fig.height=height_exp_plot, echo=FALSE, warning = FALSE, message = FALSE}
+
+if ("experience" %in% question_code$category) {
+  experience_plot
+}
+```
+
+`r if (check_behaviours) paste0("### ", tr("report.behaviours_questions")) else ""`
+
+```{r behaviours_questions, fig.width=12, fig.height=height_behaviours_plot, echo=FALSE,warning = FALSE,message = FALSE}
+
+if ("behaviours" %in% question_code$category) {
+behaviours_plot
+    }
+```
+
+`r if (check_impact) paste0("### ", tr("report.impact_questions")) else ""`
+
+```{r impact_questions, fig.width=12, fig.height=height_impact_plot, echo=FALSE,warning = FALSE,message = FALSE}
+
+if ("impact" %in% question_code$category) {
+impact_plot
+    }
+```
+
+`r if (check_intention) paste0("### ", tr("report.intention_questions")) else ""`
+
+```{r intention_questions, echo=FALSE, fig.width=12, fig.height=height_intention_plot ,message=FALSE, warning=FALSE}
+
+if("intention" %in% question_code$category) {
+intention_plot
+    }
+```
+
+`r if (check_channel) paste0("### ", tr("report.channel_questions")) else ""`
+
+```{r channel_questions, echo=FALSE, fig.width=12, fig.height=7 ,message=FALSE, warning=FALSE}
+if(check_channel) {
+plots_by_channel
+  }
+```
+
+`r if (check_knowledge) paste0("### ", tr("report.knowledge_questions")) else ""`
+
+```{r knowledge_questions, echo=FALSE, fig.width=12, fig.height=7 ,message=FALSE, warning=FALSE}
+
+if(check_knowledge) {
+plots_knowledge
+  }
+
+```
+
+`r if (check_risk || check_ews) paste0("## ", tr("report.ews")," {.tabset}") else ""`
+
+`r if (check_risk) paste0("### ", tr("report.risk_questions")) else ""`
+
+```{r risk_perception, echo=FALSE, fig.width=12, fig.height=height_risk_plot, warning=FALSE, message=FALSE, eval=check_risk}
+
+if (check_risk){
+  risk_grid
+}
+
+  
+
+```
+
+`r if (check_ews) paste0("### ", tr("report.ews_questions")) else ""`
+
+```{r ews_questions, echo=FALSE, fig.width=12, fig.height=7 ,message=FALSE, warning=FALSE}
+
+if(check_ews) {
+ews_plot
+  }
+
+```
+
+# `r tr("report.score")`
+
+```{r  score_intro, echo=FALSE, results='asis'}
+
+include_text("score_intro")
+
+```
+
+## `r tr("report.score_overall")` {.tabset .tabset-fade .tabset-pills}
+
+::: input-required
+*Text to be modified here. / Texte à modifier ici. / Texto a modificar
+aquí.*
+:::
+
+The Burundian Red Cross receives consistently high ratings across all
+competency and value dimensions. Capability and respectfulness are the
+strongest-performing areas, while engagement and transparency present
+the greatest opportunities for improvement.
+
+`r if(module == "ews") paste0("### ", tr("score.bypillar"))`
+
+```{r overall_scores, results='asis', fig.width=12, fig.height=7}
+
+if (module == "inst") {
+
+  gridExtra::grid.arrange(
+    comp_plot,
+    values_plot,
+    ncol = 2
+  )
+
+} else if (module == "ews") {
+
+  pillar_plots <- list()
+
+  if (isTRUE(check_pillar1) && exists("pillar1_plot") && !is.null(pillar1_plot)) {
+    pillar_plots <- c(pillar_plots, list(pillar1_plot))
+  }
+
+  if (isTRUE(check_pillar2) && exists("pillar2_plot") && !is.null(pillar2_plot)) {
+    pillar_plots <- c(pillar_plots, list(pillar2_plot))
+  }
+
+  if (isTRUE(check_pillar3) && exists("pillar3_plot") && !is.null(pillar3_plot)) {
+    pillar_plots <- c(pillar_plots, list(pillar3_plot))
+  }
+
+  if (isTRUE(check_pillar4) && exists("pillar4_plot") && !is.null(pillar4_plot)) {
+    pillar_plots <- c(pillar_plots, list(pillar4_plot))
+  }
+
+  if (length(pillar_plots) > 0) {
+    gridExtra::grid.arrange(
+      grobs = pillar_plots,
+      ncol = 2
+    )
+  }
+}
+
+
+```
+
+`r if(module == "ews") paste0("### ", tr("score.combined"))`
+
+```{r combined_pillar_score, echo=FALSE, fig.width=12, fig.height=7, warning=FALSE, message=FALSE}
+
+if (module == "ews") {
+  combined_pillar_plot
+}
+```
+
+## `r tr("report.score_factors")`{.tabset .tabset-fade .tabset-pills}
+
+::: input-required
+*Text to be modified here. / Texte à modifier ici. / Texto a modificar
+aquí.*
+:::
+
+Perceptions of the Burundian Red Cross are consistently positive across
+demographic, geographic, and engagement groups. Competency and value
+scores are generally high, with only modest variation between subgroups,
+indicating a strong and broadly shared level of trust across the
+surveyed population.
+
+*Distribution of mean scores for values and competencies per demographic
+questions*
+
+```{r factor_scores, results='asis', fig.width=12, fig.height=height_strip_plot}
+
+if (module == "inst") {
+  grid.arrange(strip, co, va,ncol = 3,widths = c(1, 4, 4)
+  )
+}
+
+```
+
+`r if(module == "ews" && check_pillar12) paste0("### ", tr("score.pillar12"))`
+
+```{r factor_scores_ews12, class.source="next", echo=FALSE,fig.width=15, fig.height=19,warning = FALSE,message = FALSE,results = "hide", eval=check_pillar12}
+
+if (module == "ews"){
+plots <- list(strip)
+
+widths <- c(1)
+
+if (isTRUE(check_pillar1) && !is.null(p1_factor_plot)) {
+  plots <- c(plots, list(p1_factor_plot))
+  widths <- c(widths, 4)
+}
+
+if (isTRUE(check_pillar2) && !is.null(p2_factor_plot)) {
+  plots <- c(plots, list(p2_factor_plot))
+  widths <- c(widths, 4)
+}
+
+gridExtra::grid.arrange(
+  grobs = plots,
+  ncol = length(plots),
+  widths = widths
+)
+
+}
+```
+
+`r if(module == "ews" && check_pillar34) paste0("### ", tr("score.pillar34"))`
+
+```{r factor_scores_ews34, class.source="next", echo=FALSE,fig.width=15, fig.height=19,warning = FALSE,message = FALSE,results = "hide", eval=check_pillar34}
+
+if (module == "ews") {
+plots <- list(strip)
+
+widths <- c(1)
+
+if (isTRUE(check_pillar3) && !is.null(p3_factor_plot)) {
+  plots <- c(plots, list(p3_factor_plot))
+  widths <- c(widths, 4)
+}
+
+if (isTRUE(check_pillar4) && !is.null(p4_factor_plot)) {
+  plots <- c(plots, list(p4_factor_plot))
+  widths <- c(widths, 4)
+}
+
+gridExtra::grid.arrange(
+  grobs = plots,
+  ncol = length(plots),
+  widths = widths
+)
+}
+```
+
+## `r tr("report.score_profile")`
+
+::: input-required
+*Text to be modified here. / Texte à modifier ici. / Texto a modificar
+aquí.*
+:::
+
+Competency and value perceptions remain consistently high across
+engagement groups. Respondents who have volunteered with or previously
+benefited from the Burundian Red Cross tend to rate the organization
+slightly more positively than those without prior engagement, although
+trust remains strong across all groups.
+
+```{r profile_scores, results='asis', fig.width=12, fig.height=8 }
+
+if (module == "inst") {
+  grid.arrange(c_plot, v_plot, ncol = 2)
+}
+
+
+
+```
+
+`r if(module == "ews" && check_pillar12) paste0("### ", tr("score.pillar12"))`
+
+```{r sscoring_profile1, echo=FALSE,fig.width=12, fig.height=8,warning = FALSE,message = FALSE,results = "hide",eval=check_pillar12}
+
+
+if (module == "ews") {
+plots <- list()
+
+if (isTRUE(check_pillar1) && !is.null(p1_profile_plot)) {
+  plots <- c(plots, list(p1_profile_plot))
+}
+
+if (isTRUE(check_pillar2) && !is.null(p2_profile_plot)) {
+  plots <- c(plots, list(p2_profile_plot))
+}
+
+if (length(plots) > 0) {
+  gridExtra::grid.arrange(
+    grobs = plots,
+    ncol = min(2, length(plots))
+  )
+}
+}
+```
+
+`r if(module == "ews" && check_pillar34) paste0("### ", tr("score.pillar34"))`
+
+```{r scoring_profile2, echo=FALSE,fig.width=12, fig.height=8,warning = FALSE,message = FALSE,results = "hide",eval=check_pillar34}
+
+if (module == "ews") {
+plots <- list()
+
+if (isTRUE(check_pillar3) && !is.null(p3_profile_plot)) {
+  plots <- c(plots, list(p3_profile_plot))
+}
+
+if (isTRUE(check_pillar4) && !is.null(p4_profile_plot)) {
+  plots <- c(plots, list(p4_profile_plot))
+}
+
+if (length(plots) > 0) {
+  gridExtra::grid.arrange(
+    grobs = plots,
+    ncol = min(2, length(plots))
+  )
+}
+}
+
+```
+
+# `r tr("report.methods_metrics")` {.tabset .tabset-fade .tabset-pills}
+
+## `r tr("report.methods")`
+
+```{r methodology, echo=FALSE, results='asis'}
+
+include_text("methods")
+
+```
+
+## `r tr("report.metrics")`
+
+```{r tables, results='asis'}
+# ============================================================
+# Tables
+# ============================================================
+
+cat("### ", tr("table.gender"), "\n\n")
+
+
+knitr::kable(tab_gender_display, caption = tr("table.respondents_by_gender"))
+
+cat("### ", tr("table.age_group"), "\n\n")
+knitr::kable(
+  tab_age_group_display,
+  caption = tr("table.respondents_by_age_group")
+)
+
+cat("### ", tr("table.geo"), "\n\n")
+
+knitr::kable(
+  tab_geo_display,
+  caption = paste(
+  tr_variable(adm1, "short"),
+  tr("common.and"),
+  tr_variable(adm2, "short")
+)
+)
+
+```
+
+## `r tr("report.weighting")`
+
+```{r weighting, echo=FALSE, results='asis'}
+
+include_text("weighting")
+
+weighting_plot
+
+```
+
+## `r tr("report.correlation")`
+
+```{r correlation, results='asis',fig.width=corr_plot_height}
+
+if (module == "inst") {
+corrplot(cor_matrix_w, p.mat = testRes$p, sig.level = 0.10, method = 'circle', type = 'lower', order = 'hclust', addrect = 2 , col = COL2('PuOr', 10),insig='blank',
+         tl.col = color_label_grey, tl.cex = 0.9,
+         addCoef.col = "white", number.cex = 0.7, diag = FALSE, addgrid.col = 'white')
+
+
+include_text("correlation")
+
+} else if (is.function(correlation_ews_plot)) {
+  correlation_ews_plot()
+  
+  include_text("correlation")
+  
+} else {}
+```
+
+## `r tr("report.significance_testing")`
+
+```{r significance_testing, echo=FALSE,results='asis', fig.width=7, fig.height=3}
+
+
+include_text("significance")
+
+
+## Significant testing table
+
+tab_sig_reshaped<-formattable(sig_reshaped, align =c("c","c", "c", "c", "c"))
+tab_sig_reshaped
+```
+
+# `r tr("report.download")`
+
+```{r download_button, echo=FALSE, results='asis'}
+
+# ============================================================
+# Export data
+# ============================================================
+
+
+source(paste0(repo,"/R/base/export.R")) # export to excel and supabase
+
+
+cat(
+  paste0(
+    '::: div-button\n',
+    '[',tr("report.download_button"),'](', export_file, '){.button}\n',
+    ':::\n'
+  )
+)
+```
