@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Community Trust Index reusable templates">
+    <title>CTI templates | Community Trust Index</title>
+    <style>
+      :root { --navy:#17284b; --accent:#de6c54; --text:#202c42; --muted:#617089; --line:#dfe5ef; --surface:#f7f9fc; }
+      * { box-sizing:border-box; }
+      body { margin:0; color:var(--text); background:var(--surface); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+      a { color:inherit; }
+      .container { width:min(1120px,calc(100% - 2rem)); margin:0 auto; }
+      .site-header { border-bottom:1px solid var(--line); background:rgba(255,255,255,.5); backdrop-filter:blur(10px); }
+      .header-inner { min-height:72px; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+      .brand { display:inline-flex; align-items:center; gap:.55rem; color:var(--text); font-weight:700; letter-spacing:-.02em; text-decoration:none; }
+      .brand svg { width:1.25rem; height:1.25rem; color:var(--accent); }
+      .nav { display:flex; align-items:center; gap:1.15rem; color:var(--muted); font-size:.9rem; }
+      .nav a { display:inline-flex; align-items:center; gap:.35rem; text-decoration:none; }
+      .nav a:hover, .nav a:focus-visible { color:var(--text); }
+      .nav svg { width:1rem; height:1rem; }
+      .hero { padding:5.25rem 0 5.5rem; color:#fff; background:var(--navy); }
+      .eyebrow { margin:0 0 1rem; color:rgba(255,255,255,.7); font-size:.78rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+      h1 { max-width:850px; margin:0; font-size:clamp(2.6rem,7vw,4.7rem); line-height:1.05; letter-spacing:-.035em; }
+      .hero-copy { max-width:720px; margin:1.25rem 0 0; color:rgba(255,255,255,.82); font-size:1.15rem; line-height:1.6; }
+      main { padding:4.75rem 0; }
+      h2 { margin:0; font-size:clamp(1.7rem,3vw,2.25rem); line-height:1.16; letter-spacing:-.025em; }
+      .intro { max-width:720px; margin:1rem 0 2.25rem; color:var(--muted); line-height:1.6; }
+      .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
+      .card { display:flex; min-height:238px; flex-direction:column; padding:1.5rem; color:inherit; text-decoration:none; background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 5px 16px rgba(23,40,75,.08); transition:transform .18s ease,box-shadow .18s ease; }
+      .card:hover, .card:focus-visible { outline:none; transform:translateY(-2px); box-shadow:0 12px 24px rgba(23,40,75,.13); }
+      .icon { display:grid; place-items:center; width:2.6rem; height:2.6rem; margin-bottom:1rem; color:var(--accent); background:#fbece8; border-radius:.7rem; font-size:.78rem; font-weight:800; }
+      h3 { margin:0; font-size:1.15rem; line-height:1.2; letter-spacing:-.01em; }
+      .card p { margin:.75rem 0 0; color:var(--muted); font-size:.94rem; line-height:1.55; }
+      .action { margin-top:auto; padding-top:1.5rem; color:var(--accent); font-size:.92rem; font-weight:700; }
+      footer { padding:2rem 0; color:var(--muted); border-top:1px solid var(--line); font-size:.85rem; }
+      @media (max-width:780px) { .hero { padding:4rem 0; } .cards { grid-template-columns:1fr; } }
+      @media (max-width:530px) { .header-inner { min-height:64px; } .nav a:first-child { display:none; } }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/trust-index/">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>
+          <span>Community Trust Index</span>
+        </a>
+        <nav class="nav" aria-label="External links">
+          <a href="https://trust.communityengagementhub.org" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path></svg><span>Current website</span></a>
+          <a href="https://github.com/CEA-dataportal/trust-index" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg><span>GitHub</span></a>
+        </nav>
+      </div>
+    </header>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">CEA dataportal</p>
+        <h1>CTI templates</h1>
+        <p class="hero-copy">Reusable files for calculating weights, configuring a country analysis and generating the Community Trust Index report.</p>
+      </div>
+    </section>
+    <main class="container">
+      <h2>Templates and scripts</h2>
+      <p class="intro">Download the files needed for a country implementation. Use the documentation to understand where each file is used in the workflow.</p>
+      <section class="cards" aria-label="CTI template files">
+        <a class="card" href="Data-Weighting.Rmd" download>
+          <span class="icon">RMD</span>
+          <h3>Weighting script</h3>
+          <p>R Markdown script for calculating and checking survey weights against population margins.</p>
+          <span class="action">Download Data-Weighting.Rmd →</span>
+        </a>
+        <a class="card" href="Country-Report-template.Rmd" download>
+          <span class="icon">RMD</span>
+          <h3>Country report template</h3>
+          <p>R Markdown template used to generate the country report, charts, tables and exports.</p>
+          <span class="action">Download Country-Report-template.Rmd →</span>
+        </a>
+        <a class="card" href="CTI_configuration_template.xlsx" download>
+          <span class="icon">XLSX</span>
+          <h3>Configuration template</h3>
+          <p>Excel file used to link data, population tables, variables, labels and geographic settings.</p>
+          <span class="action">Download CTI_configuration_template.xlsx →</span>
+        </a>
+      </section>
+    </main>
+    <footer><div class="container">Community Trust Index · CEA Data Portal</div></footer>
+  </body>
+</html>
