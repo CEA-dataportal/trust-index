@@ -111,12 +111,15 @@
 .site-nav{display:flex;align-items:center;gap:1.15rem;font-size:.9rem;color:var(--muted)}.site-nav a{display:inline-flex;align-items:center;gap:.35rem;text-decoration:none}.site-nav a:hover,.site-nav a:focus-visible{color:var(--ink)}.site-nav svg{width:1rem;height:1rem;flex:0 0 auto}
 @media(max-width:530px){.site-header .container{min-height:64px}.site-nav a:first-child{display:none}}
 </style>
+<style data-style="cti-breadcrumb">
+.hero .breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;margin:0 0 1.35rem;padding:0;color:rgba(255,255,255,.72);font-size:.84rem;list-style:none}.breadcrumb ol{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;margin:0;padding:0;list-style:none}.breadcrumb li{display:inline-flex;align-items:center;gap:.45rem}.breadcrumb li:not(:last-child)::after{content:"/";color:rgba(255,255,255,.38)}.breadcrumb a{color:inherit;text-decoration:none}.breadcrumb a:hover,.breadcrumb a:focus-visible{color:#fff}.breadcrumb [aria-current="page"]{color:#fff;font-weight:650}
+</style>
 </head>
   <body>
     <header class="site-header"><div class="container"><a class="brand" href="/trust-index/" aria-label="Community Trust Index home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg><span>Community Trust Index</span></a><nav class="site-nav" aria-label="Main navigation"><a href="https://trust.communityengagementhub.org" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg><span>Current website</span></a><a href="https://github.com/CEA-dataportal/trust-index" target="_blank" rel="noreferrer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg><span>GitHub</span></a></nav></div></header>
 <main id="top">
       <section class="hero">
-        <div class="container">
+        <div class="container"><nav class="breadcrumb" aria-label="Breadcrumb"><ol><li><a href="/trust-index/">Home</a></li><li><a href="../index.html">Documentation</a></li><li aria-current="page">Data preparation</li></ol></nav>
           <p class="eyebrow">CEA Data Portal · Documentation</p>
           <h1>Data preparation</h1>
           <p class="hero-copy">Prepare and quality-check your survey before calculating the Community Trust Index. This stage ensures reliable, comparable data that are ready for analysis.</p>
