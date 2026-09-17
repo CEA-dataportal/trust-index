@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Community Trust Index documentation">
+    <title>Community Trust Index | Documentation</title>
+    <style>
+      :root {
+        --navy: #17284b;
+        --blue: #2f6db8;
+        --text: #172033;
+        --muted: #5f6b7a;
+        --line: #dce3ea;
+        --surface: #f6f8fb;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--text);
+        background: var(--surface);
+      }
+
+      .site-header {
+        background: rgba(255, 255, 255, .82);
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(10px);
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: min(100% - 2rem, 1280px);
+        min-height: 66px;
+        margin: 0 auto;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: .55rem;
+        color: var(--navy);
+        font-weight: 700;
+        letter-spacing: -.01em;
+        text-decoration: none;
+      }
+
+      .brand svg { color: #e14b3f; }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nav a {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        color: var(--muted);
+        font-size: .875rem;
+        text-decoration: none;
+      }
+
+      .nav a:hover,
+      .nav a:focus-visible { color: var(--navy); }
+
+      .nav svg { width: 16px; height: 16px; }
+
+      main {
+        width: min(100% - 2rem, 900px);
+        margin: 0 auto;
+        padding: 5rem 0;
+      }
+
+      .eyebrow {
+        margin: 0 0 .75rem;
+        color: var(--blue);
+        font-size: .8rem;
+        font-weight: 700;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--navy);
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1.1;
+      }
+
+      .intro {
+        max-width: 650px;
+        margin: 1rem 0 2.5rem;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.65;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+      }
+
+      .card {
+        display: block;
+        min-height: 205px;
+        padding: 1.75rem;
+        color: inherit;
+        text-decoration: none;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(23, 40, 75, .05);
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      }
+
+      .card:hover,
+      .card:focus-visible {
+        border-color: var(--blue);
+        box-shadow: 0 10px 22px rgba(23, 40, 75, .12);
+        outline: none;
+        transform: translateY(-2px);
+      }
+
+      .language {
+        margin: 0;
+        color: var(--blue);
+        font-size: .9rem;
+        font-weight: 700;
+      }
+
+      h2 {
+        margin: .65rem 0 .75rem;
+        color: var(--navy);
+        font-size: 1.35rem;
+      }
+
+      .card p:not(.language) {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .link {
+        display: inline-block;
+        margin-top: 1.35rem;
+        color: var(--navy);
+        font-size: .95rem;
+        font-weight: 700;
+      }
+
+      footer {
+        margin-top: 3rem;
+        color: var(--muted);
+        font-size: .85rem;
+      }
+
+      @media (max-width: 640px) {
+        main { padding: 3rem 0; }
+        .cards { grid-template-columns: 1fr; }
+        .nav a:first-child { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="../index.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path>
+          </svg>
+          <span>Community Trust Index</span>
+        </a>
+        <nav class="nav" aria-label="External links">
+          <a href="https://trust.communityengagementhub.org" target="_blank" rel="noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path></svg>
+            <span>Current website</span>
+          </a>
+          <a href="https://github.com/CEA-dataportal/trust-index" target="_blank" rel="noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+            <span>GitHub</span>
+          </a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <p class="eyebrow">Community Trust Index</p>
+      <h1>Documentation</h1>
+      <p class="intro">Guidance for preparing data, weighting the sample, configuring the analysis, generating the country report and publishing results.</p>
+
+      <section class="cards" aria-label="Documentation languages">
+        <a class="card" href="FR/data-preparation.html" lang="fr">
+          <p class="language">Français</p>
+          <h2>Documentation en français</h2>
+          <p>Préparation des données, pondération, fichier de configuration, génération du rapport et publication web.</p>
+          <span class="link">Ouvrir la documentation&nbsp; →</span>
+        </a>
+
+        <a class="card" href="EN/data-preparation.html">
+          <p class="language">English</p>
+          <h2>English documentation</h2>
+          <p>Data preparation, weighting, configuration, report generation and web publication.</p>
+          <span class="link">Open documentation&nbsp; →</span>
+        </a>
+      </section>
+
+      <footer>Community Trust Index</footer>
+    </main>
+  </body>
+</html>
