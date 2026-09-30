@@ -172,7 +172,8 @@ display_no <- c(
 gender_no <- c(
   "Other",
   "No data",
-  "Prefer not to say"
+  "Prefer not to say",
+  "Prefer to not answer"
 )
 
 excluded_regions <- c(

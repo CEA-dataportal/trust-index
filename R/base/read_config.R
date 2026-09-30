@@ -92,15 +92,28 @@ read_cti_config <- function(
   .validate_module_config(module_config)
   
   # ---- Paths ----
-  
-  path <- file.path("..", country_name)
+
   
   config_path <- file.path(path, config_file)
   
   if (!file.exists(config_path)) {
+    
+    config_dir <- dirname(config_path)
+    available_files <- if (dir.exists(config_dir)) {
+      paste(list.files(config_dir), collapse = ", ")
+    } else {
+      "(directory does not exist)"
+    }
+    
     stop(
-      "Configuration file not found: ",
+      "Configuration file not found: ", 
       normalizePath(config_path, mustWork = FALSE),
+      "\n\nCurrent working directory: ",
+      getwd(),
+      "\n\nExpected directory: ",
+      normalizePath(config_dir, mustWork = FALSE),
+      "\n\nFiles available in expected directory: ",
+      available_files,
       call. = FALSE
     )
   }
