@@ -500,6 +500,14 @@ pop_age$Freq <- pop_age$Freq / sum(pop_age$Freq) * 100
 ages$origin <- tr("sampling.title")
 pop_age$origin <- tr("sampling.population")
 
+
+gender_no <- c(
+  "Other",
+  "No data",
+  "Prefer not to say",
+  "Prefer to not answer"
+)
+
 perc_nogender <- mean(data$gender %in% gender_no, na.rm = TRUE) * 100
 
 if (!is.na(perc_nogender)) {
