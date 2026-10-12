@@ -1,30 +1,36 @@
-**Scoring methodology**
+**Methodology**
 
-To determine the score, we employ the following method:
+### Scoring methodology
 
-1. **Survey Structure**
+To calculate scores for the Early Warning Systems (*EWS*) module, survey questions are grouped under four pillars:
 
-   The CTI survey includes multiple questions grouped under sub-dimensions of two main categories:
+1. **Risk Knowledge**
+2. **Monitoring and Forecasting**
+3. **Warning Dissemination and Communication**
+4. **Preparedness and Response**
 
-   - Competencies (e.g., reliability, effectiveness, technical proficiency)
-   - Values (e.g., ethics, integrity, fairness, transparency)
+Each pillar includes several questions covering different aspects of the early warning system.
 
-2. **Sub-Dimension Scoring**
+#### Question-level scoring
 
-   Each sub-dimension comprises several survey items (questions). Respondents answer on a Likert-type scale from 1 to 4; “Don't know” responses are excluded.
+Respondents answer each question using a four-point Likert scale. “Don’t know” responses are excluded from the calculation.
 
-   For each sub-dimension:
+For each question, the score is the weighted mean of valid responses. When survey weights are applied, they help ensure that results better reflect the structure of the target population.
 
-   *Sub-dimension Score = ∑ (Weighted Response Scores) / Number of Items*
+*Question Score = ∑ (Response Scores × Survey Weights) / ∑ (Survey Weights for Valid Responses)*
 
-   If weights are not empirically derived, equal weighting is typically applied to each item.
+Scores are then converted to a 0–10 scale for reporting.
 
-3. **Dimension Scoring**
+#### Pillar-level scoring
 
-   Once all sub-dimension scores are calculated, the Competency Score and Values Score are each derived as the arithmetic mean of their respective sub-dimension scores:
+The score for each pillar is calculated as the arithmetic mean of the scores for all questions associated with it.
 
-   - *Competency Score = ∑ (Sub-dimension Scores for Competency) / n*
+*Pillar Score = ∑ (Scores of Questions within the Pillar) / Number of Questions within the Pillar*
 
-   - *Values Score = ∑ (Sub-dimension Scores for Values) / m*
+Each question contributes equally to its pillar score, unless a different weighting method has been explicitly defined.
 
-   where *n* and *m* are the number of sub-dimensions in each category.
+#### Overall EWS score
+
+The overall EWS score is the arithmetic mean of the scores of the four pillars. This method ensures that each pillar has equal weight in the overall score, regardless of the number of questions it contains.
+
+*Overall EWS Score = ∑ (Pillar Scores) / 4*
