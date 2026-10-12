@@ -1,36 +1,36 @@
-**Methodology**
+**Méthodologie**
 
-### Scoring methodology
+### Méthodologie de calcul des scores
 
-To calculate scores for the Early Warning Systems (*EWS*) module, survey questions are grouped under four pillars:
+Pour calculer les scores du module relatif aux systèmes d’alerte précoce (*Early Warning Systems* — EWS), les questions de l’enquête sont regroupées selon quatre piliers :
 
-1. **Risk Knowledge**
-2. **Monitoring and Forecasting**
-3. **Warning Dissemination and Communication**
-4. **Preparedness and Response**
+1. **Connaissance des risques**
+2. **Suivi et prévision**
+3. **Diffusion et communication des alertes**
+4. **Préparation et réponse**
 
-Each pillar includes several questions covering different aspects of the early warning system.
+Chaque pilier comprend plusieurs questions portant sur les différents aspects du système d’alerte précoce.
 
-#### Question-level scoring
+#### Calcul du score par question
 
-Respondents answer each question using a four-point Likert scale. “Don’t know” responses are excluded from the calculation.
+Les répondant·es répondent à chaque question selon une échelle de Likert à quatre niveaux. Les réponses « Ne sais pas » sont exclues du calcul.
 
-For each question, the score is the weighted mean of valid responses. When survey weights are applied, they help ensure that results better reflect the structure of the target population.
+Pour chaque question, le score correspond à la moyenne pondérée des réponses valides. Lorsque des poids d’enquête sont appliqués, ils permettent de mieux refléter la structure de la population cible.
 
-*Question Score = ∑ (Response Scores × Survey Weights) / ∑ (Survey Weights for Valid Responses)*
+*Score de la question = ∑ (Scores des réponses × poids d’enquête) / ∑ (poids d’enquête des réponses valides)*
 
-Scores are then converted to a 0–10 scale for reporting.
+Les scores sont ensuite convertis sur une échelle de 0 à 10 pour la restitution des résultats.
 
-#### Pillar-level scoring
+#### Calcul du score par pilier
 
-The score for each pillar is calculated as the arithmetic mean of the scores for all questions associated with it.
+Le score de chaque pilier est calculé comme la moyenne arithmétique des scores de toutes les questions qui lui sont associées.
 
-*Pillar Score = ∑ (Scores of Questions within the Pillar) / Number of Questions within the Pillar*
+*Score du pilier = ∑ (Scores des questions du pilier) / Nombre de questions du pilier*
 
-Each question contributes equally to its pillar score, unless a different weighting method has been explicitly defined.
+Chaque question contribue de manière égale au score de son pilier, sauf si une méthode de pondération différente a été définie explicitement.
 
-#### Overall EWS score
+#### Calcul du score global EWS
 
-The overall EWS score is the arithmetic mean of the scores of the four pillars. This method ensures that each pillar has equal weight in the overall score, regardless of the number of questions it contains.
+Le score global EWS correspond à la moyenne arithmétique des scores des quatre piliers. Cette méthode garantit que chaque pilier a le même poids dans le score global, indépendamment du nombre de questions qu’il contient.
 
-*Overall EWS Score = ∑ (Pillar Scores) / 4*
+*Score global EWS = ∑ (Scores des piliers) / 4*
