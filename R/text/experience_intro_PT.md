@@ -1,0 +1,1 @@
+Esta secção apresenta os resultados relativos às experiências dos membros da comunidade com a Cruz Vermelha e aos seus comportamentos em relação à organização. Estas perguntas exploram as interações, as perceções e as formas de envolvimento, permitindo compreender melhor como a Cruz Vermelha é percecionada e como as comunidades se relacionam com ela.

@@ -1,0 +1,3 @@
+Esta pontuação é calculada a partir das respostas a perguntas que avaliam as perceções sobre as competências e os valores, fornecendo uma medida global da confiança. Uma pontuação mais elevada indica um maior nível de confiança, sugerindo que os membros da comunidade consideram que as suas necessidades são atendidas e que os seus valores são respeitados.
+
+*Mais informações sobre o método de cálculo das pontuações: [Métodos](#methods)*

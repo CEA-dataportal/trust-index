@@ -1,0 +1,5 @@
+**Ponderação vs. dados não ponderados**
+
+Para corrigir os desvios demográficos entre a amostra e a população em geral, aplicamos uma técnica denominada *raking*. Este método ajusta os resultados com base em variáveis como a idade, o género, a província, o nível de escolaridade e a área geográfica (urbana/rural), com o objetivo de alinhar a amostra com a distribuição da população.
+
+Os resultados ponderados são, de modo geral, consistentes com os dados não ponderados e apresentam apenas pequenas diferenças na maioria das dimensões. As maiores variações observam-se na abertura e na transparência, cujas pontuações ponderadas diminuem de forma mais acentuada em comparação com os resultados não ponderados. Isto sugere que a ponderação reduz ligeiramente as médias globais, mas não altera de forma substancial as tendências gerais relativas às competências e aos valores entre os diferentes grupos de pessoas inquiridas.
