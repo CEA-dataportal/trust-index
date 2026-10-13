@@ -18,10 +18,12 @@
 #   tr_data(data$gender)   # backward-compatible alias
 
 dictionary_file <- "translation.csv"
+translation <- language
 
 # ------------------------------------------------------------
 # Internal helpers
 # ------------------------------------------------------------
+
 
 .is_blank_translation <- function(x) {
   length(x) == 0L ||
